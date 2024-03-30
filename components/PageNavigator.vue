@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import { usePageStore } from "@/stores/pagination"
-import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue'
-import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
-import SkipPrevious from 'vue-material-design-icons/SkipPreviousOutline.vue'
-import SkipNext from 'vue-material-design-icons/SkipNextOutline.vue'
 
 const pageStore = usePageStore()
 </script>
@@ -11,17 +7,18 @@ const pageStore = usePageStore()
 <template>
   <nav class="flex gap-4 text-xl">
     <button @click="pageStore.setPage(1)" class="disabled:opacity-30" :disabled="pageStore.isFirstPage">
-      <SkipPrevious />
+      <MdiIcon icon="mdiSkipPrevious" />
     </button>
     <button @click="pageStore.prevPage" class="disabled:opacity-30" :disabled="pageStore.isFirstPage">
-      <ChevronLeft />
+      <MdiIcon icon="mdiChevronLeft" />
     </button>
     <span class="block w-32 text-center text-base">Page {{ pageStore.page }} of {{ pageStore.pageCount }}</span>
     <button @click="pageStore.nextPage" class="disabled:opacity-30" :disabled="pageStore.isLastPage">
-      <ChevronRight />
+      <MdiIcon icon="mdiChevronRight" />
     </button>
-    <button @click="pageStore.setPage(pageStore.pageCount)" class="disabled:opacity-30" :disabled="pageStore.isLastPage">
-      <SkipNext />
+    <button @click="pageStore.setPage(pageStore.pageCount)" class="disabled:opacity-30"
+      :disabled="pageStore.isLastPage">
+      <MdiIcon icon="mdiSkipNext" />
     </button>
   </nav>
 </template>

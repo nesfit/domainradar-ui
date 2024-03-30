@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import Fallback from 'vue-material-design-icons/AlertCircleOutline.vue'
-import Phishing from 'vue-material-design-icons/Hook.vue'
-import Malware from 'vue-material-design-icons/Bug.vue'
-import DGA from 'vue-material-design-icons/Robot.vue'
-import Okay from 'vue-material-design-icons/Check.vue'
 import { computed } from 'vue';
 
 const props = defineProps<{
@@ -11,17 +6,18 @@ const props = defineProps<{
 }>()
 
 const iconMap = new Map([
-  ["Phishing", Phishing],
-  ["Malware", Malware],
-  ["DGA", DGA],
-  ["Okay", Okay],
+  ["Phishing", "mdiHook"],
+  ["Malware", "mdiBug"],
+  ["DGA", "mdiRobot"],
+  ["Okay", "mdiCheck"],
 ])
 
 const icon = computed(() => {
-  return iconMap.has(props.type) ? iconMap.get(props.type) : Fallback
+  return iconMap.get(props.type) || 'mdiAlertCircleOutline'
 })
 </script>
 
 <template>
-  <component :is="icon" />
+  <!-- @vue-ignore the icon attr has a type of union of mdiSomething.. literals and I can't be bothered to typecast the map returns to literals -->
+  <MdiIcon :icon="icon" />
 </template>

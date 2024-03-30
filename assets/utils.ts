@@ -24,18 +24,45 @@ export function groupBy(arr: Record<string, any>[], path: string) {
 }
 
 export function getContinentFromCoordinates(latitude: number, longitude: number): string | null {
-  if (latitude >= -90 && latitude <= -10 && longitude >= -180 && longitude <= 180) {
-    return 'Antarctica'
-  } else if (latitude >= -10 && latitude <= 85 && longitude >= -180 && longitude <= 180) {
-    return 'Australia'
-  } else if (latitude >= -10 && latitude <= 85 && longitude >= -25 && longitude <= 60) {
-    return 'Africa'
-  } else if (latitude >= -10 && latitude <= 85 && longitude >= -170 && longitude <= -25) {
-    return 'South America'
-  } else if (latitude >= -10 && latitude <= 85 && longitude >= -170 && longitude <= -60) {
-    return 'North America'
+  // TODO: This is a very naive implementation. It should be replaced with a more accurate one.
+  // Also, Europe and Asia are missing, lol.
+  if (
+    latitude >= -90 &&
+    latitude <= -10 &&
+    longitude >= -180 &&
+    longitude <= 180
+  ) {
+    return "Antarctica"
+  } else if (
+    latitude >= -10 &&
+    latitude <= 85 &&
+    longitude >= -180 &&
+    longitude <= 180
+  ) {
+    return "Australia"
+  } else if (
+    latitude >= -10 &&
+    latitude <= 85 &&
+    longitude >= -25 &&
+    longitude <= 60
+  ) {
+    return "Africa"
+  } else if (
+    latitude >= -10 &&
+    latitude <= 85 &&
+    longitude >= -170 &&
+    longitude <= -25
+  ) {
+    return "South America"
+  } else if (
+    latitude >= -10 &&
+    latitude <= 85 &&
+    longitude >= -170 &&
+    longitude <= -60
+  ) {
+    return "North America"
   } else if (latitude >= 85 && longitude >= -180 && longitude <= 180) {
-    return 'Arctic'
+    return "Arctic"
   } else {
     return null
   }

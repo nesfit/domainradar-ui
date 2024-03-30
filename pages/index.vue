@@ -5,9 +5,6 @@ const route = useRoute()
 <template>
   <div>
     <h1>You are at {{ route.name }}</h1>
-    <Button @click="$router.push('/about')">Go to About</Button>
-    <div class="fixed w-full h-full top-0 left-0">
-      <Map :dots="[]" />
-    </div>
+    <Button @click="$router.push('/app')">Go to App</Button>
   </div>
 </template>

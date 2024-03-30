@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import type { DomainResult } from "@/types/dr"
+import type { Domain } from "@/types/dr"
 import Pie from "./Pie.vue"
 import MalignIcon from "./MalignIcon.vue"
-import Dot from 'vue-material-design-icons/CircleMedium.vue'
 import { computed, ref } from "vue";
 import { percentFormat } from "@/assets/utils"
 
 const props = defineProps<{
-  domain: DomainResult
+  domain: Domain
   active?: boolean
 }>()
 

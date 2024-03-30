@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "kafkajs": "^2.2.4",
     "nuxt": "^3.11.1",
     "ol": "^9.1.0",
     "ol-contextmenu": "^5.4.0",
@@ -25,5 +26,9 @@
     "@vueuse/nuxt": "^10.9.0",
     "nuxt-mdi": "^1.1.6",
     "nuxt-mongoose": "^1.0.5"
+  },
+  "prettier": {
+    "semi": false,
+    "vueIndentScriptAndStyle": true
   }
 }
