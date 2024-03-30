@@ -1,4 +1,14 @@
 <script setup lang="ts">
+definePageMeta(
+  {
+    pageTransition: {
+      name: "page-out",
+      mode: "out-in"
+    },
+    middleware: "auth",
+    auth: { guestRedirectTo: "/" }
+  }
+)
 import { ref, computed, onMounted, watch } from "vue"
 
 import DomainRadarLogo from "@/components/DomainRadarLogo.vue"
@@ -20,11 +30,32 @@ const ascendingSort = ref(false)
 
 // const { data: domains, error, loading, total, load } = useFecth...
 /// TEMP FIX
-const domains = ref<Domain[]>([])
+const domains = ref<Domain[]>([
+  {
+    domain_name: "example.com",
+    aggregate_probability: 0.5,
+    ip_addresses: [
+      {
+        ip: "FUCK",
+        collection_results: [],
+        qradar_offenses: []
+      }
+    ],
+    aggregate_description: "MRDKA",
+    classification_results: [],
+    collection_results: [],
+    first_seen: new Date(),
+    last_seen: new Date(),
+    prefilter_results: [],
+    nějaký_misp: []
+  }
+])
 const total = ref(0)
+const entered = ref(false)
 /// TEMP FIX
 
 function loadData() {
+  entered.value = true
   // const sort = ascendingSort.value ? invertSort(sortByAggregateProbability) : sortByAggregateProbability
   // load(page.value, sort, (x) => x.domain_name.includes(search.value))
   // TODO
@@ -70,67 +101,72 @@ const previewMapDots = computed(() => {
 </script>
 
 <template>
-  <!-- Controls -->
-  <div class="pane-container gap-6 py-4">
-    <div class="px-4 mx-4 mt-2 flex justify-between items-center big-ass-drop-shadow">
-      <span class="flex items-center gap-2 text-cyan-900 dark:text-cyan-100 pointer-events-none">
-        <DomainRadarLogo class="w-8" />
-        <strong class="text-lg">DomainRadar</strong>
-      </span>
-      <div class="flex items-center gap-4 invisible">
-        <span class="text-sm text-cyan-800 dark:text-cyan-200 pointer-events-none">
-          Up to date
-          <div class="dot"></div>
-        </span>
-        <button class="text-cyan-900 dark:text-cyan-100 text-2xl">
-          <MdiIcon icon="mdiTune" />
-        </button>
-      </div>
-    </div>
-    <header class="text-cyan-900 dark:text-cyan-100 bg-slate-100 dark:bg-slate-800 p-6 mx-4 rounded-xl shadow-2xl">
-      <div class="flex gap-x-4">
-        <input
-          class="grow p-2 rounded-md bg-slate-300 dark:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-900 dark:focus:ring-cyan-100 placeholder:text-cyan-900 dark:placeholder:text-cyan-100 text-cyan-900 dark:text-cyan-100"
-          placeholder="Search" v-model="search" autofocus />
-        <button class="text-2xl">
-          <MdiIcon icon="mdiFilter" />
-        </button>
-      </div>
-      <div class="flex justify-between items-center mt-4 px-2">
-        <button class="flex items-center text-sm" @click="ascendingSort = !ascendingSort">
-          <div>
-            Sort by <span class="font-bold">Aggregate Probability</span>
+  <div>
+    <!-- Controls -->
+    <Transition name="page">
+      <div class="pane-container gap-6 py-4" v-if="entered">
+        <div class="px-4 mx-4 mt-2 flex justify-between items-center big-ass-drop-shadow">
+          <NuxtLink to="/" class="flex items-center gap-2 text-cyan-900 dark:text-cyan-100 cursor-pointer">
+            <DomainRadarLogo class="w-8" />
+            <strong class="text-lg">DomainRadar</strong>
+          </NuxtLink>
+          <div class="flex items-center gap-4">
+            <span class="text-sm text-cyan-800 dark:text-cyan-200 pointer-events-none">
+              Up to date
+              <div class="dot"></div>
+            </span>
+            <button class="text-cyan-900 dark:text-cyan-100 text-2xl">
+              <MdiIcon icon="mdiTune" />
+            </button>
           </div>
-          <MdiIcon icon="mdiMenuDown" class="origin-center transition-transform duration-200"
-            :class="ascendingSort ? 'transform rotate-180' : ''" />
-        </button>
-        <span class="text-sm">
-          {{ total }} results
-        </span>
+        </div>
+        <header
+          class="text-cyan-900 dark:text-cyan-100 bg-slate-100 dark:bg-slate-800 p-6 mx-4 rounded-xl shadow-2xl flex-shrink">
+          <div class="flex gap-x-4">
+            <input
+              class="grow p-2 rounded-md bg-slate-300 dark:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-900 dark:focus:ring-cyan-100 placeholder:text-cyan-900 dark:placeholder:text-cyan-100 text-cyan-900 dark:text-cyan-100"
+              placeholder="Search" v-model="search" autofocus />
+            <button class="text-2xl">
+              <MdiIcon icon="mdiFilter" />
+            </button>
+          </div>
+          <div class="flex justify-between items-center mt-4 px-2">
+            <button class="flex items-center text-sm" @click="ascendingSort = !ascendingSort">
+              <div>
+                Sort by <span class="font-bold">Aggregate Probability</span>
+              </div>
+              <MdiIcon icon="mdiMenuDown" class="origin-center transition-transform duration-200"
+                :class="ascendingSort ? 'transform rotate-180' : ''" />
+            </button>
+            <span class="text-sm">
+              {{ total }} results
+            </span>
+          </div>
+        </header>
+        <main
+          class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-3 mx-4 rounded-xl shadow-2xl overflow-auto">
+          <ul>
+            <DomainListItem v-for="domain in domains" :key="domain.domain_name" :domain="domain"
+              :active="domain === activeDomain" @click="setActiveDomain" @mouseenter="setPreviewDomain"
+              @mouseleave="setPreviewDomain(null)" />
+          </ul>
+          <div class="mt-6 flex justify-center">
+            <PageNavigator />
+          </div>
+        </main>
       </div>
-    </header>
-    <main
-      class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-3 mx-4 rounded-xl shadow-2xl overflow-auto">
-      <ul>
-        <DomainListItem v-for="domain in domains" :key="domain.domain_name" :domain="domain"
-          :active="domain === activeDomain" @click="setActiveDomain" @mouseenter="setPreviewDomain"
-          @mouseleave="setPreviewDomain(null)" />
-      </ul>
-      <div class="mt-6 flex justify-center">
-        <PageNavigator />
-      </div>
-    </main>
-  </div>
-  <!-- Detail -->
-  <div class="detail-container px-4 -ms-3">
-    <Transition name="detail">
-      <DomainDetail class="pointer-events-auto" v-if="activeDomain" :domain="activeDomain"
-        @close="setActiveDomain(null)" />
     </Transition>
-  </div>
-  <!-- Map -->
-  <div class="fixed w-full h-full top-0 left-0">
-    <Map :dots="previewMapDots" />
+    <!-- Detail -->
+    <div class="detail-container px-4 -ms-3">
+      <Transition name="detail">
+        <DomainDetail class="pointer-events-auto" v-if="activeDomain" :domain="activeDomain"
+          @close="setActiveDomain(null)" />
+      </Transition>
+    </div>
+    <!-- Map -->
+    <div class="fixed w-full h-full top-0 left-0">
+      <Map :dots="previewMapDots" />
+    </div>
   </div>
 </template>
 

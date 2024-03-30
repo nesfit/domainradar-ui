@@ -47,14 +47,8 @@ function getFormattedCoords(ips: IP[]) {
 </script>
 
 <template>
-  <div
-    class="py-4 px-6 bg-slate-200 rounded-lg dark:bg-slate-700 dark:text-slate-50"
-  >
-    <div
-      v-for="coordGroup, i in groupedByCoords"
-      :key="i"
-      class="mb-4"
-    >
+  <div class="py-4 px-6 bg-slate-200 rounded-lg dark:bg-slate-700 dark:text-slate-50">
+    <div v-for="coordGroup, i in groupedByCoords" :key="i" class="mb-4">
       <h2 class="flex flex-wrap items-baseline gap-x-2">
         <div class="font-bold text-xl text-cyan-800 dark:text-cyan-200">
           {{ getBestGeoDescriptor(coordGroup) }}
@@ -63,21 +57,13 @@ function getFormattedCoords(ips: IP[]) {
           {{ getFormattedCoords(coordGroup) }}
         </div>
       </h2>
-      <div><strong>{{ coordGroup[0].asn.as_org }}</strong> <span class="opacity-60">({{ coordGroup[0].asn.asn }})</span></div>
-      <div
-        v-for="net, i in groupBy(coordGroup, 'asn.network_address')"
-        :key="i"
-        class="my-3"
-      >
+      <div v-if="coordGroup[0].asn"><strong>{{ coordGroup[0].asn.as_org }}</strong> <span class="opacity-60">({{
+      coordGroup[0].asn.asn }})</span></div>
+      <div v-for="net, i in groupBy(coordGroup, 'asn.network_address')" :key="i" class="my-3">
         <h3 class="mb-2 text-lg">
           Network <strong class="font-mono text-cyan-700 dark:text-cyan-300">{{ net[0].asn.network_address }}</strong>
         </h3>
-        <IPDetail
-          v-for="ip in net"
-          :key="ip.ip"
-          :ip="ip"
-          class="mb-2"
-        />
+        <IPDetail v-for="ip in net" :key="ip.ip" :ip="ip" class="mb-2" />
       </div>
     </div>
   </div>
