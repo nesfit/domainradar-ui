@@ -89,7 +89,7 @@ watchDebounced(uniqueDots, animateViewToDots, { debounce: 100 })
 <template>
   <ClientOnly>
     <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" :controls="[]"
-      class="w-full h-full [background-color:_#aad3df]">
+      class="w-full h-full [background-color:_#aad3df] dark-map">
       <ol-view ref="view" :center="center" :zoom="zoom" :projection="projection" />
       <ol-tile-layer :preload="Infinity">
         <ol-source-osm />
@@ -110,6 +110,11 @@ watchDebounced(uniqueDots, animateViewToDots, { debounce: 100 })
   animation: pulsing 2s infinite;
 }
 
+@media (prefers-color-scheme: dark) {
+  .dark-map {
+    filter: invert(1) hue-rotate(210deg);
+  }
+}
 @keyframes pulsing {
   50% {
     box-shadow: 0 0 4rem 1rem currentColor;

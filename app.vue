@@ -6,6 +6,11 @@
 body {
   background-color: #abd3df;
 }
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #213552;
+  }
+}
 
 .page-leave-active,
 .page-out-leave-active {
