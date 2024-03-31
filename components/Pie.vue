@@ -33,20 +33,11 @@ const color = computed(() => {
 
 <template>
   <div class="relative w-min h-min">
-    <CircleProgress
-      :percent="percent"
-      :size="size"
-      :fill-color="color"
-      empty-color="#8885"
-      :border-width="size/scale"
-      :border-bg-width="size/scale"
-    />
-    <div
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-      :style="{
-        fontSize: `${size / 2}px`,
-      }"
-    >
+    <CircleProgress :percent="percent" :size="size" :fill-color="color" empty-color="#8885" :border-width="size / scale"
+      :border-bg-width="size / scale" linecap="nope" />
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" :style="{
+      fontSize: `${size / 2}px`,
+    }">
       <!-- Icon slot -->
       <slot></slot>
     </div>

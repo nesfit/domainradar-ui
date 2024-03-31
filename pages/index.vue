@@ -19,6 +19,6 @@ const { signIn, signOut, session, status, cookies, getProviders } = useAuth()
     </p>
     <hr class="my-4">
     <DomainRadarLogo class="w-16 my-2" />
-    <Button @click="status === 'authenticated' ? $router.push('/app') : signIn()">Go to App</Button>
+    <HButton @click="status === 'authenticated' ? $router.push('/app') : signIn()">Go to App</HButton>
   </div>
 </template>

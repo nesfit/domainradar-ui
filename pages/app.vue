@@ -105,27 +105,10 @@ const previewMapDots = computed(() => {
     <!-- Controls -->
     <Transition name="page">
       <div class="pane-container gap-6 py-4" v-if="entered">
-        <div class="px-4 mx-4 mt-2 flex justify-between items-center big-ass-drop-shadow">
-          <NuxtLink to="/" class="flex items-center gap-2 text-cyan-900 dark:text-cyan-100 cursor-pointer">
-            <DomainRadarLogo class="w-8" />
-            <strong class="text-lg">DomainRadar</strong>
-          </NuxtLink>
-          <div class="flex items-center gap-4">
-            <span class="text-sm text-cyan-800 dark:text-cyan-200 pointer-events-none">
-              {{ $t('up_to_date') }}
-              <div class="dot"></div>
-            </span>
-            <button class="text-cyan-900 dark:text-cyan-100 text-2xl">
-              <MdiIcon icon="mdiTune" />
-            </button>
-          </div>
-        </div>
         <header
           class="text-cyan-900 dark:text-cyan-100 bg-slate-100 dark:bg-slate-800 p-6 mx-4 rounded-xl shadow-2xl flex-shrink">
           <div class="flex gap-x-4">
-            <input
-              class="grow p-2 rounded-md bg-slate-300 dark:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-900 dark:focus:ring-cyan-100 placeholder:text-cyan-900 dark:placeholder:text-cyan-100 text-cyan-900 dark:text-cyan-100"
-              :placeholder="$t('search')" v-model="search" autofocus />
+            <HInputField color="accent" class="grow" :label="$t('search')" v-model="search" autofocus />
             <button class="text-2xl">
               <MdiIcon icon="mdiFilter" />
             </button>
@@ -167,7 +150,7 @@ const previewMapDots = computed(() => {
       </Transition>
     </div>
     <!-- Map -->
-    <div class="fixed w-full h-full top-0 left-0">
+    <div class="fixed w-full h-full top-0 left-0 -z-10">
       <Map :dots="previewMapDots" />
     </div>
   </div>
@@ -176,7 +159,7 @@ const previewMapDots = computed(() => {
 <style scoped>
 .pane-container {
   position: fixed;
-  top: 0;
+  top: 4em;
   left: 0;
   z-index: 100;
   display: flex;
@@ -197,15 +180,6 @@ const previewMapDots = computed(() => {
   padding-block-start: 5rem;
   padding-block-end: 2.25rem;
   pointer-events: none;
-}
-
-.dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background-color: #23DC52;
-  border: 2px solid #13AC32;
-  display: inline-block;
 }
 
 .mist {

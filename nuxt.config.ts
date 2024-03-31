@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  ssr: false,
   alias: {
     cookie: resolve(__dirname, "node_modules/cookie"),
     "nuxt-mdi": resolve(__dirname, "node_modules/nuxt-mdi"),
@@ -16,7 +17,11 @@ export default defineNuxtConfig({
     "@hebilicious/authjs-nuxt",
     "@nuxtjs/i18n",
   ],
-  css: ["normalize.css/normalize.css"],
+  css: [
+    "normalize.css/normalize.css",
+    "holo-vue/dist/style.css",
+    "~/assets/main.css",
+  ],
   app: {
     pageTransition: {
       name: "page",
