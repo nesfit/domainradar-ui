@@ -112,7 +112,7 @@ const previewMapDots = computed(() => {
           </NuxtLink>
           <div class="flex items-center gap-4">
             <span class="text-sm text-cyan-800 dark:text-cyan-200 pointer-events-none">
-              Up to date
+              {{ $t('up_to_date') }}
               <div class="dot"></div>
             </span>
             <button class="text-cyan-900 dark:text-cyan-100 text-2xl">
@@ -125,7 +125,7 @@ const previewMapDots = computed(() => {
           <div class="flex gap-x-4">
             <input
               class="grow p-2 rounded-md bg-slate-300 dark:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-900 dark:focus:ring-cyan-100 placeholder:text-cyan-900 dark:placeholder:text-cyan-100 text-cyan-900 dark:text-cyan-100"
-              placeholder="Search" v-model="search" autofocus />
+              :placeholder="$t('search')" v-model="search" autofocus />
             <button class="text-2xl">
               <MdiIcon icon="mdiFilter" />
             </button>
@@ -133,13 +133,16 @@ const previewMapDots = computed(() => {
           <div class="flex justify-between items-center mt-4 px-2">
             <button class="flex items-center text-sm" @click="ascendingSort = !ascendingSort">
               <div>
-                Sort by <span class="font-bold">Aggregate Probability</span>
+                {{ $t('sorting.title') }} <span class="font-bold">{{ $t('sorting.options.agg_prob') }}</span>
               </div>
               <MdiIcon icon="mdiMenuDown" class="origin-center transition-transform duration-200"
                 :class="ascendingSort ? 'transform rotate-180' : ''" />
             </button>
-            <span class="text-sm">
-              {{ total }} results
+            <span class="text-sm" v-if="total > 0">
+              {{ total }} {{ $t('results') }}
+            </span>
+            <span class="text-sm" v-else>
+              {{ $t('no_results') }}
             </span>
           </div>
         </header>

@@ -1,5 +1,13 @@
+<script setup lang="ts">
+const { locale, setLocale } = useI18n()
+</script>
 <template>
   <NuxtPage />
+  <div class="fixed right-0 z-50">
+    {{ locale }}
+    <Button @click="setLocale('en')">EN</Button>
+    <Button @click="setLocale('cs')">CZ</Button>
+  </div>
 </template>
 
 <style>

@@ -1,0 +1,21 @@
+search: Search
+sorting:
+    title: Sort by
+    options:
+        agg_prob: Aggregate probability
+pagination:
+    per_page: per page
+    next: Next
+    prev: Previous
+    first: First
+    last: Last
+    page: Page
+    of: of
+    total: Total
+    showing: Showing
+    to: to
+    from: from
+results: results
+no_results: No results
+
+up_to_date: Up to date

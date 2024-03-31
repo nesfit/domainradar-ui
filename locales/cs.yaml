@@ -1,0 +1,21 @@
+search: Hledat
+sorting:
+    title: 'Řazení:'
+    options:
+        agg_prob: Potenciál škodlivosti
+pagination:
+    per_page: na stránku
+    next: Další
+    prev: Předchozí
+    first: První
+    last: Poslední
+    page: Stránka
+    of: z
+    total: Celkem
+    showing: Zobrazeno
+    to: do
+    from: od
+results: výsledky
+no_results: Bez výsledků
+
+up_to_date: Aktuální
