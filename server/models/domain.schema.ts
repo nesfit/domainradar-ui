@@ -2,22 +2,15 @@
 import { defineMongooseModel } from "#nuxt/mongoose"
 import { Schema } from "mongoose"
 
-import type * as DR from "~/types/dr"
+import type * as Domain from "~/types/domain"
 
-const PrefilterResultSchema = new Schema<DR.PrefilterResult>({
-  filter: String,
-  // TODO
-})
-
-const CollectionResultSchema = new Schema<DR.CollectionResult>({
+const CollectionResultSchema = new Schema<Domain.CollectionResult>({
   collection_date: Date,
   source: String,
-  result: String,
   error: String,
-  attempts: [Object], // What was this, again?
 })
 
-const ClassificationResultSchema = new Schema<DR.ClassificationResult>({
+const ClassificationResultSchema = new Schema<Domain.ClassificationResult>({
   classification_date: Date,
   classifier: String, // Name of the classifier
   probability: Number,
@@ -25,7 +18,7 @@ const ClassificationResultSchema = new Schema<DR.ClassificationResult>({
   details: Object, // Any key: value pair to render in the frontend
 })
 
-const QradarOffenseSchema = new Schema<DR.QradarOffense>({
+const QradarOffenseSchema = new Schema<Domain.QradarOffense>({
   id: Number,
   qradar_domain: String,
   event_flow_count: Number,
@@ -34,7 +27,7 @@ const QradarOffenseSchema = new Schema<DR.QradarOffense>({
 
 //
 
-const IPSchema = new Schema<DR.IP>({
+const IPSchema = new Schema<Domain.IP>({
   ip: String,
   geo: {
     country: String,
@@ -59,7 +52,7 @@ const IPSchema = new Schema<DR.IP>({
   qradar_offenses: [QradarOffenseSchema],
 })
 
-export const DomainModel = defineMongooseModel<DR.Domain>("Domain", {
+export const DomainModel = defineMongooseModel<Domain.Domain>("Domain", {
   domain_name: String,
   aggregate_probability: Number,
   aggregate_description: String,
@@ -68,7 +61,5 @@ export const DomainModel = defineMongooseModel<DR.Domain>("Domain", {
   first_seen: Date,
   last_seen: Date,
   collection_results: [CollectionResultSchema],
-  prefilter_results: [PrefilterResultSchema],
-  nějaký_misp: Object, // TODO
   additional_info: Object,
 })

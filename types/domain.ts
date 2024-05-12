@@ -7,17 +7,10 @@ export enum CollectionSource {
   ICMP = "ICMP",
 }
 
-export interface PrefilterResult {
-  filter: string
-  // TODO: Define what this is even for
-}
-
 export interface CollectionResult {
-  collection_date?: Date
+  collection_date: Date
   source: CollectionSource
-  result: string
   error?: string
-  attempts?: Record<string, any>[] // What was this, again?
 }
 
 export interface ClassificationResult {
@@ -71,7 +64,5 @@ export interface Domain {
   first_seen: Date
   last_seen: Date
   collection_results: CollectionResult[]
-  prefilter_results: PrefilterResult[]
-  nějaký_misp: Object // TODO: I mean...
   additional_info?: Record<string, any>
 }
