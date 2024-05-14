@@ -23,9 +23,9 @@ export interface ClassificationResult {
 
 export interface QradarOffense {
   id: number
-  qradar_domain: string
-  event_flow_count: number
-  magnitude: number
+  description: string
+  event_count: number
+  flow_count: number
 }
 
 //
@@ -52,7 +52,11 @@ export interface IP {
     prefix_len: number
   }
   collection_results: CollectionResult[]
-  qradar_offenses: QradarOffense[]
+  qradar_offense_source?: {
+    domain_id: number
+    magnitude: number
+    offenses: QradarOffense[]
+  }
 }
 
 export interface Domain {
