@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IP } from '@/types/dr'
+import type { IP } from '~/types/domain'
 import { percentFormat } from '@/assets/utils'
 import { computed } from 'vue';
 

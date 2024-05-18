@@ -20,54 +20,29 @@ import DomainDetail from "@/components/DomainDetail.vue"
 import { usePageStore } from "@/stores/pagination"
 import { storeToRefs } from "pinia"
 
-import type { Domain } from "@/types/dr"
+import type { Domain } from "~/types/domain"
 
 const pageStore = usePageStore()
-const { page } = storeToRefs(pageStore)
+const { page, limit, total } = storeToRefs(pageStore)
 
 const search = ref("")
 const ascendingSort = ref(false)
 
-// const { data: domains, error, loading, total, load } = useFecth...
-/// TEMP FIX
-const domains = ref<Domain[]>([
-  {
-    domain_name: "example.com",
-    aggregate_probability: 0.5,
-    ip_addresses: [
-      {
-        ip: "FUCK",
-        collection_results: [],
-        qradar_offenses: []
-      }
-    ],
-    aggregate_description: "MRDKA",
-    classification_results: [],
-    collection_results: [],
-    first_seen: new Date(),
-    last_seen: new Date(),
-    prefilter_results: [],
-    nějaký_misp: []
+const { data, error, refresh } = await useFetch("/api/domains", {
+  query: {
+    page: page,
+    limit: limit,
+    search: search,
+    sortAsc: ascendingSort,
+    sortKey: "aggregate_probability"
   }
-])
-const total = ref(0)
-const entered = ref(false)
-/// TEMP FIX
-
-function loadData() {
-  entered.value = true
-  // const sort = ascendingSort.value ? invertSort(sortByAggregateProbability) : sortByAggregateProbability
-  // load(page.value, sort, (x) => x.domain_name.includes(search.value))
-  // TODO
-}
-
-onMounted(loadData)
-pageStore.$subscribe(loadData)
-watch(search, () => {
-  pageStore.setPage(1)
-  loadData()
 })
-watch(ascendingSort, loadData)
+const domains = computed(() => data.value?.data as unknown as Domain[] ?? [])
+watchEffect(() => {
+  pageStore.setTotal(data.value?.metadata.totalCount ?? 0)
+})
+
+//
 
 const activeDomain = ref<Domain | null>(null)
 const previewDomain = ref<Domain | null>(null)
@@ -104,7 +79,7 @@ const previewMapDots = computed(() => {
   <div>
     <!-- Controls -->
     <Transition name="page">
-      <div class="pane-container gap-6 py-4" v-if="entered">
+      <div class="pane-container gap-6 py-4">
         <header
           class="text-cyan-900 dark:text-cyan-100 bg-slate-100 dark:bg-slate-800 p-6 mx-4 rounded-xl shadow-2xl flex-shrink">
           <div class="flex gap-x-4">

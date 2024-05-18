@@ -20,9 +20,9 @@ const ClassificationResultSchema = new Schema<Domain.ClassificationResult>({
 
 const QradarOffenseSchema = new Schema<Domain.QradarOffense>({
   id: Number,
-  qradar_domain: String,
-  event_flow_count: Number,
-  magnitude: Number,
+  description: String,
+  event_count: Number,
+  flow_count: Number,
 })
 
 //
@@ -49,7 +49,11 @@ const IPSchema = new Schema<Domain.IP>({
     prefix_len: Number,
   },
   collection_results: [CollectionResultSchema],
-  qradar_offenses: [QradarOffenseSchema],
+  qradar_offense_source: {
+    domain_id: Number,
+    magnitude: Number,
+    offenses: [QradarOffenseSchema],
+  },
 })
 
 export const DomainModel = defineMongooseModel<Domain.Domain>("Domain", {

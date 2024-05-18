@@ -1,0 +1,92 @@
+{
+  "domain_name": "example.com",
+  "aggregate_probability": 0.7,
+  "aggregate_description": "This is a test description of evilness",
+  "ip_addresses": [
+    {
+      "ip": "82.13.1.174",
+      "geo": {
+        "country": "United States",
+        "city": "New York",
+        "latitude": 40.7128,
+        "longitude": -74.006
+      },
+      "asn": {
+        "asn": "AS12345",
+        "as_org": "Some Organization",
+        "network_address": "82.13.1.0",
+        "prefix_len": 24
+      },
+      "collection_results": [
+        {
+          "source": "Geo",
+          "collection_date": "2024-01-01T00:00:00Z",
+          "error": null
+        },
+        {
+          "source": "ICMP",
+          "collection_date": "2024-01-01T00:00:00Z",
+          "error": null
+        }
+      ],
+      "qradar_offense_source": {
+        "domain_id": 123,
+        "magnitude": 5,
+        "offenses": [
+          {
+            "id": 1,
+            "description": "This is a test description of evilness",
+            "event_count": 10,
+            "flow_count": 20
+          },
+          {
+            "id": 2,
+            "description": "This is a test description of evilness",
+            "event_count": 5,
+            "flow_count": 10
+          }
+        ]
+      }
+    }
+  ],
+  "classification_results": [
+    {
+      "classification_date": "2024-01-01T00:00:00Z",
+      "classifier": "Some Classifier",
+      "probability": 0.9,
+      "description": "This is a test description of evilness",
+      "details": {
+        "some_key": "some_value",
+        "another_key": "another_value"
+      }
+    },
+    {
+      "classification_date": "2024-01-01T00:00:00Z",
+      "classifier": "Another Classifier",
+      "probability": 0.5,
+      "description": "This is a test description of evilness",
+      "details": {
+        "some_key": "some_value",
+        "another_key": "another_value"
+      }
+    }
+  ],
+  "first_seen": "2016-01-01T00:00:00Z",
+  "last_seen": "2024-01-01T00:00:00Z",
+  "collection_results": [
+    {
+      "source": "DNS",
+      "collection_date": "2024-01-01T00:00:00Z",
+      "error": null
+    },
+    {
+      "source": "WHOIS",
+      "collection_date": "2024-01-01T00:00:00Z",
+      "error": null
+    }
+  ],
+  "additional_info": {
+    "some_key": "some_value",
+    "another_key": "another_value"
+  }
+}

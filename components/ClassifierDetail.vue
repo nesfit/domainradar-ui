@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ClassificationResult } from '@/types/dr'
+import type { ClassificationResult } from '~/types/domain'
 import { percentFormat } from '@/assets/utils'
 import MalignIcon from './MalignIcon.vue';
 import { computed } from 'vue';

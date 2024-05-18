@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Domain } from "@/types/dr"
+import type { Domain } from "~/types/domain"
 import Pie from "./Pie.vue"
 import MalignIcon from "./MalignIcon.vue"
 import { computed, ref } from "vue";

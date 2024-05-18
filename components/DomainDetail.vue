@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Domain } from '@/types/dr';
+import type { Domain } from '~/types/domain';
 import { percentFormat } from "@/assets/utils"
 import { computed } from 'vue';
 import Pie from './Pie.vue'
