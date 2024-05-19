@@ -1,10 +1,22 @@
 search: Search
 sorting:
     title: Sort by
-    options:
-        agg_prob: Aggregate probability
+    direction:
+        asc: Ascending
+        desc: Descending
 filter:
     title: Filters
+    aggregate_probability:
+        title: Aggregate probability
+        description: Filter minimum and maximum aggregate probability
+    highest_classifier:
+        title: Highest reporting classifier
+        description: Only show domains where selected classifier is the highest reporting
+        options:
+            all: All
+            phishing: Phishing
+            malware: Malware
+            dga: DGA
 pagination:
     per_page: per page
     next: Next
@@ -17,7 +29,20 @@ pagination:
     showing: Showing
     to: to
     from: from
-results: results
-no_results: No results
+results: no results | {n} result | {n} results
 
 up_to_date: Up to date
+open: Open
+close: Close
+
+classification_results: Classification results
+collection_results: Collection results
+ip_addresses: IP addresses
+at: at
+network: Network
+timeline: Timeline
+aggregate_probability: Aggregate probability
+first_seen: First seen
+last_seen: Last seen
+offense_count: Offense count
+offenses: Offenses

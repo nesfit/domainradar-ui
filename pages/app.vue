@@ -25,22 +25,34 @@ import type { Domain } from "~/types/domain"
 const pageStore = usePageStore()
 const { page, limit, total } = storeToRefs(pageStore)
 
+const filterSortStore = useFilterSortStore()
+const { sortAsc, sortKey, filterAggregateProbability, filterHighestClassifier } = storeToRefs(filterSortStore)
+
 const search = ref("")
-const ascendingSort = ref(false)
+const filterAggregateProbabilityLower = computed(() => filterAggregateProbability.value[0])
+const filterAggregateProbabilityUpper = computed(() => filterAggregateProbability.value[1])
 
 const { data, error, refresh } = await useFetch("/api/domains", {
   query: {
-    page: page,
-    limit: limit,
-    search: search,
-    sortAsc: ascendingSort,
-    sortKey: "aggregate_probability"
+    page,
+    limit,
+    search,
+    sortAsc,
+    sortKey,
+    filterAggregateProbabilityLower,
+    filterAggregateProbabilityUpper,
+    filterHighestClassifier,
   }
 })
 const domains = computed(() => data.value?.data as unknown as Domain[] ?? [])
 watchEffect(() => {
   pageStore.setTotal(data.value?.metadata.totalCount ?? 0)
 })
+
+//
+
+const filtersOpen = ref(false)
+const sortingOpen = ref(false)
 
 //
 
@@ -80,28 +92,28 @@ const previewMapDots = computed(() => {
     <!-- Controls -->
     <Transition name="page">
       <div class="pane-container">
-        <header class="text-cyan-900 dark:text-cyan-100 bg-slate-100 dark:bg-slate-800 p-6 flex-shrink">
+        <header class="text-cyan-900 dark:text-cyan-100 bg-slate-200 dark:bg-slate-700 p-6 flex-shrink">
           <div class="flex gap-x-4 items-end">
             <HInputField color="accent" class="grow" :label="$t('search')" v-model="search" autofocus />
-            <HButton class="h-8" color="accent">
+            <HButton class="h-8" color="accent" @click="filtersOpen = !filtersOpen">
               <MdiIcon icon="mdiFilter" /> {{ $t('filter.title') }}
             </HButton>
           </div>
           <div class="flex justify-between items-center mt-4 px-2">
-            <button class="flex items-center text-sm" @click="ascendingSort = !ascendingSort">
+            <button class="flex items-center gap-0.5 text-sm" @click="sortingOpen = !sortingOpen">
               <div>
-                {{ $t('sorting.title') }} <span class="font-bold">{{ $t('sorting.options.agg_prob') }}</span>
+                {{ $t('sorting.title') }} <span class="font-bold">{{ $t(sortKey) }}</span>
               </div>
-              <MdiIcon icon="mdiMenuDown" class="origin-center transition-transform duration-200"
-                :class="ascendingSort ? 'transform rotate-180' : ''" />
+              <div class="origin-center transition-transform duration-200" :class="{ 'transform rotate-180': sortAsc }">
+                <MdiIcon icon="mdiArrowDown" />
+              </div>
             </button>
-            <span class="text-sm" v-if="total > 0">
-              {{ total }} {{ $t('results') }}
-            </span>
-            <span class="text-sm" v-else>
-              {{ $t('no_results') }}
+            <span class="text-sm">
+              {{ $t('results', total) }}
             </span>
           </div>
+          <FilterPanel class="mt-4" v-if="filtersOpen" />
+          <SortPanel class="mt-4" v-if="sortingOpen" />
         </header>
         <main
           class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-3 overflow-auto h-full flex flex-col">

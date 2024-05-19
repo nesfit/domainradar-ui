@@ -25,7 +25,7 @@ const componentType = computed(() => {
 
 <template>
   <component :is="componentType" :disabled="props.disabled" :href="href" :to="to">
-    <HButton :disabled="props.disabled" v-bind="$attrs" class="h-8" :color="color">
+    <HButton :disabled="props.disabled" v-bind="$attrs" class="h-8 m-0" :color="color">
       <slot />
       <MdiIcon icon="mdiOpenInNew" v-if="isExternalLink" class="ml-1" />
     </HButton>

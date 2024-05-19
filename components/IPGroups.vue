@@ -4,6 +4,8 @@ import { groupBy, getContinentFromCoordinates, formatCoordinates } from '@/asset
 import { computed } from 'vue';
 import IPDetail from './IPDetail.vue'
 
+const { t } = useI18n()
+
 const props = defineProps<{
   ips: IP[]
 }>()
@@ -39,7 +41,7 @@ function getFormattedCoords(ips: IP[]) {
     .map(ip => [ip.geo?.latitude, ip.geo?.longitude])
     [0]
   if (coords && coords.length === 2 && coords[0] && coords[1]) {
-    return 'at ' + formatCoordinates(coords[0], coords[1])
+    return `${t('at')} ${formatCoordinates(coords[0], coords[1])}`
   }
   return null
 }
@@ -58,10 +60,11 @@ function getFormattedCoords(ips: IP[]) {
         </div>
       </h2>
       <div v-if="coordGroup[0].asn"><strong>{{ coordGroup[0].asn.as_org }}</strong> <span class="opacity-60">({{
-        coordGroup[0].asn.asn }})</span></div>
+  coordGroup[0].asn.asn }})</span></div>
       <div v-for="net, i in groupBy(coordGroup, 'asn.network_address')" :key="i" class="my-3">
         <h3 class="mb-2 text-lg">
-          Network <strong class="font-mono text-cyan-700 dark:text-cyan-300">{{ net[0].asn.network_address }}</strong> /
+          {{ $t('network') }} <strong class="font-mono text-cyan-700 dark:text-cyan-300">{{ net[0].asn.network_address
+            }}</strong> /
           {{ net[0].asn.prefix_len }}
         </h3>
         <IPDetail v-for="ip in net" :key="ip.ip" :ip="ip" class="mb-2" />

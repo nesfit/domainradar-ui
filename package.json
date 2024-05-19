@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.28.1",
+    "floating-vue": "^5.2.2",
     "holo-vue": "^0.2.1",
     "kafkajs": "^2.2.4",
     "normalize.css": "^8.0.1",

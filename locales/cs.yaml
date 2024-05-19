@@ -1,10 +1,22 @@
 search: Hledat
 sorting:
-    title: 'Řazení:'
-    options:
-        agg_prob: Potenciál škodlivosti
+    title: 'Řazení'
+    direction:
+        asc: Vzestupně
+        desc: Sestupně
 filter:
     title: 'Filtry'
+    aggregate_probability:
+        title: Potenciál škodlivosti
+        description: Filtruje domény podle minimálního a maximálního potenciálu škodlivosti
+    highest_classifier:
+        title: Nejvýše hodnotící klasifikátor
+        description: Zobrazí pouze domény, kde vybraný klasifikátor hodnotí nejvýše
+        options:
+            all: Vše
+            phishing: Phishing
+            malware: Malware
+            dga: DGA
 pagination:
     per_page: na stránku
     next: Další
@@ -17,7 +29,20 @@ pagination:
     showing: Zobrazeno
     to: do
     from: od
-results: výsledků
-no_results: Bez výsledků
+results: bez výsledků | {n} výsledek | {n} výsledky | {n} výsledků
 
 up_to_date: Aktuální
+open: Otevřít
+close: Zavřít
+
+classification_results: Výsledky klasifikace
+collection_results: Výsledky sběru
+ip_addresses: IP adresy
+at: na
+network: Síť
+timeline: Časová osa
+aggregate_probability: Potenciál škodlivosti
+first_seen: První záznam
+last_seen: Poslední záznam
+offense_count: Počet incidentů
+offenses: Incidenty

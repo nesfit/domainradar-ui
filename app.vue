@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { HoloWrapper, HoloRainEffect } from 'holo-vue';
-const { locale, setLocale } = useI18n()
 </script>
 <template>
   <HRoot :uses-system-appearance="true" theme-dark="radar-dark" theme-light="radar-light">
@@ -34,10 +33,6 @@ const { locale, setLocale } = useI18n()
       </header>
     </HoloWrapper>
     <NuxtPage />
-    <div class="fixed right-0 z-50">
-      <Button @click="setLocale('en')">EN</Button>
-      <Button @click="setLocale('cs')">CZ</Button>
-    </div>
   </HRoot>
 </template>
 

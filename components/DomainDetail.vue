@@ -65,14 +65,14 @@ const explodedName = computed(() => {
       </Button>
     </div>
 
-    <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">Classification Results</h2>
+    <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classification_results') }}</h2>
     <div class="flex flex-col gap-4">
       <ClassifierDetail v-for="result in sortedClassificationResults" :key="result.classifier" :result="result" />
     </div>
 
     <template v-if="props.domain.ip_addresses.length > 0">
       <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">
-        IP Addresses
+        {{ $t('ip_addresses') }}
         <span class="text-cyan-800 dark:text-cyan-300 font-normal">
           ({{ props.domain.ip_addresses.length }})
         </span>
@@ -87,15 +87,15 @@ const explodedName = computed(() => {
       </div>
     </template>
 
-    <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">Timeline</h2>
+    <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('timeline') }}</h2>
     <div class="px-4">
-      <div>First seen: {{ props.domain.first_seen }}</div>
-      <div>Last seen: {{ props.domain.last_seen }}</div>
+      <div>{{ $t('first_seen') }}: {{ props.domain.first_seen }}</div>
+      <div>{{ $t('last_seen') }}: {{ props.domain.last_seen }}</div>
     </div>
 
     <div class="mt-8 text-end">
       <Button @click="$emit('close')" color="accent">
-        Close
+        {{ $t('close') }}
         <MdiIcon icon="mdiClose" class="ml-1" />
       </Button>
     </div>

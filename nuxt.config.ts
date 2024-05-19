@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     "nuxt-mongoose",
     "@hebilicious/authjs-nuxt",
     "@nuxtjs/i18n",
+    "floating-vue/nuxt",
   ],
   css: [
     "normalize.css/normalize.css",
