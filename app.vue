@@ -27,15 +27,14 @@ const { locale, setLocale } = useI18n()
             {{ $t('up_to_date') }}
             <div class="dot"></div>
           </span>
-          <button class="text-cyan-900 dark:text-cyan-100 text-2xl">
+          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/settings">
             <MdiIcon icon="mdiTune" />
-          </button>
+          </NuxtLink>
         </div>
       </header>
     </HoloWrapper>
     <NuxtPage />
     <div class="fixed right-0 z-50">
-      {{ locale }}
       <Button @click="setLocale('en')">EN</Button>
       <Button @click="setLocale('cs')">CZ</Button>
     </div>

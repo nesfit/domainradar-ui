@@ -16,7 +16,7 @@
   /* Colors ---------------------------------------------------------------- */
 
   /* -> Base colors */
-  --background: 194deg 45% 77%;
+  --background: 194deg 45% 95%;
   --foreground: 212deg 30% 15%;
 
   /* -> Distinctive colors (override with brand colors) */
@@ -58,4 +58,8 @@
   --destructive: 345deg 78% 62%;
 
   /* <3 -------------------------------------------------------------------- */
+}
+h1,
+h2 {
+  text-transform: unset;
 }

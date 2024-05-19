@@ -3,6 +3,8 @@ sorting:
     title: Sort by
     options:
         agg_prob: Aggregate probability
+filter:
+    title: Filters
 pagination:
     per_page: per page
     next: Next

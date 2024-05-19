@@ -17,9 +17,7 @@ const hasDetails = computed(() => {
 </script>
 
 <template>
-  <div
-    class="py-4 px-6 bg-slate-200 rounded-lg dark:bg-slate-700 dark:text-slate-50"
-  >
+  <div class="py-4 px-6 bg-slate-200 dark:bg-slate-700 dark:text-slate-50">
     <h2 class="font-bold text-cyan-800 dark:text-cyan-200 text-xl">
       <MalignIcon :type="props.result.classifier" />
       {{ props.result.classifier }}
@@ -28,11 +26,7 @@ const hasDetails = computed(() => {
     <div class="mt-4" v-if="hasDetails">
       <h3 class="font-semibold text-cyan-800 dark:text-cyan-200 text-lg">Details</h3>
       <ul>
-        <li
-          class="my-1"
-          v-for="value, key in props.result.details"
-          :key="key"
-        >
+        <li class="my-1" v-for="value, key in props.result.details" :key="key">
           <h4 class="font-semibold text-cyan-700 dark:text-cyan-300">{{ key }}</h4>
           <p>{{ value }}</p>
         </li>

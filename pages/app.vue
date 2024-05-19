@@ -79,14 +79,13 @@ const previewMapDots = computed(() => {
   <div>
     <!-- Controls -->
     <Transition name="page">
-      <div class="pane-container gap-6 py-4">
-        <header
-          class="text-cyan-900 dark:text-cyan-100 bg-slate-100 dark:bg-slate-800 p-6 mx-4 rounded-xl shadow-2xl flex-shrink">
-          <div class="flex gap-x-4">
+      <div class="pane-container">
+        <header class="text-cyan-900 dark:text-cyan-100 bg-slate-100 dark:bg-slate-800 p-6 flex-shrink">
+          <div class="flex gap-x-4 items-end">
             <HInputField color="accent" class="grow" :label="$t('search')" v-model="search" autofocus />
-            <button class="text-2xl">
-              <MdiIcon icon="mdiFilter" />
-            </button>
+            <HButton class="h-8" color="accent">
+              <MdiIcon icon="mdiFilter" /> {{ $t('filter.title') }}
+            </HButton>
           </div>
           <div class="flex justify-between items-center mt-4 px-2">
             <button class="flex items-center text-sm" @click="ascendingSort = !ascendingSort">
@@ -105,8 +104,8 @@ const previewMapDots = computed(() => {
           </div>
         </header>
         <main
-          class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-3 mx-4 rounded-xl shadow-2xl overflow-auto">
-          <ul>
+          class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-3 overflow-auto h-full flex flex-col">
+          <ul class="grow">
             <DomainListItem v-for="domain in domains" :key="domain.domain_name" :domain="domain"
               :active="domain === activeDomain" @click="setActiveDomain" @mouseenter="setPreviewDomain"
               @mouseleave="setPreviewDomain(null)" />
@@ -134,13 +133,13 @@ const previewMapDots = computed(() => {
 <style scoped>
 .pane-container {
   position: fixed;
-  top: 4em;
+  top: 3.4em;
   left: 0;
   z-index: 100;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 25rem;
+  height: calc(100vh - 3.4em);
+    width: 24rem;
 }
 
 .detail-container {
@@ -164,16 +163,6 @@ const previewMapDots = computed(() => {
 @media (prefers-color-scheme: dark) {
   .mist {
     background-image: radial-gradient(#000000AA, transparent 80%);
-  }
-}
-
-.big-ass-drop-shadow {
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 20px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
-}
-
-@media (prefers-color-scheme: dark) {
-  .big-ass-drop-shadow {
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 20px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 30px rgba(0, 0, 0, 0.2));
   }
 }
 

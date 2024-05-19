@@ -3,7 +3,9 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   href?: string
+  to?: any
   disabled?: boolean
+  color?: string
 }>()
 
 const isExternalLink = computed(() => {
@@ -13,20 +15,19 @@ const isExternalLink = computed(() => {
 const componentType = computed(() => {
   if (props.href) {
     return "a"
+  } else if (props.to) {
+    return "NuxtLink"
   } else {
-    return "button"
+    return "div"
   }
 })
 </script>
 
 <template>
-  <component :is="componentType"
-    class="inline-block bg-slate-500 text-slate-50 dark:bg-slate-100 dark:text-slate-800 py-1 px-2 rounded-md shadow-md transition-colors duration-200"
-    :class="{
-      'cursor-not-allowed opacity-50': props.disabled,
-      'hover:bg-slate-600 dark:hover:bg-slate-300': !props.disabled,
-    }" :href="props.href" :disabled="props.disabled" v-bind="$attrs">
-    <slot />
-    <MdiIcon icon="mdiOpenInNew" v-if="isExternalLink" />
+  <component :is="componentType" :disabled="props.disabled" :href="href" :to="to">
+    <HButton :disabled="props.disabled" v-bind="$attrs" class="h-8" :color="color">
+      <slot />
+      <MdiIcon icon="mdiOpenInNew" v-if="isExternalLink" class="ml-1" />
+    </HButton>
   </component>
 </template>

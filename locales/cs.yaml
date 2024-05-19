@@ -3,6 +3,8 @@ sorting:
     title: 'Řazení:'
     options:
         agg_prob: Potenciál škodlivosti
+filter:
+    title: 'Filtry'
 pagination:
     per_page: na stránku
     next: Další
@@ -15,7 +17,7 @@ pagination:
     showing: Zobrazeno
     to: do
     from: od
-results: výsledky
+results: výsledků
 no_results: Bez výsledků
 
 up_to_date: Aktuální

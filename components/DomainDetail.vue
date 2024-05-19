@@ -27,7 +27,8 @@ const explodedName = computed(() => {
 </script>
 
 <template>
-  <div class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-6 rounded-xl shadow-xl">
+  <div
+    class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-6 border-2 border-slate-400 dark:border-slate-600">
 
     <div class="flex gap-x-8 gap-y-4 items-center ms-4 flex-wrap">
       <Pie :percent="props.domain.aggregate_probability * 100">
@@ -35,7 +36,7 @@ const explodedName = computed(() => {
       </Pie>
       <div>
         <h1 class="text-3xl font-semibold flex flex-wrap items-baseline">
-          <span v-for="part in explodedName.slice(0,-1)" :key="part">
+          <span v-for="part in explodedName.slice(0, -1)" :key="part">
             {{ part }}<span class="mx-0.5 text-cyan-600 dark:text-cyan-400 font-extrabold text-4xl">.</span>
           </span><span class="text-cyan-800 dark:text-cyan-200 font-normal">{{ explodedName[explodedName.length - 1]
             }}</span>
@@ -93,12 +94,10 @@ const explodedName = computed(() => {
     </div>
 
     <div class="mt-8 text-end">
-      <button
-        class="px-2 py-1 bg-cyan-900 text-slate-50 rounded-md shadow-md hover:bg-cyan-800 transition-colors duration-200"
-        @click="$emit('close')">
+      <Button @click="$emit('close')" color="accent">
         Close
-        <MdiIcon icon="mdiClose" />
-      </button>
+        <MdiIcon icon="mdiClose" class="ml-1" />
+      </Button>
     </div>
 
   </div>

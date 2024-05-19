@@ -24,7 +24,10 @@ export default defineEventHandler(async (event): Promise<DomainResponse> => {
     const result = await DomainModel.aggregate([
       {
         $facet: {
-          metadata: [{ $count: "totalCount" }],
+          metadata: [
+            { $match: { domain_name: { $regex: search, $options: "i" } } },
+            { $count: "totalCount" },
+          ],
           data: [
             { $match: { domain_name: { $regex: search, $options: "i" } } },
             { $sort: { [sortKey]: sortAsc as 1 | -1 } },

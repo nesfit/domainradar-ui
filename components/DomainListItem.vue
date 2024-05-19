@@ -44,20 +44,20 @@ const maxIPDots = 4
 </script>
 
 <template>
-  <li class="flex items-center gap-2 cursor-pointer px-3 py-1 rounded-md hover:bg-slate-300 dark:hover:bg-slate-600"
-    :class="{
-      'bg-slate-200 dark:bg-slate-700': props.active,
-    }" @click="$emit('click', props.domain)" @mouseenter="onMouseEntered" @mouseleave="onMouseLeft">
+  <li class="flex items-center gap-2 cursor-pointer px-3 py-1 hover:bg-slate-300 dark:hover:bg-slate-600" :class="{
+    'bg-slate-200 dark:bg-slate-700': props.active,
+  }" @click="$emit('click', props.domain)" @mouseenter="onMouseEntered" @mouseleave="onMouseLeft">
     <Pie :size="36" :percent="props.domain.aggregate_probability * 100">
       <MalignIcon :type="dominantType" />
     </Pie>
     <div class="overflow-x-hidden">
       <h2 class="whitespace-nowrap truncate text-ellipsis">{{ props.domain.domain_name }}</h2>
       <ul class="flex gap-2 text-sm">
-        <li v-for="result in props.domain.classification_results" :key="result.classifier">
+        <li v-for="result in props.domain.classification_results" :key="result.classifier"
+          class="flex items-center gap-0.5">
           <MalignIcon :type="result.classifier" /> {{ percentFormat(result.probability) }}
         </li>
-        <li class="opacity-50 transition-colors duration-150" :class="{
+        <li class="opacity-50 transition-colors duration-150 flex" :class="{
             'opacity-100 text-pink-600': isHovered,
 }
 ">
