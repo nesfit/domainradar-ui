@@ -66,7 +66,6 @@ export interface Domain {
   ip_addresses: IP[]
   classification_results: ClassificationResult[]
   first_seen: Date
-  last_seen: Date
   collection_results: CollectionResult[]
   additional_info?: Record<string, any>
 }

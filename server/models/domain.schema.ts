@@ -63,7 +63,6 @@ export const DomainModel = defineMongooseModel<Domain.Domain>("Domain", {
   ip_addresses: [IPSchema],
   classification_results: [ClassificationResultSchema],
   first_seen: Date,
-  last_seen: Date,
   collection_results: [CollectionResultSchema],
   additional_info: Object,
 })
