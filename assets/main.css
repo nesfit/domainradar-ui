@@ -63,3 +63,13 @@ h1,
 h2 {
   text-transform: unset;
 }
+.holo-radio-visual svg {
+  border-radius: 9999px;
+}
+
+/* ================================ Poppers ================================ */
+
+.v-popper--theme-tooltip .v-popper__inner {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
