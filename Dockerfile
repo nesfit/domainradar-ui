@@ -6,11 +6,13 @@ ARG PORT=3784
 FROM node:${NODE_VERSION}-alpine
 WORKDIR /app
 
+COPY ./package.json ./yarn.lock ./
+RUN yarn install
+
 COPY . .
+RUN yarn build
 
-RUN yarn install && yarn build
 RUN rm -rf node_modules && yarn install --ignore-scripts --omit=dev
-
 
 ENV NODE_ENV=PRODUCTION
 ENV NUXT_HOST=0.0.0.0

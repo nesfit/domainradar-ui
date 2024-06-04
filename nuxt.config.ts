@@ -6,13 +6,12 @@ export default defineNuxtConfig({
   ssr: false,
   alias: {
     cookie: resolve(__dirname, "node_modules/cookie"),
-    "nuxt-mdi": resolve(__dirname, "node_modules/nuxt-mdi"),
   },
   modules: [
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
-    "nuxt-mdi",
+    "nuxt-mdi-unfucked",
     "nuxt-mongoose",
     "@hebilicious/authjs-nuxt",
     "@nuxtjs/i18n",
@@ -29,6 +28,9 @@ export default defineNuxtConfig({
       mode: "out-in",
     },
   },
+  mongoose: {
+    uri: process.env.NUXT_MONGOOSE_URI,
+  },
   authJs: {
     authenticatedRedirectTo: "/app",
   },
@@ -43,12 +45,12 @@ export default defineNuxtConfig({
     ],
   },
   runtimeConfig: {
+    mongoose: { uri: process.env.NUXT_MONGOOSE_URI },
     authJs: {
-      secret: process.env.NUXT_NEXTAUTH_SECRET,
+      secret: "",
     },
     public: {
       authJs: {
-        baseUrl: process.env.NUXT_NEXTAUTH_URL,
         verifyClientOnEveryRequest: true,
       },
     },

@@ -8,6 +8,8 @@ services:
     restart: always
   app:
     build: .
+    env_file:
+      - .env
     ports:
       - ${PORT}:${PORT}
     depends_on:
