@@ -1,18 +1,20 @@
 ARG NODE_VERSION=21
 ARG PORT=3784
 
-
-
 FROM node:${NODE_VERSION}-alpine
+ARG PORT
+
 WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./
-RUN yarn install
+
+ENV YARN_CACHE_FOLDER=/root/.yarn
+RUN --mount=type=cache,target=/root/.yarn yarn install
 
 COPY . .
-RUN yarn build
+RUN --mount=type=cache,target=/root/.yarn yarn build
 
-RUN rm -rf node_modules && yarn install --ignore-scripts --omit=dev
+RUN --mount=type=cache,target=/root/.yarn rm -rf node_modules && yarn install --ignore-scripts --omit=dev
 
 ENV NODE_ENV=PRODUCTION
 ENV NUXT_HOST=0.0.0.0
