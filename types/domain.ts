@@ -1,10 +1,11 @@
 export enum CollectionSource {
-  DNS = "DNS",
-  RDAP = "RDAP",
-  TLS = "TLS",
-  Geo = "Geo",
-  ASN = "ASN",
-  ICMP = "ICMP",
+  ZONE = "zone",
+  DNS = "dns",
+  RDAP_DOMAIN = "rdap_dn",
+  RDAP_IP = "rdap_ip",
+  TLS = "tls",
+  NERD = "nerd",
+  GeoASN = "geo_asn",
 }
 
 export interface CollectionResult {
