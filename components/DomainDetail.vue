@@ -89,7 +89,7 @@ const explodedName = computed(() => {
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('timeline') }}</h2>
     <div class="px-4">
-      <div>{{ $t('first_seen') }}: {{ props.domain.first_seen }}</div>
+      <div>{{ $t('first_seen') }}: {{ $d(props.domain.first_seen, 'long') }}</div>
     </div>
 
     <div class="mt-8 text-end">
