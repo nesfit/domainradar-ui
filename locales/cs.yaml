@@ -9,14 +9,6 @@ filter:
     aggregate_probability:
         title: Potenciál škodlivosti
         description: Filtruje domény podle minimálního a maximálního potenciálu škodlivosti
-    highest_classifier:
-        title: Nejvýše hodnotící klasifikátor
-        description: Zobrazí pouze domény, kde vybraný klasifikátor hodnotí nejvýše
-        options:
-            all: Vše
-            phishing: Phishing
-            malware: Malware
-            dga: DGA
 pagination:
     per_page: na stránku
     next: Další

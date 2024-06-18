@@ -9,14 +9,6 @@ filter:
     aggregate_probability:
         title: Aggregate probability
         description: Filter minimum and maximum aggregate probability
-    highest_classifier:
-        title: Highest reporting classifier
-        description: Only show domains where selected classifier is the highest reporting
-        options:
-            all: All
-            phishing: Phishing
-            malware: Malware
-            dga: DGA
 pagination:
     per_page: per page
     next: Next

@@ -26,13 +26,13 @@ const pageStore = usePageStore()
 const { page, limit, total } = storeToRefs(pageStore)
 
 const filterSortStore = useFilterSortStore()
-const { sortAsc, sortKey, filterAggregateProbability, filterHighestClassifier } = storeToRefs(filterSortStore)
+const { sortAsc, sortKey, filterAggregateProbability } = storeToRefs(filterSortStore)
 
 const search = ref("")
 const filterAggregateProbabilityLower = computed(() => filterAggregateProbability.value[0])
 const filterAggregateProbabilityUpper = computed(() => filterAggregateProbability.value[1])
 
-const { data, error, refresh } = await useFetch("/api/domains", {
+const { data, error, refresh, pending: domainsLoading } = await useFetch("/api/domains", {
   query: {
     page,
     limit,
@@ -41,7 +41,6 @@ const { data, error, refresh } = await useFetch("/api/domains", {
     sortKey,
     filterAggregateProbabilityLower,
     filterAggregateProbabilityUpper,
-    filterHighestClassifier,
   }
 })
 const domains = computed(() => data.value?.data as unknown as Domain[] ?? [])
@@ -117,11 +116,14 @@ const previewMapDots = computed(() => {
         </header>
         <main
           class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-3 overflow-auto h-full flex flex-col">
-          <ul class="grow">
+          <ul class="grow transition-all duration-300" :class="{ 'filter blur-sm': domainsLoading }">
             <DomainListItem v-for="domain in domains" :key="domain.domain_name" :domain="domain"
               :active="domain === activeDomain" @click="setActiveDomain" @mouseenter="setPreviewDomain"
               @mouseleave="setPreviewDomain(null)" />
           </ul>
+          <div v-if="domainsLoading" class="absolute inset-0 flex items-center justify-center opacity-0 show-after-1s">
+            <img src="/cheese.webp" alt="Loading" class="w-1/2" />
+          </div>
           <div class="mt-6 flex justify-center">
             <PageNavigator />
           </div>
@@ -190,5 +192,14 @@ const previewMapDots = computed(() => {
 .detail-leave-to {
   translate: -100% 0;
   opacity: 0;
+}
+.show-after-1s {
+  animation: showAfter1s 1s 1s forwards;
+}
+
+@keyframes showAfter1s {
+  to {
+    opacity: 1;
+  }
 }
 </style>

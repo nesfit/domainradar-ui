@@ -13,17 +13,6 @@
           <span>max: {{ filterAggregateProbability[1] }}</span>
         </div>
       </div>
-      <div class="flex flex-col">
-        <div class="flex justify-between">
-          <h2 class="font-medium">{{ $t('filter.highest_classifier.title') }}</h2>
-          <MdiIcon icon="mdiInformationOutline" v-tooltip="$t('filter.highest_classifier.description')" />
-        </div>
-        <select v-model="filterHighestClassifier" class="w-full my-1">
-          <option value="">{{ $t('filter.highest_classifier.options.all') }}</option>
-          <option v-for="classifier in classifiers" :value="classifier">{{
-            $t(`filter.highest_classifier.options.${classifier}`) }}</option>
-        </select>
-      </div>
     </div>
   </div>
 </template>
