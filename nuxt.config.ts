@@ -45,6 +45,7 @@ export default defineNuxtConfig({
     ],
   },
   runtimeConfig: {
+    kafkaBroker: process.env.NUXT_KAFKA_BROKER,
     mongoose: { uri: process.env.NUXT_MONGOOSE_URI },
     authJs: {
       secret: "",

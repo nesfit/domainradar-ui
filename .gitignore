@@ -25,3 +25,7 @@ logs
 
 # Volume data
 .mongo
+
+# Mount points
+server/assets/**/*
+!server/assets/README.md
