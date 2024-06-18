@@ -29,7 +29,7 @@ onKeyStroke("Enter", jump)
       :title="$t('pagination.prev')">
       <MdiIcon icon="mdiChevronLeft" />
     </button>
-    <span class="block w-32 text-center text-base">
+    <span class="block w-32 text-center text-sm">
       {{ $t('pagination.page') }}
       <button class="font-bold" @click="enableJumpMode">{{ pageStore.page }}</button>
       {{ $t('pagination.of') }}
