@@ -27,8 +27,11 @@ export const usePageStore = defineStore("page", () => {
   }
 
   const setPage = (p: number) => {
-    if (p < 1 || p > pageCount.value) {
-      return
+    if (p < 1) {
+      page.value = 1
+    }
+    if (p > pageCount.value) {
+      page.value = pageCount.value
     }
     page.value = p
   }
