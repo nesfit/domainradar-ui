@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
-
 const props = defineProps<{
   href?: string
   to?: any
@@ -16,7 +14,7 @@ const componentType = computed(() => {
   if (props.href) {
     return "a"
   } else if (props.to) {
-    return "NuxtLink"
+    return resolveComponent("NuxtLink")
   } else {
     return "div"
   }
