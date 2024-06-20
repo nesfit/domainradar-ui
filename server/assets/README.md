@@ -5,6 +5,7 @@ a Docker volume to this directory to provide the necessary files.
 Kafka SSL files are expected in a subdirectory called kafka-ssl.
 So the path to the Kafka SSL files should be server/assets/kafka-ssl/...
 where the required files are:
-- ca-cert.pem
-- webui-cert.pem
-- webui-priv-key.pem
+- ca-cert.pem (CA certificate)
+- webui-cert.pem (certificate)
+- webui-priv-key.pem (private key)
+- key-password.txt (private key passphrase)

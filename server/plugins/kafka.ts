@@ -7,15 +7,17 @@ async function createKafka() {
   const ca = await storage.getItem("kafka-ssl/ca-cert.pem")
   const cert = await storage.getItem("kafka-ssl/webui-cert.pem")
   const key = await storage.getItem("kafka-ssl/webui-priv-key.pem")
+  const passphrase = await storage.getItem("kafka-ssl/key-password.txt")
 
   const kafka = new Kafka({
     clientId: "nitro",
     brokers: [runtimeConfig.kafkaBroker],
     ssl: {
       rejectUnauthorized: false,
-      ca: ca?.toString(),
-      cert: cert?.toString(),
-      key: key?.toString(),
+      ca: ca?.toString().trim(),
+      cert: cert?.toString().trim(),
+      key: key?.toString().trim(),
+      passphrase: passphrase?.toString().trim(),
     },
   })
 
