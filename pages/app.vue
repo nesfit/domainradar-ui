@@ -41,7 +41,8 @@ const { data, error, refresh, pending: domainsLoading } = await useFetch("/api/d
     sortKey,
     filterAggregateProbabilityLower,
     filterAggregateProbabilityUpper,
-  }
+  },
+  lazy: true,
 })
 const domains = computed(() => data.value?.data as unknown as Domain[] ?? [])
 watchEffect(() => {
