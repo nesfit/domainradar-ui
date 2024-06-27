@@ -46,3 +46,28 @@ auth_msg:
     guest: Please sign in to access the application.
     unauthorized: You are not authorized to access this.
     authenticated: Signed in as {name}
+
+settings:
+    title: Settings
+    app:
+        title: Application settings
+        description: Tweak the application interface.
+        #
+        theme:
+            title: Theme
+            description: Choose a color theme for the application.
+            light: Light
+            dark: Dark
+            system: Follow system
+            allow_holo: Use Holo visual effects
+        language:
+            title: Language
+            description: Choose a language for the application. You can toggle between languages at any time in the header.
+    components:
+        title: Component settings
+        description: Adjust DomainRadar component configuration.
+        loading: Fetching current component configuration
+        invalid: Invalid configuration
+        waiting: Waiting for confirmation from the component
+        saved: Component settings updated
+        failed: Failed to update the component

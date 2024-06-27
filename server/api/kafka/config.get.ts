@@ -2,9 +2,11 @@ import type { Consumer, Message, ConsumerSubscribeTopics, Admin } from "kafkajs"
 import type { ComponentId } from "~/types/config"
 import { EventEmitter } from "events"
 
-export default defineEventHandler(async (event) => {
+type Configs = Partial<Record<ComponentId, Record<string, any>>>
+
+export default defineEventHandler(async (event): Promise<Configs> => {
   const TOPIC = "configuration_states"
-  const configs: Partial<Record<ComponentId, Record<string, any>>> = {}
+  const configs: Configs = {}
   //
   const admin: Admin = event.context.kafka.client.admin()
   const maxOffset = await getTotalOffset(admin, TOPIC)
@@ -37,7 +39,6 @@ async function consume(
     await consumer.subscribe(subscription)
     await consumer.run({
       eachMessage: async ({ message }) => {
-        console.log("emitting message", message)
         bus.emit("message", message)
       },
     })
@@ -51,7 +52,6 @@ async function consume(
     return new Promise<void>((resolve, reject) => {
       bus.on("message", async (message) => await handler(message, stop))
       bus.on("stop", async () => {
-        console.log("stopping consumer by bus")
         await consumer.stop()
         await consumer.disconnect()
         resolve()

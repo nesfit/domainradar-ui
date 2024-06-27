@@ -46,3 +46,28 @@ auth_msg:
     guest: Pro přístup k aplikaci se prosím přihlaste.
     unauthorized: K přístupu nemáte oprávnění.
     authenticated: Přihlášen uživatel {name}
+
+settings:
+    title: Nastavení
+    app:
+        title: Nastavení aplikace
+        description: Přizpůsobte si prostředí aplikace.
+        #
+        theme:
+            title: Vzhled
+            description: Vyberte si barevné schéma aplikace.
+            light: Světlý
+            dark: Tmavý
+            system: Podle systému
+            allow_holo: Používat vizuální efekty Holo
+        language:
+            title: Jazyk
+            description: Zvolte jazyk aplikace. Přepínat jazyk můžete kdykoliv v horní liště.
+    components:
+        title: Nastavení komponent
+        description: Upravte konfiguraci komponent DomainRadaru.
+        loading: Načítání aktuální konfigurace komponent
+        invalid: Neplatná konfigurace
+        waiting: Čekání na potvrzení od komponenty
+        saved: Nastavení komponent aktualizováno
+        failed: Nepodařilo se komponentu aktualizovat
