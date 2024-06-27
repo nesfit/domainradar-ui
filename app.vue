@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { HoloWrapper, HoloRainEffect } from 'holo-vue';
+const { locale, setLocale } = useI18n()
 </script>
 <template>
   <HRoot :uses-system-appearance="true" theme-dark="radar-dark" theme-light="radar-light">
@@ -16,7 +17,7 @@ import { HoloWrapper, HoloRainEffect } from 'holo-vue';
       <template #effects="{ renderer }">
         <HoloRainEffect :renderer="renderer" :options="{ propagate: false, interval: 1 }" />
       </template>
-      <header class="px-6 py-3 w-full flex justify-between items-center">
+      <header class="px-6 py-3 w-full h-16 flex justify-between items-center">
         <NuxtLink to="/" class="flex items-center gap-2 text-cyan-900 dark:text-cyan-100 cursor-pointer">
           <DomainRadarLogo class="w-8" />
           <strong class="text-lg">DomainRadar</strong>
@@ -26,6 +27,9 @@ import { HoloWrapper, HoloRainEffect } from 'holo-vue';
             {{ $t('up_to_date') }}
             <div class="dot"></div>
           </span>
+          <HButton @click="setLocale(locale === 'en' ? 'cs' : 'en')" class="uppercase h-7" symmetrical borderless
+            hollow>{{ locale }}
+          </HButton>
           <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/settings">
             <MdiIcon icon="mdiTune" />
           </NuxtLink>

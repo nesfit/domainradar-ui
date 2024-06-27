@@ -38,3 +38,11 @@ first_seen: First seen
 last_seen: Last seen
 offense_count: Offense count
 offenses: Offenses
+
+sign_in: Sign in
+sign_out: Sign out
+open_app: Open app
+auth_msg:
+    guest: Please sign in to access the application.
+    unauthorized: You are not authorized to access this.
+    authenticated: Signed in as {name}

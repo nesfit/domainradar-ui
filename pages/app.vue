@@ -90,7 +90,7 @@ const previewMapDots = computed(() => {
   <div>
     <!-- Controls -->
     <Transition name="page">
-      <div class="pane-container">
+      <div class="pane-container top-16">
         <header class="text-cyan-900 dark:text-cyan-100 bg-slate-200 dark:bg-slate-700 p-6 flex-shrink">
           <div class="flex gap-x-4 items-end">
             <HInputField color="accent" class="grow" :label="$t('search')" v-model="search" autofocus />
@@ -147,12 +147,11 @@ const previewMapDots = computed(() => {
 <style scoped>
 .pane-container {
   position: fixed;
-  top: 3.4em;
   left: 0;
   z-index: 100;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 3.4em);
+  height: calc(100vh - 4em);
     width: 24rem;
 }
 

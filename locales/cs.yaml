@@ -38,3 +38,11 @@ first_seen: První záznam
 last_seen: Poslední záznam
 offense_count: Počet incidentů
 offenses: Incidenty
+
+sign_in: Přihlásit se
+sign_out: Odhlásit se
+open_app: Otevřít aplikaci
+auth_msg:
+    guest: Pro přístup k aplikaci se prosím přihlaste.
+    unauthorized: K přístupu nemáte oprávnění.
+    authenticated: Přihlášen uživatel {name}
