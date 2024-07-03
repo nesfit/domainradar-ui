@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Vue3JsonEditor } from 'vue3-json-editor';
+import type { ComponentId, ConfigChangeRequest } from '~/types/config';
 
 const route = useRoute()
 const { go } = useRouter()
@@ -15,9 +16,52 @@ const editableConfigs: Record<string, object> = reactive({})
 
 watch(currentConfig, () => {
   for (const component in currentConfig.value) {
-    editableConfigs[component] = JSON.parse(JSON.stringify(currentConfig.value[component].currentConfig))
+    editableConfigs[component] = JSON.parse(JSON.stringify(
+      currentConfig.value[component].currentConfig
+    ))
   }
 })
+
+async function sendChangeRequest(component: ComponentId) {
+  const body: ConfigChangeRequest = {
+    component,
+    config: editableConfigs[component],
+  }
+  const { error } = await $fetch("/api/kafka/config", {
+    method: 'PUT',
+    body
+  })
+  if (error) {
+    console.error(error)
+  }
+}
+
+async function waitForComponentResponse(component: ComponentId) {
+  const { data, error } = await $fetch(`/api/kafka/config/${component}`)
+  if (error) {
+    if (error.value?.message === 'timeout') {
+      console.error('Timeout while waiting for component response')
+    } else {
+      console.error(error)
+    }
+  }
+  return data
+}
+
+async function tryUpdateConfig(component: ComponentId) {
+  try {
+    const promises = [
+      sendChangeRequest(component),
+      waitForComponentResponse(component)
+    ]
+    const [sent, response] = await Promise.all(promises)
+    return response
+  } catch (error) {
+    console.error(error)
+  } finally {
+    refreshConfigs()
+  }
+}
 </script>
 
 <template>
@@ -75,7 +119,7 @@ watch(currentConfig, () => {
       <section v-for="(config, component) in editableConfigs" class="mt-4">
         <div class="flex justify-between items-center p-2 bg-slate-300 dark:bg-slate-600">
           <h3 class="mx-2 text-lg font-bold capitalize">{{ component }}</h3>
-          <HButton @click="refreshConfigs" color="accent" disabled>{{ $t('save') }}</HButton>
+          <HButton @click="tryUpdateConfig(component)" color="accent">{{ $t('save') }}</HButton>
         </div>
         <vue3-json-editor v-model="editableConfigs[component]" />
       </section>

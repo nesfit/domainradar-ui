@@ -14,3 +14,12 @@ export enum Component {
 }
 
 export type ComponentId = `${Component}`
+
+export type Config = Record<string, any>
+
+export type Configs = Partial<Record<ComponentId, Config>>
+
+export interface ConfigChangeRequest {
+  component: ComponentId
+  config: Record<string, any>
+}
