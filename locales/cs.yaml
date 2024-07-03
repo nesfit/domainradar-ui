@@ -26,6 +26,7 @@ results: bez výsledků | {n} výsledek | {n} výsledky | {n} výsledků
 up_to_date: Aktuální
 open: Otevřít
 close: Zavřít
+save: Uložit
 
 classification_results: Výsledky klasifikace
 collection_results: Výsledky sběru

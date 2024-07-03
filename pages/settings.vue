@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Vue3JsonEditor } from 'vue3-json-editor';
+
 const route = useRoute()
 const { go } = useRouter()
 const { locale, setLocale } = useI18n()
@@ -8,10 +10,18 @@ const allowHolo = ref(true)
 const { data: currentConfig, error: errorFetchingConfigs, refresh: refreshConfigs, pending: loadingConfigs } = await useFetch("/api/kafka/config", {
   lazy: true,
 })
+
+const editableConfigs: Record<string, object> = reactive({})
+
+watch(currentConfig, () => {
+  for (const component in currentConfig.value) {
+    editableConfigs[component] = JSON.parse(JSON.stringify(currentConfig.value[component].currentConfig))
+  }
+})
 </script>
 
 <template>
-  <div class="px-16 py-8 flex flex-col gap-12">
+  <div class="px-16 py-8 flex flex-col gap-12 max-w-screen-xl">
     <div class="flex items-center gap-2 text-2xl font-black text-cyan-900 dark:text-cyan-100 -ml-8">
       <button @click="go(-1)">
         <MdiIcon icon="mdiArrowLeft" />
@@ -62,11 +72,12 @@ const { data: currentConfig, error: errorFetchingConfigs, refresh: refreshConfig
         <p v-if="errorFetchingConfigs">{{ errorFetchingConfigs }}</p>
       </div>
 
-      <section v-for="(config, component) in currentConfig">
-        <h3 class="mt-4 text-lg font-bold">{{ component }}</h3>
-        <pre class="px-4 bg-slate-200 dark:bg-slate-700"><code>
-{{ config.currentConfig }}
-        </code></pre>
+      <section v-for="(config, component) in editableConfigs" class="mt-4">
+        <div class="flex justify-between items-center p-2 bg-slate-300 dark:bg-slate-600">
+          <h3 class="mx-2 text-lg font-bold capitalize">{{ component }}</h3>
+          <HButton @click="refreshConfigs" color="accent" disabled>{{ $t('save') }}</HButton>
+        </div>
+        <vue3-json-editor v-model="editableConfigs[component]" />
       </section>
 
     </section>

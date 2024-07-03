@@ -26,6 +26,7 @@ results: no results | {n} result | {n} results
 up_to_date: Up to date
 open: Open
 close: Close
+save: Save
 
 classification_results: Classification results
 collection_results: Collection results
