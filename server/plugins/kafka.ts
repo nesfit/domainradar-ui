@@ -29,11 +29,12 @@ async function createKafka() {
     },
   })
 
-  const producer = kafka.producer({
-    allowAutoTopicCreation: false,
-    createPartitioner: Partitioners.DefaultPartitioner,
-  })
-  const consumer = kafka.consumer({ groupId: "webui" })
+  const producer = () =>
+    kafka.producer({
+      allowAutoTopicCreation: false,
+      createPartitioner: Partitioners.DefaultPartitioner,
+    })
+  const consumer = () => kafka.consumer({ groupId: "webui" })
 
   return { client: kafka, producer, consumer }
 }

@@ -11,7 +11,7 @@ export default defineEventHandler(async (event): Promise<Configs> => {
   let processed = 0
   //
   await consume(
-    event.context.kafka.consumer,
+    event.context.kafka.consumer(),
     { topics: [TOPIC] },
     async (message, stop) => {
       const key = message.key?.toString() as ComponentId

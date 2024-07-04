@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const key = body.component
   const value = body.config
   //
-  const producer: Producer = event.context.kafka.producer
+  const producer: Producer = event.context.kafka.producer()
   await producer.connect()
   await producer.send({
     topic: TOPIC,
