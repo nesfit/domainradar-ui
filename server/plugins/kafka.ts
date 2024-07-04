@@ -1,13 +1,21 @@
 import { Kafka, Partitioners } from "kafkajs"
+import fs from "fs/promises"
+
+async function getContent(path: string) {
+  try {
+    return await fs.readFile(path, { encoding: "utf-8" })
+  } catch (e) {
+    return null
+  }
+}
 
 async function createKafka() {
   const runtimeConfig = useRuntimeConfig()
-  const storage = useStorage("assets:server")
 
-  const ca = await storage.getItem("kafka-ssl/ca-cert.pem")
-  const cert = await storage.getItem("kafka-ssl/webui-cert.pem")
-  const key = await storage.getItem("kafka-ssl/webui-priv-key.pem")
-  const passphrase = await storage.getItem("kafka-ssl/key-password.txt")
+  const ca = await getContent("kafka-ssl/ca-cert.pem")
+  const cert = await getContent("kafka-ssl/webui-cert.pem")
+  const key = await getContent("kafka-ssl/webui-priv-key.pem")
+  const passphrase = await getContent("kafka-ssl/key-password.txt")
 
   const kafka = new Kafka({
     clientId: "nitro",

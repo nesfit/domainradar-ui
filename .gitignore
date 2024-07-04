@@ -27,5 +27,5 @@ logs
 .mongo
 
 # Mount points
-server/assets/**/*
-!server/assets/README.md
+kafka-ssl/**/*
+!kafka-ssl/README.md
