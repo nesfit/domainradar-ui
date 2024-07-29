@@ -71,4 +71,7 @@ settings:
         invalid: Neplatná konfigurace
         waiting: Čekání na potvrzení od komponenty
         saved: Nastavení komponent aktualizováno
-        failed: Nepodařilo se komponentu aktualizovat
+        failed: Nepodařilo se komponentu aktualizovat¨
+
+prefiltered:
+    title: Předfiltrované domény

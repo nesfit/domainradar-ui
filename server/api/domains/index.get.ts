@@ -1,5 +1,7 @@
 import { parse } from "vue/compiler-sfc"
 import { Domain } from "~/types/domain"
+import { authOptions } from "../auth/[...]"
+import { getServerSession } from "#auth"
 
 interface DomainResponse {
   data: Domain[]
@@ -12,6 +14,14 @@ interface DomainResponse {
 }
 
 export default defineEventHandler(async (event): Promise<DomainResponse> => {
+  // auth
+  if (!(await getServerSession(event, authOptions))?.user)
+    return {
+      data: [],
+      metadata: { totalCount: 0, page: 0, limit: 0 },
+      error: "Unauthorized",
+    }
+  //
   let {
     page,
     limit,

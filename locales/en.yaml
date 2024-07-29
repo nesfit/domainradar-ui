@@ -72,3 +72,6 @@ settings:
         waiting: Waiting for confirmation from the component
         saved: Component settings updated
         failed: Failed to update the component
+
+prefiltered:
+    title: Prefiltered Domains

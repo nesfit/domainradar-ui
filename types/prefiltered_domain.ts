@@ -4,6 +4,10 @@ export interface PrefilterResult {
 }
 
 export interface PrefilteredDomain {
-  domain_name: string
-  prefilters: PrefilterResult[]
+  _id: {
+    domainName: string
+    timestamp: Date
+  }
+  // prefilters: PrefilterResult[]
+  [other: string | number | symbol]: unknown
 }

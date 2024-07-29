@@ -23,10 +23,14 @@ const { locale, setLocale } = useI18n()
           <strong class="text-lg">DomainRadar</strong>
         </NuxtLink>
         <div class="flex items-center gap-4">
-          <span class="text-sm text-cyan-800 dark:text-cyan-200 pointer-events-none">
+          <!-- <span class="text-sm text-cyan-800 dark:text-cyan-200 pointer-events-none">
             {{ $t('up_to_date') }}
             <div class="dot"></div>
-          </span>
+          </span> -->
+          <NuxtLink class="text-cyan-900 dark:text-cyan-100 flex items-center gap-2" to="/prefiltered">
+            <MdiIcon icon="mdiFilterCheck" />
+            {{ $t('prefiltered.title') }}
+          </NuxtLink>
           <HButton @click="setLocale(locale === 'en' ? 'cs' : 'en')" class="uppercase h-7" symmetrical borderless
             hollow>{{ locale }}
           </HButton>

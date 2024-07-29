@@ -2,6 +2,13 @@
 import { Vue3JsonEditor } from 'vue3-json-editor';
 import type { ComponentId, ConfigChangeRequest } from '~/types/config';
 
+definePageMeta(
+  {
+    middleware: "auth",
+    auth: { guestRedirectTo: "/" }
+  }
+)
+
 const route = useRoute()
 const { go } = useRouter()
 const { locale, setLocale } = useI18n()
