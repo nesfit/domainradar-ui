@@ -2,6 +2,8 @@ import { parse } from "vue/compiler-sfc"
 import { Domain } from "~/types/domain"
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
+import createDomainPipeline from "~/server/utils/domain.pipeline"
+import { defineMongooseModel } from "#nuxt/mongoose"
 
 interface DomainResponse {
   data: Domain[]
@@ -12,6 +14,25 @@ interface DomainResponse {
   }
   error?: any
 }
+
+// quick and dirty stub models
+// because using the connection directly is somehow even worse
+const ClassificationResultsModel = defineMongooseModel<{ domain_name: string }>(
+  "classification_results",
+  {
+    domain_name: String,
+  },
+  {
+    collection: "classification_results",
+  },
+)
+const DomainDataModel = defineMongooseModel(
+  "dn_data",
+  {},
+  {
+    collection: "dn_data",
+  },
+)
 
 export default defineEventHandler(async (event): Promise<DomainResponse> => {
   // auth
@@ -44,6 +65,11 @@ export default defineEventHandler(async (event): Promise<DomainResponse> => {
     parseFloat(filterAggregateProbabilityUpper as string) / 100
   filterHighestClassifier = (filterHighestClassifier as string) ?? ""
   //
+  if (isNaN(filterAggregateProbabilityLower))
+    filterAggregateProbabilityLower = 0
+  if (isNaN(filterAggregateProbabilityUpper))
+    filterAggregateProbabilityUpper = 1
+  //
   try {
     const match = {
       aggregate_probability: {
@@ -52,43 +78,39 @@ export default defineEventHandler(async (event): Promise<DomainResponse> => {
       },
       domain_name: { $regex: search, $options: "i" },
     }
-    const result = await DomainModel.aggregate([
-      {
-        $facet: {
-          metadata: [{ $match: match }, { $count: "totalCount" }],
-          data: [
-            {
-              $match: match,
-            },
-            {
-              $addFields: {
-                offense_count: {
-                  $size: {
-                    $reduce: {
-                      input: "$ip_addresses.qradar_offense_source.offenses",
-                      initialValue: [],
-                      in: { $concatArrays: ["$$value", "$$this"] },
-                    },
-                  },
-                },
-              },
-            },
-            { $sort: { [sortKey]: sortAsc as 1 | -1 } },
-            { $skip: (page - 1) * limit },
-            { $limit: limit },
-          ],
-        },
-      },
+
+    const domainNamesPagePromise = ClassificationResultsModel.find(match, {
+      _id: 0,
+      domain_name: 1,
+    })
+      .sort({ [sortKey]: sortAsc as 1 | -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .exec()
+    const totalCountPromise =
+      ClassificationResultsModel.countDocuments(match).exec()
+
+    const [domainNamesPage, totalCount] = await Promise.all([
+      domainNamesPagePromise,
+      totalCountPromise,
     ])
+    const domainNamesToAggregate = domainNamesPage.map(
+      (domain) => domain.domain_name,
+    )
+
+    const pipeline = createDomainPipeline(domainNamesToAggregate)
+    const result = await DomainDataModel.aggregate(pipeline)
+
     return {
-      data: result[0].data,
+      data: result,
       metadata: {
-        totalCount: result[0].metadata[0].totalCount,
+        totalCount,
         page,
         limit,
       },
     }
   } catch (error) {
+    console.error(error)
     return { data: [], metadata: { totalCount: 0, page, limit }, error }
   }
 })
