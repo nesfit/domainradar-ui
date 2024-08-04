@@ -1,19 +1,10 @@
-import { Producer } from "kafkajs"
 import { ConfigChangeRequest } from "~/types/config"
+import type { ConfigManager } from "~/server/plugins/configManager"
 
 export default defineEventHandler(async (event) => {
-  const TOPIC = "configuration_change_requests"
-  const body = await readBody<ConfigChangeRequest>(event)
-  const key = body.component
-  const value = body.config
-  //
-  const producer: Producer = event.context.kafka.producer()
-  await producer.connect()
-  await producer.send({
-    topic: TOPIC,
-    messages: [{ key, value: JSON.stringify(value) }],
-  })
-  await producer.disconnect()
+  const request = await readBody<ConfigChangeRequest>(event)
+  const manager: ConfigManager = event.context.configManager
+  await manager.updateConfig(request)
   //
   return { success: true }
 })
