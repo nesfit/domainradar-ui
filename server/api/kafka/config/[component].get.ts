@@ -2,24 +2,22 @@
 // or timeout and assume the component is down
 
 import type { ComponentId, Config } from "~/types/config"
-import consume from "~/server/utils/kafkaConsume"
+import type { ConfigManager } from "~/server/plugins/configManager"
 
 export default defineEventHandler(async (event): Promise<Config> => {
-  const TOPIC = "configuration_states"
   const componentId = getRouterParam(event, "component") as ComponentId
-  let config: Config | undefined
+  const manager: ConfigManager = event.context.configManager
   //
-  await consume(
-    event.context.kafka.consumer(),
-    { topics: [TOPIC] },
-    async (message, stop) => {
-      const key = message.key?.toString() as ComponentId
-      if (key === componentId) {
-        config = JSON.parse(message.value?.toString() ?? "{}")
-        stop()
-      }
-    },
-    { timeout: 5000 },
-  )
-  return config ?? {}
+  const configPromise = manager.waitForConfigUpdate(componentId)
+  const timeoutPromise = new Promise<Config>((resolve, reject) => {
+    setTimeout(() => {
+      reject(
+        new Error(
+          `Timeout waiting for config update for component ${componentId}`,
+        ),
+      )
+    }, 5000) // set the timeout to 5 seconds
+  })
+
+  return Promise.race([configPromise, timeoutPromise])
 })
