@@ -80,7 +80,7 @@ export default function createPipeline(domainNames: string[]) {
               latest_data: {
                 $push: {
                   k: "$_id.collector",
-                  v: "$latest.data",
+                  v: { $ifNull: ["$latest.data", null] },
                 },
               },
               // Also propagate the array of all collection attempt metadata
@@ -117,21 +117,21 @@ export default function createPipeline(domainNames: string[]) {
               _id: 0,
               ip: "$_id",
               geo: {
-                country: "$results.geo_asn.countryCode",
-                country_code: "$results.geo_asn.countryCode",
-                region: "$results.geo_asn.region",
-                region_code: "$results.geo_asn.regionCode",
-                city: "$results.geo_asn.city",
-                postal_code: "$results.geo_asn.postalCode",
-                latitude: "$results.geo_asn.latitude",
-                longitude: "$results.geo_asn.longitude",
-                timezone: "$results.geo_asn.timezone",
+                country: "$results.geo-asn.countryCode",
+                country_code: "$results.geo-asn.countryCode",
+                region: "$results.geo-asn.region",
+                region_code: "$results.geo-asn.regionCode",
+                city: "$results.geo-asn.city",
+                postal_code: "$results.geo-asn.postalCode",
+                latitude: "$results.geo-asn.latitude",
+                longitude: "$results.geo-asn.longitude",
+                timezone: "$results.geo-asn.timezone",
               },
               asn: {
-                asn: "$results.geo_asn.asn",
-                as_org: "$results.geo_asn.asnOrg",
-                network_address: "$results.geo_asn.networkAddress",
-                prefix_len: "$results.geo_asn.prefixLength",
+                asn: "$results.geo-asn.asn",
+                as_org: "$results.geo-asn.asnOrg",
+                network_address: "$results.geo-asn.networkAddress",
+                prefix_len: "$results.geo-asn.prefixLength",
               },
               collection_results: {
                 $sortArray: {
