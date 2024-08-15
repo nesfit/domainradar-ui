@@ -71,6 +71,7 @@ class ConfigManager {
   // Initialize the ConfigManager state by reading the current configuration
   // from the designated Kafka topic's beginning.
   async initialize() {
+    console.log("Initializing ConfigManager...")
     await this.primaryConsumer.connect()
     await this.primaryConsumer.subscribe({ topics: [this.configTopic] })
     await this.primaryConsumer.run({
@@ -85,6 +86,7 @@ class ConfigManager {
       partition: 0,
       offset: "0",
     })
+    console.log("ConfigManager initialized.")
   }
 
   // Register a callback to be called when a specific component's configuration
@@ -150,15 +152,20 @@ class ConfigManager {
   }
 }
 
-export default defineNitroPlugin((nitroApp) => {
+async function createManager() {
   const configManager = new ConfigManager(
     "webui",
     "configuration_states",
     "configuration_change_requests",
   )
-  configManager.initialize().then(() => {
+  await configManager.initialize()
+  return configManager
+}
+
+export default defineNitroPlugin((nitroApp) => {
+  createManager().then((manager) => {
     nitroApp.hooks.hook("request", (event) => {
-      event.context.configManager = configManager
+      event.context.configManager = manager
     })
   })
 })
