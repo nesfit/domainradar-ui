@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { usePageStore } from "@/stores/pagination"
 
+const props = defineProps<{
+  refreshing: boolean
+}>()
+
 const pageStore = usePageStore()
 const jumpMode = ref(false)
 const jumpTarget = ref(1)
+
+const pageCount = computed(() => pageStore.pageCount == 0 ? '...' : pageStore.pageCount)
 
 function enableJumpMode() {
   jumpTarget.value = pageStore.page
@@ -33,7 +39,10 @@ onKeyStroke("Enter", jump)
       {{ $t('pagination.page') }}
       <button class="font-bold" @click="enableJumpMode">{{ pageStore.page }}</button>
       {{ $t('pagination.of') }}
-      {{ pageStore.pageCount }}
+      <span v-if="!refreshing">{{ pageCount }}</span>
+      <span v-else class="inline-flex animate-spin ml-1">
+        <MdiIcon icon="mdiLoading" class="inline-block" />
+      </span>
     </span>
     <button @click="pageStore.nextPage" class="disabled:opacity-30" :disabled="pageStore.isLastPage"
       :title="$t('pagination.next')">

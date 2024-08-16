@@ -32,6 +32,38 @@ const search = ref("")
 const filterAggregateProbabilityLower = computed(() => filterAggregateProbability.value[0])
 const filterAggregateProbabilityUpper = computed(() => filterAggregateProbability.value[1])
 
+const abortController = new AbortController()
+const totalCountRequestInFlight = ref(false)
+function refreshTotalCount() {
+  if (totalCountRequestInFlight.value) {
+    abortController.abort("New request received")
+  }
+  console.log("Refreshing total count in the background")
+  console.time("Total Count Refresh")
+  totalCountRequestInFlight.value = true
+  $fetch("/api/domains/count", {
+    query: {
+      search: search.value,
+      filterAggregateProbabilityLower: filterAggregateProbabilityLower.value,
+      filterAggregateProbabilityUpper: filterAggregateProbabilityUpper.value,
+    },
+    signal: abortController.signal,
+  }).then(({ data }) => {
+    totalCountRequestInFlight.value = false
+    pageStore.setTotal(data.totalCount)
+    console.timeEnd("Total Count Refresh")
+  })
+}
+
+onMounted(() => {
+  refreshTotalCount()
+})
+
+function refreshTotalOnParamChange() {
+  useDebounceFn(refreshTotalCount, 500)()
+  pageStore.setPage(1)
+}
+
 const { data, error, refresh, pending: domainsLoading } = await useFetch("/api/domains", {
   query: {
     page,
@@ -45,9 +77,8 @@ const { data, error, refresh, pending: domainsLoading } = await useFetch("/api/d
   lazy: true,
 })
 const domains = computed(() => data.value?.data as unknown as Domain[] ?? [])
-watchEffect(() => {
-  pageStore.setTotal(data.value?.metadata.totalCount ?? 0)
-})
+filterSortStore.$subscribe(refreshTotalOnParamChange)
+watch(search, refreshTotalOnParamChange)
 
 //
 
@@ -108,8 +139,11 @@ const previewMapDots = computed(() => {
                 <MdiIcon icon="mdiArrowDown" />
               </div>
             </button>
-            <span class="text-sm">
+            <span class="text-sm" v-if="!totalCountRequestInFlight">
               {{ $t('results', total) }}
+            </span>
+            <span class="text-sm animate-spin" v-else>
+              <MdiIcon icon="mdiLoading" />
             </span>
           </div>
           <FilterPanel class="mt-4" v-if="filtersOpen" />
@@ -126,7 +160,7 @@ const previewMapDots = computed(() => {
             <img src="/cheese.webp" alt="Loading" class="w-1/2" />
           </div>
           <div class="mt-6 flex justify-center">
-            <PageNavigator />
+            <PageNavigator :refreshing="totalCountRequestInFlight" />
           </div>
         </main>
       </div>
