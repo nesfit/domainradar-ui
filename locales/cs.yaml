@@ -34,7 +34,7 @@ ip_addresses: IP adresy
 at: na
 network: Síť
 timeline: Časová osa
-aggregate_probability: Potenciál škodlivosti
+aggregate_probability: Škodlivost
 first_seen: První záznam
 last_seen: Poslední záznam
 offense_count: Počet incidentů
