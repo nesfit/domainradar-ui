@@ -159,7 +159,7 @@ export default function createPipeline(domainNames: string[]) {
           // selected for each domain name
           {
             $match: {
-              "_id.domainName": { $in: domainNames },
+              _id: { $in: domainNames },
             },
           },
           {
