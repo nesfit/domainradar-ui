@@ -34,7 +34,7 @@ ip_addresses: IP addresses
 at: at
 network: Network
 timeline: Timeline
-aggregate_probability: Aggregate probability
+aggregate_probability: Badness
 first_seen: First seen
 last_seen: Last seen
 offense_count: Offense count
