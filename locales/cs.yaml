@@ -68,6 +68,10 @@ settings:
         title: Nastavení komponent
         description: Upravte konfiguraci komponent DomainRadaru.
         loading: Načítání aktuální konfigurace komponent
+        retrying: Opakování po neobdržení odpovědi – pokus {attempt}
+        retrying_explanation: Pokud server právě nastartoval, může ještě sbírat konfigurace komponent. To obvykle trvá až minutu.
+        no_configs: Zatím nedorazily žádné konfigurace komponent, ale seznam se bude průběžně obnovovat.
+        loaded: Aktuální konfigurace komponent načtena
         invalid: Neplatná konfigurace
         waiting: Čekání na potvrzení od komponenty
         saved: Nastavení komponent aktualizováno

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Vue3JsonEditor } from 'vue3-json-editor';
-import type { ComponentId, ConfigChangeRequest } from '~/types/config';
+import type { ComponentId, ConfigChangeRequest, Configs, Config } from '~/types/config';
 
 definePageMeta(
   {
@@ -15,24 +15,80 @@ const { locale, setLocale } = useI18n()
 
 const allowHolo = ref(true)
 
+const configFetchTries = ref(0)
 const { data: currentConfig, error: errorFetchingConfigs, refresh: refreshConfigs, pending: loadingConfigs } = await useFetch("/api/kafka/config", {
   lazy: true,
-})
-
-const editableConfigs: Record<string, object> = reactive({})
-
-watch(currentConfig, () => {
-  for (const component in currentConfig.value) {
-    editableConfigs[component] = JSON.parse(JSON.stringify(
-      currentConfig.value[component].currentConfig
-    ))
+  retry: 12,
+  retryDelay: 5000,
+  onRequest() {
+    configFetchTries.value++
   }
 })
 
+const epillepsyFreeLoadingIndicator = ref(true)
+let timeout: NodeJS.Timeout
+watch(loadingConfigs, () => {
+  if (loadingConfigs.value) {
+    timeout = setTimeout(() => {
+      epillepsyFreeLoadingIndicator.value = true
+    }, 100)
+  } else {
+    clearTimeout(timeout)
+    epillepsyFreeLoadingIndicator.value = false
+  }
+})
+
+const noConfigsReceived = computed(() => currentConfig.value && Object.keys(currentConfig.value).length === 0)
+useIntervalFn(() => {
+  if (currentConfig.value) {
+    refreshConfigs()
+  }
+}, 5000)
+
+const editableConfigs: Configs = reactive({})
+
+function isSameConfig(a: Config, b: Config) {
+  return JSON.stringify(a) === JSON.stringify(b)
+}
+
+const lastReceivedConfigs: Configs = {}
+watch(currentConfig, () => {
+  const cc = currentConfig.value as Configs
+  for (const c in cc) {
+    const component = c as ComponentId
+    if (lastReceivedConfigs[component] && isSameConfig(cc[component]?.currentConfig, lastReceivedConfigs[component])) {
+      // skip update if upstream didn't change
+      // prevents overwriting user changes
+      // but keeps receiving new unseen configs
+      continue
+    }
+    //
+    const copy = JSON.parse(JSON.stringify(cc[component]?.currentConfig))
+    editableConfigs[component] = copy
+    lastReceivedConfigs[component] = copy
+  }
+  configFetchTries.value = 0
+})
+
+const configStatusIcon = computed(() => {
+  if (loadingConfigs.value) {
+    return 'mdiLoading'
+  }
+  if (errorFetchingConfigs.value) {
+    return 'mdiAlert'
+  }
+  return 'mdiCheck'
+})
+
 async function sendChangeRequest(component: ComponentId) {
+  const config = editableConfigs[component]
+  if (!config) {
+    console.error('No config for component', component)
+    return
+  }
   const body: ConfigChangeRequest = {
     component,
-    config: editableConfigs[component],
+    config
   }
   const { error } = await $fetch("/api/kafka/config", {
     method: 'PUT',
@@ -118,9 +174,24 @@ async function tryUpdateConfig(component: ComponentId) {
       <h2 class="text-xl font-extrabold">{{ $t('settings.components.title') }}</h2>
       <p>{{ $t('settings.components.description') }}</p>
 
-      <div><!-- status -->
-        <p v-if="loadingConfigs">{{ $t('settings.components.loading') }}</p>
-        <p v-if="errorFetchingConfigs">{{ errorFetchingConfigs }}</p>
+      <div class="flex gap-2 items-center"><!-- status -->
+        <div :class="{ 'animate-spin': loadingConfigs }"><!-- icon -->
+          <MdiIcon :icon="configStatusIcon" />
+        </div>
+        <div><!-- text -->
+          <span v-if="errorFetchingConfigs">{{ errorFetchingConfigs }}</span>
+          <span v-else-if="noConfigsReceived">
+            {{ $t('settings.components.no_configs') }}
+          </span>
+          <span v-else-if="epillepsyFreeLoadingIndicator">
+            <span v-if="configFetchTries > 0" class="flex gap-2 items-center">
+              {{ $t('settings.components.retrying', { attempt: configFetchTries }) }}
+              <MdiIcon icon="mdiInformationOutline" v-tooltip="$t('settings.components.retrying_explanation')" />
+            </span>
+            <span v-else>{{ $t('settings.components.loading') }}</span>
+          </span>
+          <span v-else>{{ $t('settings.components.loaded') }}</span>
+        </div>
       </div>
 
       <section v-for="(config, component) in editableConfigs" class="mt-4">
@@ -135,3 +206,15 @@ async function tryUpdateConfig(component: ComponentId) {
 
   </div>
 </template>
+<style scoped>
+.show-after-1s {
+  opacity: 0;
+  animation: showAfter1s 1s 1s forwards;
+}
+
+@keyframes showAfter1s {
+  to {
+    opacity: 1;
+  }
+}
+</style>

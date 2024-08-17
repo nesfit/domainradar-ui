@@ -68,6 +68,10 @@ settings:
         title: Component settings
         description: Adjust DomainRadar component configuration.
         loading: Fetching current component configuration
+        retrying: Retrying after no response – attempt {attempt}
+        retrying_explanation: If the server just startep up, it may take up to a minute to collect the configurations.
+        no_configs: No configurations have been received yet, but the list will be updated periodically.
+        loaded: Current component configuration loaded
         invalid: Invalid configuration
         waiting: Waiting for confirmation from the component
         saved: Component settings updated

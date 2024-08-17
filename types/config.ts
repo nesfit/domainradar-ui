@@ -21,5 +21,5 @@ export type Configs = Partial<Record<ComponentId, Config>>
 
 export interface ConfigChangeRequest {
   component: ComponentId
-  config: Record<string, any>
+  config: Config
 }
