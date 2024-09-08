@@ -64,6 +64,9 @@ settings:
         language:
             title: Jazyk
             description: Zvolte jazyk aplikace. Přepínat jazyk můžete kdykoliv v horní liště.
+        links:
+            title: Odkazy u domén
+            description: Vytvořte vlastní odkazy na externí služby u domén.
     components:
         title: Nastavení komponent
         description: Upravte konfiguraci komponent DomainRadaru.

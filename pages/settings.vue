@@ -168,6 +168,12 @@ async function tryUpdateConfig(component: ComponentId) {
         </HButton>
       </div>
       <HCheckbox class="mx-1.5" v-model="allowHolo" disabled>{{ $t('settings.app.theme.allow_holo') }}</HCheckbox>
+
+      <h3 class="mt-4 text-lg font-bold">{{ $t('settings.app.links.title') }}</h3>
+      <p>{{ $t('settings.app.links.description') }}</p>
+      <div class="flex my-2">
+        <LinkConfig class="w-full" />
+      </div>
     </section>
 
     <section>

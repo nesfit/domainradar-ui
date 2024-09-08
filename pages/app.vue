@@ -116,6 +116,8 @@ const previewMapDots = computed(() => {
       return [ip.geo?.longitude, ip.geo?.latitude] as [number, number]
     })
 })
+
+const { data: domainLinks } = await useFetch('/api/config/links')
 </script>
 
 <template>
@@ -168,7 +170,7 @@ const previewMapDots = computed(() => {
     <!-- Detail -->
     <div class="detail-container px-4 -ms-3">
       <Transition name="detail">
-        <DomainDetail class="pointer-events-auto" v-if="activeDomain" :domain="activeDomain"
+        <DomainDetail class="pointer-events-auto" v-if="activeDomain" :domain="activeDomain" :links="domainLinks || {}"
           @close="setActiveDomain(null)" />
       </Transition>
     </div>

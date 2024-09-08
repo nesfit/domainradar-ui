@@ -9,9 +9,13 @@ import IPDetail from './IPDetail.vue'
 import IPGroups from './IPGroups.vue'
 import Button from './Button.vue'
 
-const props = defineProps<{
-  domain: Domain
-}>()
+const props = withDefaults(defineProps<{
+  domain: Domain,
+  links?: Record<string, string>
+}>(), {
+  // @ts-ignore
+  links: {}
+})
 
 defineEmits(["close"])
 
@@ -53,16 +57,17 @@ const explodedName = computed(() => {
       </div>
     </div>
 
-    <div class="mx-4 mt-10 flex flex-wrap gap-2">
-      <Button :href="`https://apiminer.ls.iwy/mining?val=${$props.domain.domain_name}&data_type=DOMAIN&target=all`">
-        API Miner
+    <div class="mx-4 mt-10 flex flex-wrap gap-2" v-if="Object.keys(links).length > 0">
+      <Button v-for="link, name in props.links" :key="name" :href="link.replace('%s', domain.domain_name)">
+        {{ name }}
       </Button>
-      <Button :href="`https://www.virustotal.com/gui/domain/${$props.domain.domain_name}/detection`">
+      <!-- <Button :href="`https://www.virustotal.com/gui/domain/${$props.domain.domain_name}/detection`">
         VirusTotal
+        LOL ==> `https://apiminer.ls.iwy/mining?val=${$props.domain.domain_name}&data_type=DOMAIN&target=all`
       </Button>
       <Button :href="`/qradar`" disabled>
         QRadar
-      </Button>
+      </Button> -->
     </div>
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classification_results') }}</h2>

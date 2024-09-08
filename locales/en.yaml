@@ -64,6 +64,9 @@ settings:
         language:
             title: Language
             description: Choose a language for the application. You can toggle between languages at any time in the header.
+        links:
+            title: Domain links
+            description: Create custom links to external services for domains.
     components:
         title: Component settings
         description: Adjust DomainRadar component configuration.
