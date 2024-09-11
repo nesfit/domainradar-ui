@@ -67,6 +67,9 @@ settings:
         links:
             title: Odkazy u domén
             description: Vytvořte vlastní odkazy na externí služby u domén.
+        prefilterColors:
+            title: Barvy předfiltrovaných domén
+            description: Zvolte barvy pro předfiltrované domény pomocí vzoru (regulární výraz).
     components:
         title: Nastavení komponent
         description: Upravte konfiguraci komponent DomainRadaru.

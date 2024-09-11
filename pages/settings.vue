@@ -172,7 +172,14 @@ async function tryUpdateConfig(component: ComponentId) {
       <h3 class="mt-4 text-lg font-bold">{{ $t('settings.app.links.title') }}</h3>
       <p>{{ $t('settings.app.links.description') }}</p>
       <div class="flex my-2">
-        <LinkConfig class="w-full" />
+        <ObjectConfig class="w-full" get-endpoint="/api/config/links" default-value="https://external.link/%s" />
+      </div>
+
+      <h3 class="mt-4 text-lg font-bold">{{ $t('settings.app.prefilterColors.title') }}</h3>
+      <p>{{ $t('settings.app.prefilterColors.description') }}</p>
+      <div class="flex my-2">
+        <ObjectConfig class="w-full" get-endpoint="/api/config/prefiltercolors" default-key="pattern"
+          default-value="#facade" value-input-type="color" />
       </div>
     </section>
 

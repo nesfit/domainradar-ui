@@ -1,11 +1,10 @@
 import { parse } from "vue/compiler-sfc"
 import { PrefilteredDomainModel } from "~/server/models/prefiltered_domain.schema"
-import { PrefilteredDomain } from "~/types/prefiltered_domain"
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
 
 interface PrefilteredDomainResponse {
-  data: PrefilteredDomain[]
+  data: Record<string, any>[]
   metadata: {
     totalCount: number
     page: number
@@ -24,7 +23,7 @@ export default defineEventHandler(
         error: "Unauthorized",
       }
     //
-    const result = await PrefilteredDomainModel.find({}).exec()
+    const result = await PrefilteredDomainModel.find({}).limit(1000)
     return {
       data: result,
       metadata: {

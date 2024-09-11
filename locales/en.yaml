@@ -67,6 +67,9 @@ settings:
         links:
             title: Domain links
             description: Create custom links to external services for domains.
+        prefilterColors:
+            title: Prefiltered domain colors
+            description: Assign colors to prefiltered domains using patterns (regex).
     components:
         title: Component settings
         description: Adjust DomainRadar component configuration.
