@@ -58,16 +58,17 @@ const explodedName = computed(() => {
     </div>
 
     <div class="mx-4 mt-10 flex flex-wrap gap-2" v-if="Object.keys(links).length > 0">
+      <Modal show-close>
+        <template #trigger="{ state }">
+          <Button symmetrical color="accent" v-tooltip="$t('collection_results')" @click="state.open = true">
+            <MdiIcon icon="mdiBookOpenPageVariant" />
+          </Button>
+        </template>
+        <CollectionResults :collectionResults="domain.collection_results" />
+      </Modal>
       <Button v-for="link, name in props.links" :key="name" :href="link.replace('%s', domain.domain_name)">
         {{ name }}
       </Button>
-      <!-- <Button :href="`https://www.virustotal.com/gui/domain/${$props.domain.domain_name}/detection`">
-        VirusTotal
-        LOL ==> `https://apiminer.ls.iwy/mining?val=${$props.domain.domain_name}&data_type=DOMAIN&target=all`
-      </Button>
-      <Button :href="`/qradar`" disabled>
-        QRadar
-      </Button> -->
     </div>
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classification_results') }}</h2>
@@ -84,11 +85,6 @@ const explodedName = computed(() => {
       </h2>
       <div class="flex flex-col gap-4">
         <IPGroups :ips="props.domain.ip_addresses" />
-        <!-- <IPDetail
-        v-for="ip in props.domain.ip_addresses"
-        :key="ip.ip"
-        :ip="ip"
-      /> -->
       </div>
     </template>
 

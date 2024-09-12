@@ -40,13 +40,18 @@ const hasOffenses = computed(() => {
         <strong>QRadar:</strong> mag. {{ props.ip.qradar_offense_source.magnitude }}, <strong class="lowercase">{{
           $t('offenses') }}:
           {{
-            props.ip.qradar_offense_source.offenses.length }}</strong>
+  props.ip.qradar_offense_source.offenses.length }}</strong>
       </div>
     </div>
     <div class="flex gap-1">
-      <Button symmetrical color="accent" v-tooltip="$t('collection_results')">
-        <MdiIcon icon="mdiBookOpenPageVariant" />
-      </Button>
+      <Modal show-close>
+        <template #trigger="{ state }">
+          <Button symmetrical color="accent" v-tooltip="$t('collection_results')" @click="state.open = true">
+            <MdiIcon icon="mdiBookOpenPageVariant" />
+          </Button>
+        </template>
+        <CollectionResults :collectionResults="ip.collection_results" />
+      </Modal>
       <Button color="destructive" v-if="hasOffenses">{{ $t('offenses') }}</Button>
     </div>
   </div>
