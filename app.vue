@@ -27,14 +27,19 @@ const { locale, setLocale } = useI18n()
             {{ $t('up_to_date') }}
             <div class="dot"></div>
           </span> -->
-          <NuxtLink class="text-cyan-900 dark:text-cyan-100 flex items-center gap-2" to="/prefiltered">
-            <MdiIcon icon="mdiFilterCheck" />
-            {{ $t('prefiltered.title') }}
+          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/prefiltered"
+            v-tooltip="$t('prefiltered.title')">
+            <MdiIcon icon="mdiFilterCheckOutline" />
           </NuxtLink>
-          <HButton @click="setLocale(locale === 'en' ? 'cs' : 'en')" class="uppercase h-7" symmetrical borderless
-            hollow>{{ locale }}
-          </HButton>
-          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/settings">
+          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/custom-check"
+            v-tooltip="$t('customCheck.title')">
+            <MdiIcon icon="mdiWebPlus" />
+          </NuxtLink>
+          <button @click="setLocale(locale === 'en' ? 'cs' : 'en')"
+            class="uppercase h-7 font-semibold text-cyan-900 dark:text-cyan-100"
+            v-tooltip="$t('settings.app.language.title')">{{ locale }}
+          </button>
+          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/settings" v-tooltip="$t('settings.title')">
             <MdiIcon icon="mdiTune" />
           </NuxtLink>
         </div>

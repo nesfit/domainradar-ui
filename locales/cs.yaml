@@ -85,3 +85,11 @@ settings:
 
 prefiltered:
     title: Předfiltrované domény
+
+customCheck:
+    title: Kontrola vlastních domén
+    description: Zadejte domény, které chcete zkontrolovat. Každá doména na novém řádku.
+    placeholder: Zadejte domény
+    submit: Přidat do fronty DomainRadaru
+    sending: Přidávání do fronty...
+    sent: Domény přidány

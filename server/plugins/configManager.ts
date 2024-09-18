@@ -1,4 +1,3 @@
-import fs from "fs"
 import { Kafka, Partitioners, Message, Consumer } from "kafkajs"
 import type {
   ComponentId,
@@ -6,15 +5,7 @@ import type {
   Config,
   ConfigChangeRequest,
 } from "~/types/config"
-
-function getContent(path: string) {
-  try {
-    const content = fs.readFileSync(path, { encoding: "utf-8" })
-    return content.toString().trim()
-  } catch (e) {
-    return ""
-  }
-}
+import createKafka from "../utils/kafka"
 
 class ConfigManager {
   public configTopic: string
@@ -35,19 +26,10 @@ class ConfigManager {
     const runtimeConfig = useRuntimeConfig()
     this.configTopic = configTopic
     this.requestTopic = requestTopic
-    //
-    this.kafka = new Kafka({
-      clientId,
-      brokers: [runtimeConfig.kafkaBroker],
-      ssl: {
-        rejectUnauthorized: false,
-        ca: getContent("kafka-ssl/ca-cert.pem"),
-        cert: getContent("kafka-ssl/webui-cert.pem"),
-        key: getContent("kafka-ssl/webui-priv-key.pem"),
-        passphrase: getContent("kafka-ssl/key-password.txt"),
-      },
+    this.kafka = createKafka(clientId, runtimeConfig.kafkaBroker)
+    this.primaryConsumer = this.kafka.consumer({
+      groupId: "webui",
     })
-    this.primaryConsumer = this.kafka.consumer({ groupId: "webui" })
   }
 
   // Update the current configuration with a config message.
@@ -150,6 +132,11 @@ class ConfigManager {
     })
     await producer.disconnect()
   }
+
+  async close() {
+    await this.primaryConsumer.disconnect()
+    console.log("ConfigManager consumer connection closed gracefully.")
+  }
 }
 
 async function createManager() {
@@ -166,6 +153,9 @@ export default defineNitroPlugin((nitroApp) => {
   createManager().then((manager) => {
     nitroApp.hooks.hook("request", (event) => {
       event.context.configManager = manager
+    })
+    nitroApp.hooks.hook("close", async () => {
+      await manager.close()
     })
   })
 })

@@ -85,3 +85,11 @@ settings:
 
 prefiltered:
     title: Prefiltered Domains
+
+customCheck:
+    title: Custom Domain Check
+    description: Specify domains you want to have checked. One domain per line.
+    placeholder: Enter domains
+    submit: Add to DomainRadar queue
+    sending: Enqueueing in progress...
+    sent: Domains added to queue

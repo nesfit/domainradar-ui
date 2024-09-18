@@ -23,10 +23,10 @@ export default defineNuxtConfig({
     "~/assets/main.css",
   ],
   app: {
-    pageTransition: {
-      name: "page",
-      mode: "out-in",
-    },
+    // pageTransition: {
+    //   name: "page",
+    //   mode: "out-in",
+    // },
   },
   mongoose: {
     uri: process.env.NUXT_MONGOOSE_URI,
