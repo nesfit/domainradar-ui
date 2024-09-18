@@ -212,7 +212,7 @@ async function tryUpdateConfig(component: ComponentId) {
           <h3 class="mx-2 text-lg font-bold capitalize">{{ component }}</h3>
           <HButton @click="tryUpdateConfig(component)" color="accent">{{ $t('save') }}</HButton>
         </div>
-        <vue3-json-editor v-model="editableConfigs[component]" />
+        <vue3-json-editor v-model="editableConfigs[component]" mode="code" />
       </section>
 
     </section>
