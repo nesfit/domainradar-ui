@@ -32,7 +32,6 @@ export default defineEventHandler(async (event): Promise<DomainResponse> => {
   try {
     const domainNamesPage = await ClassificationResultsModel.find(match, {
       _id: 0,
-      domain_name: 1,
     })
       .sort(sort)
       .skip(skip)
@@ -45,8 +44,23 @@ export default defineEventHandler(async (event): Promise<DomainResponse> => {
     const pipeline = createDomainPipeline(domainNamesToAggregate)
     const result = await DomainDataModel.aggregate(pipeline)
 
+    const combined = domainNamesPage.map((domain) => {
+      const domainData = result.find(
+        (d) => d.domain_name === domain.domain_name,
+      )
+      if (!domainData) {
+        return {
+          ...domain.toObject(),
+          ip_addresses: [],
+          first_seen: null,
+        }
+      } else {
+        return domainData
+      }
+    })
+
     return {
-      data: result,
+      data: combined,
       metadata: {
         page,
         limit,

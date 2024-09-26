@@ -57,8 +57,8 @@ const explodedName = computed(() => {
       </div>
     </div>
 
-    <div class="mx-4 mt-10 flex flex-wrap gap-2" v-if="Object.keys(links).length > 0">
-      <Modal show-close>
+    <div class="mx-4 mt-10 flex flex-wrap gap-2">
+      <Modal show-close v-if="domain.collection_results">
         <template #trigger="{ state }">
           <Button symmetrical color="accent" v-tooltip="$t('collection_results')" @click="state.open = true">
             <MdiIcon icon="mdiBookOpenPageVariant" />
@@ -66,9 +66,11 @@ const explodedName = computed(() => {
         </template>
         <CollectionResults :collectionResults="domain.collection_results" />
       </Modal>
-      <Button v-for="link, name in props.links" :key="name" :href="link.replace('%s', domain.domain_name)">
-        {{ name }}
-      </Button>
+      <div class="flex flex-wrap gap-2" v-if="Object.keys(links).length > 0">
+        <Button v-for="link, name in props.links" :key="name" :href="link.replace('%s', domain.domain_name)">
+          {{ name }}
+        </Button>
+      </div>
     </div>
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classification_results') }}</h2>
@@ -90,7 +92,7 @@ const explodedName = computed(() => {
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('timeline') }}</h2>
     <div class="px-4">
-      <div>{{ $t('first_seen') }}: {{ $d(props.domain.first_seen, 'long') }}</div>
+      <div v-if="domain.first_seen">{{ $t('first_seen') }}: {{ $d(props.domain.first_seen, 'long') }}</div>
     </div>
 
     <div class="mt-8 text-end">
