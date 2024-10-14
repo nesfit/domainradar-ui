@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ClassificationResult } from '~/types/domain'
+import type { Prisma } from '@prisma/client';
 import { percentFormat } from '@/assets/utils'
 import MalignIcon from './MalignIcon.vue';
 import { computed } from 'vue';
 
 const props = defineProps<{
-  result: ClassificationResult
+  result: Prisma.ClassificationCategoryResultGetPayload<{}>
 }>()
 
 const hasDetails = computed(() => {
@@ -20,10 +20,10 @@ const hasDetails = computed(() => {
   <div class="py-4 px-6 bg-slate-200 dark:bg-slate-700 dark:text-slate-50">
     <div class="flex justify-between items-center flex-wrap">
       <h2 class="font-bold text-cyan-800 dark:text-cyan-200 text-xl inline-flex gap-1 items-center">
-        <MalignIcon :type="result.classifier" />
-        {{ result.classifier }}
+        <MalignIcon :type="result.category" />
+        {{ result.category }}
       </h2>
-      <h3 v-if="result.classification_date" class="text-xs">{{ $d(result.classification_date, 'long') }}</h3>
+      <h3 v-if="result.timestamp" class="text-xs">{{ $d(result.timestamp, 'long') }}</h3>
     </div>
     <p>{{ result.description }}</p>
     <div class="mt-4" v-if="hasDetails">

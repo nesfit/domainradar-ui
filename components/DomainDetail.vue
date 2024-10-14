@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Domain } from '~/types/domain';
+import type { DomainData as Domain } from "~/server/api/domains/index.get"
 import { percentFormat } from "@/assets/utils"
 import { computed } from 'vue';
 import Pie from './Pie.vue'
@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<{
 defineEmits(["close"])
 
 const sortedClassificationResults = computed(() => {
-  return [...props.domain.classification_results].sort((a, b) => {
+  return [...props.domain.classificationResults].sort((a, b) => {
     return b.probability - a.probability
   })
 })
@@ -46,25 +46,25 @@ const explodedName = computed(() => {
             }}</span>
         </h1>
         <ul class="mt-2 flex gap-4 flex-wrap">
-          <li v-for="result in sortedClassificationResults" :key="result.classifier" :style="{
+          <li v-for="result in sortedClassificationResults" :key="result.category" :style="{
             opacity: result.probability + 0.35,
           }" class="flex items-center gap-2">
             <Pie :percent="result.probability * 100" :size="36">
-              <MalignIcon :type="result.classifier" />
-            </Pie> <strong>{{ percentFormat(result.probability) }}</strong> {{ result.classifier }}
+              <MalignIcon :type="result.category" />
+            </Pie> <strong>{{ percentFormat(result.probability) }}</strong> {{ result.category }}
           </li>
         </ul>
       </div>
     </div>
 
     <div class="mx-4 mt-10 flex flex-wrap gap-2">
-      <Modal show-close v-if="domain.collection_results">
+      <Modal show-close v-if="domain.collectionResults">
         <template #trigger="{ state }">
-          <Button symmetrical color="accent" v-tooltip="$t('collection_results')" @click="state.open = true">
+          <Button symmetrical color="accent" v-tooltip="$t('collectionResults')" @click="state.open = true">
             <MdiIcon icon="mdiBookOpenPageVariant" />
           </Button>
         </template>
-        <CollectionResults :collectionResults="domain.collection_results" />
+        <CollectionResults :collectionResults="domain.collectionResults" />
       </Modal>
       <div class="flex flex-wrap gap-2" v-if="Object.keys(links).length > 0">
         <Button v-for="link, name in props.links" :key="name" :href="link.replace('%s', domain.domain_name)">
@@ -73,26 +73,27 @@ const explodedName = computed(() => {
       </div>
     </div>
 
-    <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classification_results') }}</h2>
+    <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classificationResults') }}</h2>
     <div class="flex flex-col gap-4">
-      <ClassifierDetail v-for="result in sortedClassificationResults" :key="result.classifier" :result="result" />
+      <ClassifierDetail v-for="result in sortedClassificationResults" :key="result.category" :result="result" />
     </div>
 
-    <template v-if="props.domain.ip_addresses.length > 0">
+    <template v-if="props.domain.ipAddresses.length > 0">
       <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">
         {{ $t('ip_addresses') }}
         <span class="text-cyan-800 dark:text-cyan-300 font-normal">
-          ({{ props.domain.ip_addresses.length }})
+          ({{ props.domain.ipAddresses.length }})
         </span>
       </h2>
       <div class="flex flex-col gap-4">
-        <IPGroups :ips="props.domain.ip_addresses" />
+        <IPGroups :ips="props.domain.ipAddresses" />
       </div>
     </template>
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('timeline') }}</h2>
     <div class="px-4">
-      <div v-if="domain.first_seen">{{ $t('first_seen') }}: {{ $d(props.domain.first_seen, 'long') }}</div>
+      <!-- TODO implement first seen via latest result timestamp -->
+      <!-- <div v-if="domain.first_seen">{{ $t('first_seen') }}: {{ $d(props.domain.first_seen, 'long') }}</div> -->
     </div>
 
     <div class="mt-8 text-end">

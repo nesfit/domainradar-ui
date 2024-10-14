@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { IP } from '~/types/domain'
 import { groupBy, getContinentFromCoordinates, formatCoordinates } from '@/assets/utils'
 import { computed } from 'vue';
 import IPDetail from './IPDetail.vue'
+
+import type { DomainData } from '~/server/api/domains/index.get';
+type IP = DomainData['ipAddresses'][0]
 
 const { t } = useI18n()
 
@@ -13,7 +15,7 @@ const props = defineProps<{
 const groupedByCoords = computed(() => {
   const combinedCoords = props.ips.map(ip => ({
     ...ip,
-    coords: `${ip.geo?.latitude},${ip.geo?.longitude}`,
+    coords: `${ip.geo_latitude},${ip.geo_longitude}`,
   }))
   return groupBy(combinedCoords, "coords")
 })
@@ -21,15 +23,15 @@ const groupedByCoords = computed(() => {
 // ideally get city and country from one of the ips, or at least the country, or use the coords if nothing else is available
 // try to get the most specific descriptor possible from all the ips
 function getBestGeoDescriptor(ips: IP[]) {
-  const cities = ips.map(ip => ip.geo?.city).filter(city => city !== null)
-  const countries = ips.map(ip => ip.geo?.country).filter(country => country !== null)
-  const coords = ips.filter(ip => ip.geo?.longitude && ip.geo?.latitude)
+  const cities = ips.map(ip => ip.geo_city).filter(city => city !== null)
+  const countries = ips.map(ip => ip.geo_country).filter(country => country !== null)
+  const coords = ips.filter(ip => ip.geo_longitude && ip.geo_latitude)
   if (cities.length > 0) {
     return `${cities[0]}, ${countries[0]}`
   } else if (countries.length > 0) {
     return countries[0]
   } else if (coords.length > 0) {
-    return getContinentFromCoordinates(coords[0].geo?.latitude ?? 0, coords[0].geo?.longitude ?? 0)
+    return getContinentFromCoordinates(coords[0].geo_latitude ?? 0, coords[0].geo_longitude ?? 0)
   } else {
     return "Unknown location"
   }
@@ -37,8 +39,8 @@ function getBestGeoDescriptor(ips: IP[]) {
 
 function getFormattedCoords(ips: IP[]) {
   const coords = ips
-    .filter(ip => ip.geo?.latitude && ip.geo?.longitude)
-    .map(ip => [ip.geo?.latitude, ip.geo?.longitude])
+    .filter(ip => ip.geo_latitude && ip.geo_longitude)
+    .map(ip => [ip.geo_latitude, ip.geo_longitude])
     [0]
   if (coords && coords.length === 2 && coords[0] && coords[1]) {
     return `${t('at')} ${formatCoordinates(coords[0], coords[1])}`

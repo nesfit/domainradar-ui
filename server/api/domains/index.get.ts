@@ -38,8 +38,10 @@ async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
   })
 }
 
+export type DomainData = Awaited<ReturnType<typeof fetchData>>[0]
+
 interface DomainResponse {
-  data: Awaited<ReturnType<typeof fetchData>>
+  data: DomainData[]
   metadata: {
     page: number
     limit: number

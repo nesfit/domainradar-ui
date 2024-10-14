@@ -11,7 +11,6 @@ definePageMeta(
 )
 import { ref, computed, onMounted, watch } from "vue"
 
-import DomainRadarLogo from "@/components/DomainRadarLogo.vue"
 import DomainListItem from "@/components/DomainListItem.vue"
 import PageNavigator from "@/components/PageNavigator.vue"
 import Map from "@/components/Map.vue"
@@ -20,7 +19,7 @@ import DomainDetail from "@/components/DomainDetail.vue"
 import { usePageStore } from "@/stores/pagination"
 import { storeToRefs } from "pinia"
 
-import type { Domain } from "~/types/domain"
+import type { DomainData as Domain } from "~/server/api/domains/index.get"
 
 const pageStore = usePageStore()
 const { page, limit, total } = storeToRefs(pageStore)
@@ -76,7 +75,7 @@ const { data, error, refresh, pending: domainsLoading } = await useFetch("/api/d
   },
   lazy: true,
 })
-const domains = computed(() => data.value?.data as unknown as Domain[] ?? [])
+const domains = computed(() => data.value?.data ?? [])
 filterSortStore.$subscribe(refreshTotalOnParamChange)
 watch(search, refreshTotalOnParamChange)
 
@@ -110,10 +109,10 @@ const previewMapDots = computed(() => {
   if (previewDomain.value === null) {
     return []
   }
-  return previewDomain.value.ip_addresses
-    .filter((ip) => ip.geo?.longitude && ip.geo?.latitude)
+  return previewDomain.value.ipAddresses
+    .filter((ip) => ip.geo_longitude && ip.geo_latitude)
     .map((ip) => {
-      return [ip.geo?.longitude, ip.geo?.latitude] as [number, number]
+      return [ip.geo_longitude, ip.geo_latitude] as [number, number]
     })
 })
 
@@ -155,8 +154,8 @@ const { data: domainLinks } = await useFetch('/api/config/links')
           class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-3 overflow-auto h-full flex flex-col">
           <ul class="grow transition-all duration-300" :class="{ 'filter blur-sm': domainsLoading }">
             <DomainListItem v-for="domain in domains" :key="domain.domain_name" :domain="domain"
-              :active="domain === activeDomain" @click="setActiveDomain" @mouseenter="setPreviewDomain"
-              @mouseleave="setPreviewDomain(null)" />
+              :active="domain.domain_name === activeDomain?.domain_name" @click="setActiveDomain"
+              @mouseenter="setPreviewDomain" @mouseleave="setPreviewDomain(null)" />
           </ul>
           <div v-if="domainsLoading" class="absolute inset-0 flex items-center justify-center opacity-0 show-after-1s">
             <img src="/cheese.webp" alt="Loading" class="w-1/2" />

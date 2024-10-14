@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { IP } from '~/types/domain'
 import { percentFormat } from '@/assets/utils'
 import { computed } from 'vue';
+
+import type { DomainData } from '~/server/api/domains/index.get';
+type IP = DomainData['ipAddresses'][0]
 
 const props = defineProps<{
   ip: IP
@@ -16,11 +18,11 @@ const version = computed(() => {
 })
 
 const hasGeo = computed(() => {
-  return props.ip.geo !== null
+  return props.ip.geo_longitude !== null && props.ip.geo_latitude !== null
 })
 
 const hasOffenses = computed(() => {
-  return props.ip.qradar_offense_source && props.ip.qradar_offense_source.offenses.length > 0
+  return props.ip.qradarOffenseSource && props.ip.qradarOffenseSource[0].offenses.length > 0
 })
 </script>
 
@@ -36,11 +38,11 @@ const hasOffenses = computed(() => {
         <MdiIcon icon="mdiNumeric4Box" v-else />
         {{ props.ip.ip }}
       </h2>
-      <div class="text-sm" v-if="props.ip.qradar_offense_source">
-        <strong>QRadar:</strong> mag. {{ props.ip.qradar_offense_source.magnitude }}, <strong class="lowercase">{{
+      <div class="text-sm" v-if="props.ip.qradarOffenseSource[0]">
+        <strong>QRadar:</strong> mag. {{ props.ip.qradarOffenseSource[0].magnitude }}, <strong class="lowercase">{{
           $t('offenses') }}:
           {{
-  props.ip.qradar_offense_source.offenses.length }}</strong>
+          props.ip.qradarOffenseSource[0].offenses.length }}</strong>
       </div>
     </div>
     <div class="flex gap-1">
@@ -50,7 +52,7 @@ const hasOffenses = computed(() => {
             <MdiIcon icon="mdiBookOpenPageVariant" />
           </Button>
         </template>
-        <CollectionResults :collectionResults="ip.collection_results" />
+        <CollectionResults :collectionResults="ip.collectionResults" />
       </Modal>
       <Button color="destructive" v-if="hasOffenses">{{ $t('offenses') }}</Button>
     </div>

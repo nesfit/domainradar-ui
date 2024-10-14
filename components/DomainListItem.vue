@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Domain } from "~/types/domain"
+import type { DomainData as Domain } from "~/server/api/domains/index.get"
 import Pie from "./Pie.vue"
 import MalignIcon from "./MalignIcon.vue"
 import { computed, ref } from "vue";
@@ -13,16 +13,16 @@ const props = defineProps<{
 const emit = defineEmits(["click", "mouseenter", "mouseleave"])
 
 const dominantType = computed(() => {
-  const dominant = props.domain.classification_results
+  const dominant = props.domain.classificationResults
     .reduce((acc, cur) => {
       if (acc.probability > cur.probability) {
         return acc
       } else {
         return cur
       }
-    }, { probability: 0, classifier: "" })
+    }, { probability: 0, category: "" })
   if (dominant.probability > 0.3) {
-    return dominant.classifier
+    return dominant.category
   } else {
     return "Okay"
   }
@@ -53,22 +53,22 @@ const maxIPDots = 4
     <div class="overflow-x-hidden">
       <h2 class="whitespace-nowrap truncate text-ellipsis">{{ domain.domain_name }}</h2>
       <ul class="flex gap-2 text-sm">
-        <li v-for="result in domain.classification_results" :key="result.classifier" class="flex items-center gap-0.5">
-          <MalignIcon :type="result.classifier" /> {{ percentFormat(result.probability) }}
+        <li v-for="result in domain.classificationResults" :key="result.category" class="flex items-center gap-0.5">
+          <MalignIcon :type="result.category" /> {{ percentFormat(result.probability) }}
         </li>
         <li class="opacity-50 transition-colors duration-150 flex" :class="{
   'opacity-100 text-pink-600': isHovered,
 }
   ">
-          <template v-if="domain.ip_addresses.length < maxIPDots">
-            <MdiIcon icon="mdiCircleMedium" v-for="{ ip } in domain.ip_addresses" :key="ip" />
+          <template v-if="domain.ipAddresses.length < maxIPDots">
+            <MdiIcon icon="mdiCircleMedium" v-for="{ ip } in domain.ipAddresses" :key="ip" />
           </template>
-          <template v-else-if="domain.ip_addresses.length === maxIPDots">
+          <template v-else-if="domain.ipAddresses.length === maxIPDots">
             <MdiIcon icon="mdiCircleMedium" v-for="i in maxIPDots" :key="i" />
           </template>
           <template v-else>
             <MdiIcon icon="mdiCircleMedium" v-for="i in maxIPDots - 1" :key="i" />
-            +{{ domain.ip_addresses.length - (maxIPDots - 1) }}
+            +{{ domain.ipAddresses.length - (maxIPDots - 1) }}
           </template>
         </li>
       </ul>
