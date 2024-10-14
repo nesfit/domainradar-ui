@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.32.0",
-    "drizzle-orm": "^0.34.1",
+    "@prisma/nuxt": "^0.0.35",
     "floating-vue": "^5.2.2",
     "holo-vue": "^0.2.1",
     "kafkajs": "^2.2.4",
@@ -21,6 +21,7 @@
     "ol-contextmenu": "^5.4.0",
     "ol-ext": "^4.0.17",
     "pg": "^8.13.0",
+    "prisma": "^5.20.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue3-circle-progress": "^1.0.7",
@@ -32,6 +33,7 @@
     "@nuxtjs/i18n": "^8.2.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@pinia/nuxt": "^0.5.1",
+    "@prisma/client": "^5.20.0",
     "@types/pg": "^8.11.10",
     "@vueuse/nuxt": "^10.9.0",
     "nuxt-mdi-unfucked": "^69.0.1"

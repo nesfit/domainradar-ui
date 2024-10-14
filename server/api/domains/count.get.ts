@@ -1,7 +1,10 @@
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
-import { getMongoParamsForDomainFromEvent } from "~/server/utils/domain.params"
-import { ClassificationResultsModel } from "~/server/models/domain.schema"
+
+import getDomainParamsFromEvent, {
+  buildDomainFilter,
+} from "~/server/utils/domain.params"
+import prisma from "~/lib/prisma"
 
 interface DomainCountResponse {
   data: {
@@ -19,10 +22,11 @@ export default defineEventHandler(
         error: "Unauthorized",
       }
     //
-    const { match } = getMongoParamsForDomainFromEvent(event)
     //
     try {
-      const totalCount = await ClassificationResultsModel.countDocuments(match)
+      const totalCount = await prisma.domain.count({
+        where: buildDomainFilter(getDomainParamsFromEvent(event)),
+      })
 
       return {
         data: { totalCount },

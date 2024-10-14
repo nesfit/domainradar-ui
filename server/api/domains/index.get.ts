@@ -1,45 +1,40 @@
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
 
-import { useDrizzle } from "~/server/utils/drizzle"
 import getDomainParamsFromEvent, {
   buildDomainFilter,
 } from "~/server/utils/domain.params"
+import prisma from "~/lib/prisma"
 
 async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
-  return useDrizzle().query.Domain.findMany({
-    with: {
-      classification_category_results: {
-        with: {
-          classifier_outputs: true,
-        },
-      },
-      collection_results: {
-        columns: {
-          raw_data: false,
-        },
-      },
-      ip_addresses: {
-        with: {
-          collection_results: true,
-          qradar_offense_source: {
-            with: {
+  return prisma.domain.findMany({
+    include: {
+      ipAddresses: {
+        include: {
+          collectionResults: true,
+          qradarOffenseSource: {
+            include: {
               offenses: true,
             },
           },
         },
       },
+      classificationResults: {
+        include: {
+          classifierOutputs: true,
+        },
+      },
+      collectionResults: {
+        omit: {
+          raw_data: true,
+        },
+      },
     },
-    limit: params.limit,
-    offset: params.limit * params.page,
     //
     where: buildDomainFilter(params),
-    orderBy: (domain, { asc, desc }) => {
-      const sorting = params.sortAsc === 1 ? asc : desc
-      // @ts-ignore
-      const column = domain[params.sortKey]
-      return [sorting(column)]
-    },
+    orderBy: { [params.sortKey]: params.sortAsc === 1 ? "asc" : "desc" },
+    skip: (params.page - 1) * params.limit,
+    take: params.limit,
   })
 }
 

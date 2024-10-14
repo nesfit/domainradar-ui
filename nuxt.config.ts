@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     cookie: resolve(__dirname, "node_modules/cookie"),
   },
   modules: [
+    "@prisma/nuxt",
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
@@ -26,6 +27,10 @@ export default defineNuxtConfig({
     //   name: "page",
     //   mode: "out-in",
     // },
+  },
+  prisma: {
+    runMigration: false,
+    autoSetupPrisma: true,
   },
   authJs: {
     authenticatedRedirectTo: "/app",

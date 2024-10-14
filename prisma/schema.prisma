@@ -1,0 +1,102 @@
+// Prisma schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Domain {
+  id                     Int                      @id @default(autoincrement())
+  domain_name            String                   @unique
+  aggregate_probability  Float
+  aggregate_description  String
+  classificationResults  ClassificationCategoryResult[]
+  collectionResults      CollectionResult[]
+  ipAddresses            IP[]
+}
+
+model IP {
+  id                 Int             @id @default(autoincrement())
+  ip                 String
+  geo_country        String?
+  geo_country_code   String?
+  geo_region         String?
+  geo_region_code    String?
+  geo_city           String?
+  geo_postal_code    String?
+  geo_latitude       Float?
+  geo_longitude      Float?
+  geo_timezone       String?
+  geo_isp            String?
+  geo_org            String?
+  asn                Int?
+  as_org             String?
+  network_address    String?
+  network_prefix_length Int?
+  domain             Domain          @relation(fields: [domain_id], references: [id])
+  domain_id          Int
+  collectionResults  CollectionResult[]
+  qradarOffenseSource QRadarOffenseSource[]
+}
+
+model ClassificationCategoryResult {
+  id          Int        @id @default(autoincrement())
+  timestamp   DateTime?
+  category    String
+  probability Float
+  description String?
+  details     Json?
+  domain      Domain     @relation(fields: [domain_id], references: [id])
+  domain_id   Int
+  classifierOutputs ClassifierOutput[]
+}
+
+model ClassifierOutput {
+  id                 Int                       @id @default(autoincrement())
+  classifier         String
+  probability        Float
+  additional_info    String?
+  categoryResult     ClassificationCategoryResult @relation(fields: [category_result_id], references: [id])
+  category_result_id Int
+}
+
+model CollectionResult {
+  id         Int      @id @default(autoincrement())
+  source     String
+  status_code Int?
+  error      String?
+  timestamp  DateTime
+  raw_data   Json?
+  domain     Domain   @relation(fields: [domain_id], references: [id])
+  domain_id  Int
+  ip         IP       @relation(fields: [ip_id], references: [id])
+  ip_id      Int
+}
+
+model QRadarOffenseSource {
+  id              Int      @id @default(autoincrement())
+  qradar_domain_id Int
+  magnitude       Float
+  ip              IP       @relation(fields: [ip_id], references: [id])
+  ip_id           Int
+  offenses        QRadarOffense[]
+}
+
+model QRadarOffense {
+  id               Int                @id @default(autoincrement())
+  description      String?
+  event_count      Int
+  flow_count       Int
+  device_count     Int?
+  severity         Float?
+  magnitude        Float?
+  last_updated_time DateTime?
+  status           String?
+  source           QRadarOffenseSource @relation(fields: [source_id], references: [id])
+  source_id        Int
+}

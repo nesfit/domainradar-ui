@@ -1,9 +1,5 @@
 import { type H3Event, type EventHandlerRequest, getQuery } from "h3"
-import * as Drizzle from "drizzle-orm"
-import { type SQL } from "drizzle-orm"
-import { Domain } from "~/server/db/schema"
-
-const { asc, desc, ...op } = Drizzle
+import type { Prisma } from "@prisma/client"
 
 export default function getDomainParamsFromEvent(
   event: H3Event<EventHandlerRequest>,
@@ -50,27 +46,20 @@ export default function getDomainParamsFromEvent(
 export function buildDomainFilter(
   params: ReturnType<typeof getDomainParamsFromEvent>,
 ) {
-  const filters: SQL[] = []
+  const filters: Prisma.DomainWhereInput[] = []
   //
-  if (params.search)
-    filters.push(op.ilike(Domain.domain_name, `%${params.search}%`))
+  if (params.search) filters.push({ domain_name: { contains: params.search } })
 
   if (params.filterAggregateProbabilityLower)
-    filters.push(
-      op.gte(
-        Domain.aggregate_probability,
-        params.filterAggregateProbabilityLower,
-      ),
-    )
+    filters.push({
+      aggregate_probability: { gte: params.filterAggregateProbabilityLower },
+    })
 
   if (params.filterAggregateProbabilityUpper)
-    filters.push(
-      op.lte(
-        Domain.aggregate_probability,
-        params.filterAggregateProbabilityUpper,
-      ),
-    )
+    filters.push({
+      aggregate_probability: { lte: params.filterAggregateProbabilityUpper },
+    })
 
   //
-  return op.and(...filters)
+  return { AND: filters }
 }
