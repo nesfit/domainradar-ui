@@ -1,15 +1,50 @@
-import { type Domain } from "~/types/domain"
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
-import createDomainPipeline from "~/server/utils/domain.pipeline"
-import { getMongoParamsForDomainFromEvent } from "~/server/utils/domain.params"
-import {
-  ClassificationResultsModel,
-  DomainDataModel,
-} from "~/server/models/domain.schema"
+
+import { useDrizzle } from "~/server/utils/drizzle"
+import getDomainParamsFromEvent, {
+  buildDomainFilter,
+} from "~/server/utils/domain.params"
+
+async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
+  return useDrizzle().query.Domain.findMany({
+    with: {
+      classification_category_results: {
+        with: {
+          classifier_outputs: true,
+        },
+      },
+      collection_results: {
+        columns: {
+          raw_data: false,
+        },
+      },
+      ip_addresses: {
+        with: {
+          collection_results: true,
+          qradar_offense_source: {
+            with: {
+              offenses: true,
+            },
+          },
+        },
+      },
+    },
+    limit: params.limit,
+    offset: params.limit * params.page,
+    //
+    where: buildDomainFilter(params),
+    orderBy: (domain, { asc, desc }) => {
+      const sorting = params.sortAsc === 1 ? asc : desc
+      // @ts-ignore
+      const column = domain[params.sortKey]
+      return [sorting(column)]
+    },
+  })
+}
 
 interface DomainResponse {
-  data: Domain[]
+  data: Awaited<ReturnType<typeof fetchData>>
   metadata: {
     page: number
     limit: number
@@ -26,41 +61,12 @@ export default defineEventHandler(async (event): Promise<DomainResponse> => {
       error: "Unauthorized",
     }
   //
-  const { match, sort, skip, limit, page } =
-    getMongoParamsForDomainFromEvent(event)
+  const params = getDomainParamsFromEvent(event)
+  const { page, limit } = params
   //
   try {
-    const domainNamesPage = await ClassificationResultsModel.find(match, {
-      _id: 0,
-    })
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
-
-    const domainNamesToAggregate = domainNamesPage.map(
-      (domain) => domain.domain_name,
-    )
-
-    const pipeline = createDomainPipeline(domainNamesToAggregate)
-    const result = await DomainDataModel.aggregate(pipeline)
-
-    const combined = domainNamesPage.map((domain) => {
-      const domainData = result.find(
-        (d) => d.domain_name === domain.domain_name,
-      )
-      if (!domainData) {
-        return {
-          ...domain.toObject(),
-          ip_addresses: [],
-          first_seen: null,
-        }
-      } else {
-        return domainData
-      }
-    })
-
     return {
-      data: combined,
+      data: await fetchData(params),
       metadata: {
         page,
         limit,

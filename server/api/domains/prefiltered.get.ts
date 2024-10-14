@@ -1,5 +1,3 @@
-import { parse } from "vue/compiler-sfc"
-import { PrefilteredDomainModel } from "~/server/models/prefiltered_domain.schema"
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
 
@@ -13,6 +11,7 @@ interface PrefilteredDomainResponse {
   error?: any
 }
 
+// TODO implement with postgres
 export default defineEventHandler(
   async (event): Promise<PrefilteredDomainResponse> => {
     // auth
@@ -23,14 +22,14 @@ export default defineEventHandler(
         error: "Unauthorized",
       }
     //
-    const result = await PrefilteredDomainModel.find({}).limit(1000)
     return {
-      data: result,
+      data: [],
       metadata: {
-        totalCount: result.length,
+        totalCount: 0,
         page: 1,
         limit: 10,
       },
+      error: "pg version not implemented!",
     }
   },
 )

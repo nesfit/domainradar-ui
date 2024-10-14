@@ -1,4 +1,9 @@
 import { type H3Event, type EventHandlerRequest, getQuery } from "h3"
+import * as Drizzle from "drizzle-orm"
+import { type SQL } from "drizzle-orm"
+import { Domain } from "~/server/db/schema"
+
+const { asc, desc, ...op } = Drizzle
 
 export default function getDomainParamsFromEvent(
   event: H3Event<EventHandlerRequest>,
@@ -42,29 +47,30 @@ export default function getDomainParamsFromEvent(
   }
 }
 
-export function getMongoParamsForDomainFromEvent(
-  event: H3Event<EventHandlerRequest>,
+export function buildDomainFilter(
+  params: ReturnType<typeof getDomainParamsFromEvent>,
 ) {
-  const {
-    page,
-    limit,
-    search,
-    sortAsc,
-    sortKey,
-    filterAggregateProbabilityLower,
-    filterAggregateProbabilityUpper,
-  } = getDomainParamsFromEvent(event)
-  return {
-    match: {
-      aggregate_probability: {
-        $gte: filterAggregateProbabilityLower,
-        $lte: filterAggregateProbabilityUpper,
-      },
-      domain_name: { $regex: search, $options: "i" },
-    },
-    sort: { [sortKey]: sortAsc as 1 | -1 },
-    skip: (page - 1) * limit,
-    limit,
-    page,
-  }
+  const filters: SQL[] = []
+  //
+  if (params.search)
+    filters.push(op.ilike(Domain.domain_name, `%${params.search}%`))
+
+  if (params.filterAggregateProbabilityLower)
+    filters.push(
+      op.gte(
+        Domain.aggregate_probability,
+        params.filterAggregateProbabilityLower,
+      ),
+    )
+
+  if (params.filterAggregateProbabilityUpper)
+    filters.push(
+      op.lte(
+        Domain.aggregate_probability,
+        params.filterAggregateProbabilityUpper,
+      ),
+    )
+
+  //
+  return op.and(...filters)
 }

@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
     "nuxt-mdi-unfucked",
-    "nuxt-mongoose",
     "@hebilicious/authjs-nuxt",
     "@nuxtjs/i18n",
     "floating-vue/nuxt",
@@ -27,9 +26,6 @@ export default defineNuxtConfig({
     //   name: "page",
     //   mode: "out-in",
     // },
-  },
-  mongoose: {
-    uri: process.env.NUXT_MONGOOSE_URI,
   },
   authJs: {
     authenticatedRedirectTo: "/app",
@@ -46,7 +42,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     kafkaBroker: process.env.NUXT_KAFKA_BROKER,
-    mongoose: { uri: process.env.NUXT_MONGOOSE_URI },
+    db: {
+      connectionString: process.env.NUXT_DB_CONNECTION_STRING,
+    },
     authJs: {
       secret: "",
     },
