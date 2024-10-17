@@ -44,6 +44,7 @@ model Domain {
   classificationResults ClassificationCategoryResult[]
   collectionResults     CollectionResult[]
   ipAddresses           IP[]
+  last_update           DateTime
 }
 
 model IP {
