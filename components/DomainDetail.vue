@@ -46,11 +46,11 @@ const explodedName = computed(() => {
             }}</span>
         </h1>
         <ul class="mt-2 flex gap-4 flex-wrap">
-          <li v-for="result in sortedClassificationResults" :key="result.category" :style="{
+          <li v-for="result in sortedClassificationResults" :key="result.category.category" :style="{
             opacity: result.probability + 0.35,
           }" class="flex items-center gap-2">
             <Pie :percent="result.probability * 100" :size="36">
-              <MalignIcon :type="result.category" />
+              <MalignIcon :type="result.category.category" />
             </Pie> <strong>{{ percentFormat(result.probability) }}</strong> {{ result.category }}
           </li>
         </ul>
@@ -75,7 +75,8 @@ const explodedName = computed(() => {
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classificationResults') }}</h2>
     <div class="flex flex-col gap-4">
-      <ClassifierDetail v-for="result in sortedClassificationResults" :key="result.category" :result="result" />
+      <ClassifierDetail v-for="result in sortedClassificationResults" :key="result.category.category"
+        :result="result" />
     </div>
 
     <template v-if="props.domain.ipAddresses.length > 0">

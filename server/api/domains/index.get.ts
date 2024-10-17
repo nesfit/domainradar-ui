@@ -11,7 +11,14 @@ async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
     include: {
       ipAddresses: {
         include: {
-          collectionResults: true,
+          collectionResults: {
+            include: {
+              source: true,
+            },
+            omit: {
+              raw_data: true,
+            },
+          },
           qradarOffenseSource: {
             include: {
               offenses: true,
@@ -22,9 +29,13 @@ async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
       classificationResults: {
         include: {
           classifierOutputs: true,
+          category: true,
         },
       },
       collectionResults: {
+        include: {
+          source: true,
+        },
         omit: {
           raw_data: true,
         },

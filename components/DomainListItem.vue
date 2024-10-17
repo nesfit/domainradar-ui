@@ -18,7 +18,7 @@ const dominantType = computed(() => {
       if (acc.probability > cur.probability) {
         return acc
       } else {
-        return cur
+        return { probability: cur.probability, category: cur.category.category }
       }
     }, { probability: 0, category: "" })
   if (dominant.probability > 0.3) {
@@ -53,8 +53,9 @@ const maxIPDots = 4
     <div class="overflow-x-hidden">
       <h2 class="whitespace-nowrap truncate text-ellipsis">{{ domain.domain_name }}</h2>
       <ul class="flex gap-2 text-sm">
-        <li v-for="result in domain.classificationResults" :key="result.category" class="flex items-center gap-0.5">
-          <MalignIcon :type="result.category" /> {{ percentFormat(result.probability) }}
+        <li v-for="result in domain.classificationResults" :key="result.category.category"
+          class="flex items-center gap-0.5">
+          <MalignIcon :type="result.category.category" /> {{ percentFormat(result.probability) }}
         </li>
         <li class="opacity-50 transition-colors duration-150 flex" :class="{
   'opacity-100 text-pink-600': isHovered,

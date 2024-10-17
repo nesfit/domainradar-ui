@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4 min-w-60">
-    <div v-for="res in props.collectionResults" :key="res.source">
+    <div v-for="res in props.collectionResults" :key="res.source.collector">
       <h2 class="text-lg font-bold">{{ res.source }}</h2>
       <p class="text-sm">{{ $d(res.timestamp, "long") }}</p>
 
@@ -14,7 +14,7 @@
 import type { Prisma } from '@prisma/client';
 
 const props = defineProps<{
-  collectionResults: Prisma.CollectionResultGetPayload<{ omit: { raw_data: true } }>[]
+  collectionResults: Prisma.CollectionResultGetPayload<{ include: { source: true }, omit: { raw_data: true } }>[]
 }>()
 </script>
 
