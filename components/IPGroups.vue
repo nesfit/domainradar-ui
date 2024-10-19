@@ -24,7 +24,7 @@ const groupedByCoords = computed(() => {
 // try to get the most specific descriptor possible from all the ips
 function getBestGeoDescriptor(ips: IP[]) {
   const cities = ips.map(ip => ip.geo_city).filter(city => city !== null)
-  const countries = ips.map(ip => ip.geo_country).filter(country => country !== null)
+  const countries = ips.map(ip => ip.geo_country_code).filter(country => country !== null)
   const coords = ips.filter(ip => ip.geo_longitude && ip.geo_latitude)
   if (cities.length > 0) {
     return `${cities[0]}, ${countries[0]}`
@@ -61,13 +61,14 @@ function getFormattedCoords(ips: IP[]) {
           {{ getFormattedCoords(coordGroup) }}
         </div>
       </h2>
-      <div v-if="coordGroup[0].asn"><strong>{{ coordGroup[0].asn.as_org }}</strong> <span class="opacity-60">({{
-  coordGroup[0].asn.asn }})</span></div>
-      <div v-for="net, i in groupBy(coordGroup, 'asn.network_address')" :key="i" class="my-3">
+      <div v-if="coordGroup[0].asn"><strong>{{ coordGroup[0].as_org }}</strong> <span class="opacity-60">({{
+          coordGroup[0].asn }})</span></div>
+      <div v-for="net, i in groupBy(coordGroup, 'network_address')" :key="i" class="my-3">
         <h3 class="mb-2 text-lg">
-          {{ $t('network') }} <strong class="font-mono text-cyan-700 dark:text-cyan-300">{{ net[0].asn.network_address
-            }}</strong> /
-          {{ net[0].asn.prefix_len }}
+          {{ $t('network') }} <strong class="font-mono text-cyan-700 dark:text-cyan-300">{{
+            net[0].network_address.replace('/', '')
+          }}</strong> /
+          {{ net[0].network_prefix_length }}
         </h3>
         <IPDetail v-for="ip in net" :key="ip.ip" :ip="ip" class="mb-2" />
       </div>

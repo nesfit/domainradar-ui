@@ -47,7 +47,8 @@ const maxIPDots = 4
   <li class="flex items-center gap-2 cursor-pointer px-3 py-1 hover:bg-slate-300 dark:hover:bg-slate-600" :class="{
   'bg-slate-200 dark:bg-slate-700': active,
 }" @click="$emit('click', domain)" @mouseenter="onMouseEntered" @mouseleave="onMouseLeft">
-    <Pie :size="36" :percent="domain.aggregate_probability * 100">
+    <Pie v-if="typeof domain.aggregate_probability == 'number'" :size="36"
+      :percent="domain.aggregate_probability * 100">
       <MalignIcon :type="dominantType" />
     </Pie>
     <div class="overflow-x-hidden">

@@ -7,12 +7,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("NUXT_DB_CONNECTION_STRING")
 }
 
 // "Enum" tables
 
 model Collector {
+  @@map("collector")
   id               Int                @id
   collector        String
   is_ip_collector  Boolean
@@ -20,6 +21,7 @@ model Collector {
 }
 
 model ClassificationCategory {
+  @@map("classification_category")
   id                           Int                            @id
   category                     String
   ClassifierType               ClassifierType[]
@@ -27,6 +29,7 @@ model ClassificationCategory {
 }
 
 model ClassifierType {
+  @@map("classifier_type")
   id               Int                    @id
   category_id      Int
   classifier       String
@@ -35,6 +38,7 @@ model ClassifierType {
 }
 
 model CollectorStatusType {
+  @@map("collector_status_type")
   status_code Int   @id
   name        String
   description String?
@@ -44,10 +48,11 @@ model CollectorStatusType {
 // Models
 
 model Domain {
+  @@map("domain")
   id                    Int                            @id @default(autoincrement())
   domain_name           String                         @unique
-  aggregate_probability Float
-  aggregate_description String
+  aggregate_probability Float?
+  aggregate_description String?
   classificationResults ClassificationCategoryResult[]
   collectionResults     CollectionResult[]
   ipAddresses           IP[]
@@ -55,9 +60,9 @@ model Domain {
 }
 
 model IP {
+  @@map("ip")
   id                    Int                   @id @default(autoincrement())
   ip                    String
-  geo_country           String?
   geo_country_code      String?
   geo_region            String?
   geo_region_code       String?
@@ -66,12 +71,13 @@ model IP {
   geo_latitude          Float?
   geo_longitude         Float?
   geo_timezone          String?
-  geo_isp               String?
-  geo_org               String?
   asn                   Int?
   as_org                String?
   network_address       String?
   network_prefix_length Int?
+  nerd_reputation       Float?
+  geo_asn_update_timestamp DateTime?
+  nerd_update_timestamp DateTime?
   domain                Domain                @relation(fields: [domain_id], references: [id])
   domain_id             Int
   collectionResults     CollectionResult[]
@@ -79,6 +85,7 @@ model IP {
 }
 
 model ClassificationCategoryResult {
+  @@map("classification_category_result")
   id                Int                    @id @default(autoincrement())
   timestamp         DateTime
   category          ClassificationCategory @relation(fields: [category_id], references: [id])
@@ -92,16 +99,18 @@ model ClassificationCategoryResult {
 }
 
 model ClassifierOutput {
-  id                 Int                          @id @default(autoincrement())
+  @@map("classifier_output")
+  @@id([classifier_id, result_id])
   classifier         ClassifierType               @relation(fields: [classifier_id], references: [id])
   classifier_id      Int
   probability        Float
   additional_info    String?
-  categoryResult     ClassificationCategoryResult @relation(fields: [category_result_id], references: [id])
-  category_result_id Int
+  categoryResult     ClassificationCategoryResult @relation(fields: [result_id], references: [id])
+  result_id Int
 }
 
 model CollectionResult {
+  @@map("collection_result")
   id          Int       @id @default(autoincrement())
   source      Collector @relation(fields: [source_id], references: [id])
   source_id   Int
@@ -112,11 +121,12 @@ model CollectionResult {
   raw_data    Json?
   domain      Domain    @relation(fields: [domain_id], references: [id])
   domain_id   Int
-  ip          IP        @relation(fields: [ip_id], references: [id])
-  ip_id       Int
+  ip          IP?        @relation(fields: [ip_id], references: [id])
+  ip_id       Int?
 }
 
 model QRadarOffenseSource {
+  @@map("qradar_offense_source")
   id               Int             @id @default(autoincrement())
   qradar_domain_id Int
   magnitude        Float
@@ -126,14 +136,15 @@ model QRadarOffenseSource {
 }
 
 model QRadarOffense {
+  @@map("qradar_offense")
   id                Int                 @id @default(autoincrement())
   description       String?
   event_count       Int
   flow_count        Int
-  device_count      Int?
-  severity          Float?
-  magnitude         Float?
-  last_updated_time DateTime?
+  device_count      Int
+  severity          Float
+  magnitude         Float
+  last_updated_time DateTime
   status            String?
   source            QRadarOffenseSource @relation(fields: [source_id], references: [id])
   source_id         Int

@@ -35,8 +35,8 @@ const explodedName = computed(() => {
     class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-6 border-2 border-slate-400 dark:border-slate-600">
 
     <div class="flex gap-x-8 gap-y-4 items-center ms-4 flex-wrap">
-      <Pie :percent="props.domain.aggregate_probability * 100">
-        <div class="text-2xl">{{ percentFormat(props.domain.aggregate_probability, 0) }}</div>
+      <Pie v-if="typeof domain.aggregate_probability == 'number'" :percent="domain.aggregate_probability * 100">
+        <div class="text-2xl">{{ percentFormat(domain.aggregate_probability, 0) }}</div>
       </Pie>
       <div>
         <h1 class="text-3xl font-semibold flex flex-wrap items-baseline">
@@ -51,7 +51,7 @@ const explodedName = computed(() => {
           }" class="flex items-center gap-2">
             <Pie :percent="result.probability * 100" :size="36">
               <MalignIcon :type="result.category.category" />
-            </Pie> <strong>{{ percentFormat(result.probability) }}</strong> {{ result.category }}
+            </Pie> <strong>{{ percentFormat(result.probability) }}</strong> {{ result.category.category }}
           </li>
         </ul>
       </div>
@@ -60,7 +60,7 @@ const explodedName = computed(() => {
     <div class="mx-4 mt-10 flex flex-wrap gap-2">
       <Modal show-close v-if="domain.collectionResults">
         <template #trigger="{ state }">
-          <Button symmetrical color="accent" v-tooltip="$t('collectionResults')" @click="state.open = true">
+          <Button symmetrical color="accent" v-tooltip="$t('collection_results')" @click="state.open = true">
             <MdiIcon icon="mdiBookOpenPageVariant" />
           </Button>
         </template>
@@ -73,7 +73,7 @@ const explodedName = computed(() => {
       </div>
     </div>
 
-    <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classificationResults') }}</h2>
+    <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classification_results') }}</h2>
     <div class="flex flex-col gap-4">
       <ClassifierDetail v-for="result in sortedClassificationResults" :key="result.category.category"
         :result="result" />

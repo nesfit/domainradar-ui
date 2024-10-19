@@ -22,7 +22,7 @@ const hasGeo = computed(() => {
 })
 
 const hasOffenses = computed(() => {
-  return props.ip.qradarOffenseSource && props.ip.qradarOffenseSource[0].offenses.length > 0
+  return props.ip.qradarOffenseSource.length > 0 && props.ip.qradarOffenseSource[0].offenses.length > 0
 })
 </script>
 
