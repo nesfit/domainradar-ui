@@ -34,6 +34,13 @@ model ClassifierType {
   ClassifierOutput ClassifierOutput[]
 }
 
+model CollectorStatusType {
+  status_code Int   @id
+  name        String
+  description String?
+  CollectionResult CollectionResult[]
+}
+
 // Models
 
 model Domain {
@@ -98,7 +105,8 @@ model CollectionResult {
   id          Int       @id @default(autoincrement())
   source      Collector @relation(fields: [source_id], references: [id])
   source_id   Int
-  status_code Int?
+  status_code Int
+  status      CollectorStatusType @relation(fields: [status_code], references: [status_code])
   error       String?
   timestamp   DateTime
   raw_data    Json?
