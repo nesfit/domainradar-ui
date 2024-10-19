@@ -36,7 +36,7 @@ network: Síť
 timeline: Časová osa
 aggregate_probability: Škodlivost
 first_seen: První záznam
-last_seen: Poslední záznam
+last_update: Poslední aktualizace
 offense_count: Počet incidentů
 offenses: Incidenty
 

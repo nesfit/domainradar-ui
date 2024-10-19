@@ -36,7 +36,7 @@ network: Network
 timeline: Timeline
 aggregate_probability: Badness
 first_seen: First seen
-last_seen: Last seen
+last_update: Last updated
 offense_count: Offense count
 offenses: Offenses
 

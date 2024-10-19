@@ -28,6 +28,22 @@ const sortedClassificationResults = computed(() => {
 const explodedName = computed(() => {
   return props.domain.domain_name.split(".")
 })
+
+function hasFirstSeen(domain: Domain) {
+  return domain.collectionResults.length > 0
+}
+
+function getFirstSeen(domain: Domain) {
+  // THROWS if domain.collectionResults is empty, check with hasFirstSeen before calling
+  return domain.collectionResults.reduce((acc, cur) => {
+    const c = new Date(cur.timestamp)
+    if (c < acc) {
+      return c
+    } else {
+      return acc
+    }
+  }, new Date())
+}
 </script>
 
 <template>
@@ -93,8 +109,9 @@ const explodedName = computed(() => {
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('timeline') }}</h2>
     <div class="px-4">
-      <!-- TODO implement first seen via latest result timestamp -->
-      <!-- <div v-if="domain.first_seen">{{ $t('first_seen') }}: {{ $d(props.domain.first_seen, 'long') }}</div> -->
+      <div v-if="hasFirstSeen(domain) != null">{{ $t('first_seen') }}: {{ $d(getFirstSeen(domain), 'long') }}
+      </div>
+      <div v-if="domain.last_update">{{ $t('last_update') }}: {{ $d(domain.last_update, 'long') }}</div>
     </div>
 
     <div class="mt-8 text-end">
