@@ -25,7 +25,7 @@ const pageStore = usePageStore()
 const { page, limit, total } = storeToRefs(pageStore)
 
 const filterSortStore = useFilterSortStore()
-const { sortAsc, sortKey, filterAggregateProbability } = storeToRefs(filterSortStore)
+const { sortAsc, sortKey, sortName, filterAggregateProbability } = storeToRefs(filterSortStore)
 
 const search = ref("")
 const filterAggregateProbabilityLower = computed(() => filterAggregateProbability.value[0])
@@ -151,7 +151,7 @@ const { data: domainLinks } = await useFetch('/api/config/links')
           <div class="flex justify-between items-center mt-4 px-2">
             <button class="flex items-center gap-0.5 text-sm" @click="sortingOpen = !sortingOpen">
               <div>
-                {{ $t('sorting.title') }} <span class="font-bold">{{ $t(sortKey) }}</span>
+                {{ $t('sorting.title') }} <span class="font-bold">{{ $t(sortName) }}</span>
               </div>
               <div class="origin-center transition-transform duration-200" :class="{ 'transform rotate-180': sortAsc }">
                 <MdiIcon icon="mdiArrowDown" />

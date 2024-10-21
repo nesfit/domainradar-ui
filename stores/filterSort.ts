@@ -3,6 +3,7 @@ import { defineStore } from "pinia"
 
 export const useFilterSortStore = defineStore("filterSort", () => {
   const sortKey = ref("aggregate_probability")
+  const sortName = ref("aggregate_probability")
   const sortAsc = ref(false)
   //
   const filterAggregateProbability = ref([0, 100])
@@ -25,6 +26,7 @@ export const useFilterSortStore = defineStore("filterSort", () => {
   //
   return {
     sortKey,
+    sortName,
     sortAsc,
     setSortKey,
     setSortAsc,

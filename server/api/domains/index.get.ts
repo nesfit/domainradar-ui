@@ -3,8 +3,10 @@ import { getServerSession } from "#auth"
 
 import getDomainParamsFromEvent, {
   buildDomainFilter,
+  buildDomainSort,
 } from "~/server/utils/domain.params"
 import prisma from "~/lib/prisma"
+import { getDomainsSortedByClassifierProbability } from "@prisma/client/sql"
 
 async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
   return prisma.domain.findMany({
@@ -43,7 +45,7 @@ async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
     },
     //
     where: buildDomainFilter(params),
-    orderBy: { [params.sortKey]: params.sortAsc === 1 ? "asc" : "desc" },
+    orderBy: buildDomainSort(params.sortKey, params.sortAsc === 1),
     skip: (params.page - 1) * params.limit,
     take: params.limit,
   })

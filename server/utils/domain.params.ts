@@ -63,3 +63,18 @@ export function buildDomainFilter(
   //
   return { AND: filters }
 }
+
+export function buildDomainSort(keyPath: string, asc: boolean) {
+  const keyParts = keyPath.split(".")
+  // build sort object nested
+  const orderBy: any = {}
+  let current = orderBy
+  for (let i = 0; i < keyParts.length - 1; i++) {
+    current[keyParts[i]] = {}
+    current = current[keyParts[i]]
+  }
+  // set asc or desc
+  current[keyParts[keyParts.length - 1]] = asc ? "asc" : "desc"
+  //
+  return orderBy
+}
