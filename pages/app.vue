@@ -31,9 +31,13 @@ const search = ref("")
 const filterAggregateProbabilityLower = computed(() => filterAggregateProbability.value[0])
 const filterAggregateProbabilityUpper = computed(() => filterAggregateProbability.value[1])
 
+const totalCountRefreshAllowed = ref(true)
 const abortController = new AbortController()
 const totalCountRequestInFlight = ref(false)
 function refreshTotalCount() {
+  if (!totalCountRefreshAllowed.value) {
+    return
+  }
   if (totalCountRequestInFlight.value) {
     abortController.abort("New request received")
   }
@@ -51,15 +55,28 @@ function refreshTotalCount() {
     totalCountRequestInFlight.value = false
     pageStore.setTotal(data.totalCount)
     console.timeEnd("Total Count Refresh")
+  }).catch((err) => {
+    if (err.name === "AbortError") {
+      console.log("Total count refresh aborted")
+    } else {
+      console.error(err)
+    }
+    totalCountRequestInFlight.value = false
   })
 }
 
+const debouncedRefresh = useDebounceFn(refreshTotalCount, 500)
+
 onMounted(() => {
   refreshTotalCount()
+  totalCountRefreshAllowed.value = false
+  setTimeout(() => {
+    totalCountRefreshAllowed.value = true
+  }, 500)
 })
 
 function refreshTotalOnParamChange() {
-  useDebounceFn(refreshTotalCount, 500)()
+  debouncedRefresh()
   pageStore.setPage(1)
 }
 
