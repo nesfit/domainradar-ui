@@ -1,3 +1,4 @@
+import type { TypedSql } from "@prisma/client/runtime/library"
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
 
@@ -6,10 +7,64 @@ import getDomainParamsFromEvent, {
   buildDomainSort,
 } from "~/server/utils/domain.params"
 import prisma from "~/lib/prisma"
-import { getDomainsSortedByClassifierProbability } from "@prisma/client/sql"
 
-async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
-  return prisma.domain.findMany({
+// workaround queries
+import { getDomainsSortedByCategoryProbability } from "@prisma/client/sql"
+import { Prisma } from "@prisma/client"
+
+function neededWorkaroundFn(params: DomainParams): workaroundFn | null {
+  // sort by category probability
+  if (params.sortKey === "phishing_probability")
+    return (...args: Parameters<workaroundFn>) =>
+      getDomainsSortedByCategoryProbability("Phishing", ...args)
+  if (params.sortKey === "malware_probability")
+    return (...args: Parameters<workaroundFn>) =>
+      getDomainsSortedByCategoryProbability("Malware", ...args)
+  if (params.sortKey === "dga_probability")
+    return (...args: Parameters<workaroundFn>) =>
+      getDomainsSortedByCategoryProbability("DGA", ...args)
+  // none needed
+  return null
+}
+
+type DomainParams = ReturnType<typeof getDomainParamsFromEvent>
+type workaroundFn = (
+  offset: number,
+  limit: number,
+  minProbability: number,
+  maxProbability: number,
+  domainNameContaining: string,
+) => TypedSql<any, { id: bigint }>
+
+async function executeWorkaroundQuery(
+  workaround: workaroundFn,
+  params: DomainParams,
+) {
+  const {
+    offset,
+    limit,
+    filterAggregateProbabilityLower,
+    filterAggregateProbabilityUpper,
+    search,
+  } = params
+  //
+  return prisma.$queryRawTyped(
+    workaround(
+      offset,
+      limit,
+      filterAggregateProbabilityLower,
+      filterAggregateProbabilityUpper,
+      search,
+    ),
+  )
+}
+
+async function executeFindManyQuery(
+  params: DomainParams,
+  idsFromWorkaround: number[] = [],
+) {
+  const usingWorkaround = idsFromWorkaround.length > 0
+  const result = await prisma.domain.findMany({
     include: {
       ipAddresses: {
         include: {
@@ -44,11 +99,34 @@ async function fetchData(params: ReturnType<typeof getDomainParamsFromEvent>) {
       },
     },
     //
-    where: buildDomainFilter(params),
-    orderBy: buildDomainSort(params.sortKey, params.sortAsc === 1),
-    skip: (params.page - 1) * params.limit,
-    take: params.limit,
+    where: usingWorkaround
+      ? { id: { in: idsFromWorkaround } }
+      : buildDomainFilter(params),
+    orderBy: usingWorkaround
+      ? {}
+      : buildDomainSort(params.sortKey, params.sortAsc === 1),
+    skip: usingWorkaround ? 0 : (params.page - 1) * params.limit,
+    take: usingWorkaround ? idsFromWorkaround.length : params.limit,
   })
+  // re-sort if using workaround
+  if (usingWorkaround) {
+    return result.sort(
+      (a, b) =>
+        idsFromWorkaround.indexOf(a.id) - idsFromWorkaround.indexOf(b.id),
+    )
+  }
+  //
+  return result
+}
+
+async function fetchData(params: DomainParams) {
+  const workaroundFn = neededWorkaroundFn(params)
+  if (workaroundFn) {
+    const domainsWithIds = await executeWorkaroundQuery(workaroundFn, params)
+    const ids = domainsWithIds.map((d) => Number(d.id))
+    return executeFindManyQuery(params, ids)
+  }
+  return executeFindManyQuery(params)
 }
 
 export type DomainData = Awaited<ReturnType<typeof fetchData>>[0]

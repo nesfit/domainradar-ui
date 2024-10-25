@@ -31,6 +31,7 @@ save: Uložit
 classification_results: Výsledky klasifikace
 collection_results: Výsledky sběru
 ip_addresses: IP adresy
+ip_count: Počet IP adres
 at: na
 network: Síť
 timeline: Časová osa
@@ -39,6 +40,9 @@ first_seen: První záznam
 last_update: Poslední aktualizace
 offense_count: Počet incidentů
 offenses: Incidenty
+phishing_probability: Pravděpodobnost phishingu
+malware_probability: Pravděpodobnost malware
+dga_probability: Pravděpodobnost DGA
 
 sign_in: Přihlásit se
 sign_out: Odhlásit se

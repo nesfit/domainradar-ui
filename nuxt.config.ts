@@ -30,6 +30,7 @@ export default defineNuxtConfig({
   },
   prisma: {
     runMigration: false,
+    generateClient: false,
     autoSetupPrisma: true,
   },
   authJs: {

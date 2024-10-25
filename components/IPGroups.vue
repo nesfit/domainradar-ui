@@ -66,7 +66,7 @@ function getFormattedCoords(ips: IP[]) {
       <div v-for="net, i in groupBy(coordGroup, 'network_address')" :key="i" class="my-3">
         <h3 class="mb-2 text-lg">
           {{ $t('network') }} <strong class="font-mono text-cyan-700 dark:text-cyan-300">{{
-            net[0].network_address.replace('/', '')
+  net[0].network_address?.replace('/', '')
           }}</strong> /
           {{ net[0].network_prefix_length }}
         </h3>

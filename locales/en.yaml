@@ -31,6 +31,7 @@ save: Save
 classification_results: Classification results
 collection_results: Collection results
 ip_addresses: IP addresses
+ip_count: IP count
 at: at
 network: Network
 timeline: Timeline
@@ -39,6 +40,9 @@ first_seen: First seen
 last_update: Last updated
 offense_count: Offense count
 offenses: Offenses
+phishing_probability: Phishing probability
+malware_probability: Malware probability
+dga_probability: DGA probability
 
 sign_in: Sign in
 sign_out: Sign out

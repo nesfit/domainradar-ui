@@ -12,6 +12,11 @@ Install dependencies with Yarn:
 yarn install
 ```
 
+Then run the Prisma codegen to generate the Prisma client:
+```bash
+npx prisma generate --sql
+```
+
 ### Environment setup
 See the .env.example file for the environment variables that need to be set
 and their descriptions.

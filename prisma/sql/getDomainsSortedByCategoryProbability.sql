@@ -1,6 +1,9 @@
 -- @param {String} $1:category
 -- @param {Int} $2:offset
 -- @param {Int} $3:limit
+-- @param {Float} $4:minProbability
+-- @param {Float} $5:maxProbability
+-- @param {String} $6:domainNameContaining
 SELECT d.id
 FROM
     domain d
@@ -8,9 +11,12 @@ FROM
     JOIN classification_category cat ON r.category_id = cat.id
 WHERE
     cat.category = $1
+    AND r.probability > $4
+    AND r.probability < $5
+    AND d.domain_name ILIKE '%' || $6 || '%'
 GROUP BY
     d.id
-ORDER BY MAX(r.probability) DESC -- or use AVG(r.score) if you prefer
+ORDER BY MAX(r.probability) DESC
 OFFSET
     $2
 LIMIT $3;

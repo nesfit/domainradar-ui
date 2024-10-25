@@ -33,6 +33,7 @@ export default function getDomainParamsFromEvent(
   // RETURN
   return {
     page,
+    offset: (page - 1) * limit,
     limit,
     search,
     sortAsc,
@@ -76,5 +77,5 @@ export function buildDomainSort(keyPath: string, asc: boolean) {
   // set asc or desc
   current[keyParts[keyParts.length - 1]] = asc ? "asc" : "desc"
   //
-  return orderBy
+  return orderBy as Prisma.DomainOrderByWithRelationInput
 }

@@ -148,7 +148,7 @@ const { data: domainLinks } = await useFetch('/api/config/links')
               <MdiIcon icon="mdiFilter" /> {{ $t('filter.title') }}
             </HButton>
           </div>
-          <div class="flex justify-between items-center mt-4 px-2">
+          <div class="flex flex-wrap justify-between items-center mt-4 px-2">
             <button class="flex items-center gap-0.5 text-sm" @click="sortingOpen = !sortingOpen">
               <div>
                 {{ $t('sorting.title') }} <span class="font-bold">{{ $t(sortName) }}</span>
