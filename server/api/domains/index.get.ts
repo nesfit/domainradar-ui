@@ -10,7 +10,6 @@ import prisma from "~/lib/prisma"
 
 // workaround queries
 import { getDomainsSortedByCategoryProbability } from "@prisma/client/sql"
-import { Prisma } from "@prisma/client"
 
 function neededWorkaroundFn(params: DomainParams): workaroundFn | null {
   // sort by category probability
