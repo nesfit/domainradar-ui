@@ -1,18 +1,9 @@
 services:
-  mongo:
-    image: mongo
-    ports:
-      - 27017:27017
-    volumes:
-      - ./.mongo:/data/db
-    restart: always
   app:
     build: .
     env_file:
       - .env
     ports:
       - ${PORT}:${PORT}
-    depends_on:
-      - mongo
     volumes:
       - ./kafka-ssl:/app/kafka-ssl
