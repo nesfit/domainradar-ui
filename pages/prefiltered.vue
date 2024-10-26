@@ -65,8 +65,13 @@ function getTextStyle(domainName: string) {
   if (!colors.value) return {}
   //
   for (const [pattern, color] of Object.entries(colors.value)) {
-    if (domainName.match(new RegExp(pattern))) {
-      return { color }
+    try {
+      const domainNamePattern = new RegExp(pattern)
+      if (domainName.match(domainNamePattern)) {
+        return { color }
+      }
+    } catch (e) {
+      console.error(`Invalid pattern: ${pattern}`)
     }
   }
   //

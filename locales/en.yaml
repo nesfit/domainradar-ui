@@ -98,3 +98,6 @@ customCheck:
     submit: Add to DomainRadar queue
     sending: Enqueueing in progress...
     sent: Domains added to queue
+
+
+invalid_regex: Invalid regular expression

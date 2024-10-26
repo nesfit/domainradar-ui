@@ -9,6 +9,8 @@ definePageMeta(
   }
 )
 
+const t = useI18n().t
+
 const route = useRoute()
 const { go } = useRouter()
 const { locale, setLocale } = useI18n()
@@ -125,6 +127,15 @@ async function tryUpdateConfig(component: ComponentId) {
     refreshConfigs()
   }
 }
+
+function regexFieldValidator(expression: string): Error | null {
+  try {
+    new RegExp(expression)
+    return null
+  } catch (error) {
+    return Error(t('invalid_regex'))
+  }
+}
 </script>
 
 <template>
@@ -179,7 +190,7 @@ async function tryUpdateConfig(component: ComponentId) {
       <p>{{ $t('settings.app.prefilterColors.description') }}</p>
       <div class="flex my-2">
         <ObjectConfig class="w-full" get-endpoint="/api/config/prefiltercolors" default-key="pattern"
-          default-value="#facade" value-input-type="color" />
+          default-value="#facade" value-input-type="color" :key-validator="regexFieldValidator" />
       </div>
     </section>
 

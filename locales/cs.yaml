@@ -98,3 +98,6 @@ customCheck:
     submit: Přidat do fronty DomainRadaru
     sending: Přidávání do fronty...
     sent: Domény přidány
+
+
+invalid_regex: Neplatný regulární výraz
