@@ -7,7 +7,8 @@
       <div v-if="state.open" class="modal">
         <div class="modal-closer" @click="state.open = false">
         </div>
-        <div class="modal-inner bg-slate-200 dark:bg-slate-700 border-2 border-slate-300 dark:border-slate-600 p-4">
+        <div
+          class="modal-inner bg-slate-200 dark:bg-slate-700 border-2 border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 p-4">
           <div class="flex justify-end" v-if="showClose">
             <HButton @click="state.open = false" symmetrical color="destructive">
               <MdiIcon icon="mdiClose" />

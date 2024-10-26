@@ -52,7 +52,7 @@ const hasOffenses = computed(() => {
             <MdiIcon icon="mdiBookOpenPageVariant" />
           </Button>
         </template>
-        <CollectionResults :collectionResults="ip.collectionResults" />
+        <CollectionResults ip :collectionResults="ip.collectionResults" />
       </Modal>
       <Button color="destructive" v-if="hasOffenses">{{ $t('offenses') }}</Button>
     </div>
