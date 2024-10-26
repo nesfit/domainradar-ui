@@ -47,6 +47,15 @@ model CollectorStatusType {
 
 // Models
 
+model DomainsInput {
+  @@map("domains_input")
+  id          Int      @id @default(autoincrement())
+  domain      String
+  first_seen  DateTime
+  last_seen   DateTime
+  filter_output Json?
+}
+
 model Domain {
   @@map("domain")
   id                    Int                            @id @default(autoincrement())

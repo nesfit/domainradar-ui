@@ -1,8 +1,12 @@
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
+import prisma from "~/lib/prisma"
+import type { Prisma } from "@prisma/client"
+
+export type Data = Prisma.PromiseReturnType<typeof prisma.domainsInput.findMany>
 
 interface PrefilteredDomainResponse {
-  data: Record<string, any>[]
+  data: Data
   metadata: {
     totalCount: number
     page: number
@@ -11,7 +15,6 @@ interface PrefilteredDomainResponse {
   error?: any
 }
 
-// TODO implement with postgres
 export default defineEventHandler(
   async (event): Promise<PrefilteredDomainResponse> => {
     // auth
@@ -23,13 +26,14 @@ export default defineEventHandler(
       }
     //
     return {
-      data: [],
+      data: await prisma.domainsInput.findMany({
+        take: 1000,
+      }),
       metadata: {
         totalCount: 0,
         page: 1,
         limit: 10,
       },
-      error: "pg version not implemented!",
     }
   },
 )

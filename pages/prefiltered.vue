@@ -9,11 +9,11 @@
     <ul>
       <li v-for="(domains, filterName) in domainsByFilterName" :key="filterName">
         <h2 class="text-xl font-bold text-cyan-900 dark:text-cyan-100">{{ filterName }}</h2>
-        <ul>
+        <ul class="mb-8">
           <li v-for="domain in domains" :key="domain.domain">
             <div class="flex items-center gap-2">
               <span :style="getTextStyle(domain.domain)">{{ domain.domain }}</span>
-              <span class="text-sm text-gray-500 dark:text-gray-400">{{ $d(domain.timestamp, 'long') }}</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400">{{ $d(domain.last_seen, 'long') }}</span>
             </div>
             <!-- <div class="text-sm text-gray-500 dark:text-gray-400">{{ domain.filterResult }}</div> -->
           </li>
@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { Data } from "~/server/api/domains/prefiltered.get"
 definePageMeta(
   {
     middleware: "auth",
@@ -35,29 +36,29 @@ const { go } = useRouter()
 const { data, error, refresh } = await useFetch("/api/domains/prefiltered")
 const { data: colors } = await useFetch("/api/config/prefiltercolors")
 
-type PrefilteredDomain = {
-  domain: string
-  timestamp: Date
-  filterResult: number
-}
-
 const domainsByFilterName = computed(() => {
   if (!data.value) return {}
-  const achjo: Record<string, PrefilteredDomain[]> = data.value.data.reduce((acc: Record<string, PrefilteredDomain[]>, domain: Record<string, any>) => { // SHUT UP TS
-    const filters = Object.keys(domain).filter(key => key !== "_id")
+  const achjo: Record<string, Data> = data.value.data.reduce((acc: Record<string, Data>, domain) => {
+    const filter_output = domain.filter_output && typeof domain.filter_output === "object" ? domain.filter_output as Record<string, any> : { "No prefilter output": 0 }
+    const filters = Object.keys(filter_output)
     for (const filter of filters) {
       if (!acc[filter]) {
         acc[filter] = []
       }
       acc[filter].push({
-        domain: domain._id.domainName,
-        timestamp: domain._id.timestamp,
-        filterResult: domain[filter]
+        ...domain,
+        first_seen: new Date(domain.first_seen),
+        last_seen: new Date(domain.last_seen),
       })
     }
     return acc
   }, {})
-  return achjo
+  // return achjo with "No prefilter output" last
+  return Object.fromEntries(Object.entries(achjo).sort(([a], [b]) => {
+    if (a === "No prefilter output") return 1
+    if (b === "No prefilter output") return -1
+    return a.localeCompare(b)
+  }))
 })
 
 function getTextStyle(domainName: string) {
