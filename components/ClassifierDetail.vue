@@ -5,7 +5,7 @@ import MalignIcon from './MalignIcon.vue';
 import { computed } from 'vue';
 
 const props = defineProps<{
-  result: Prisma.ClassificationCategoryResultGetPayload<{ include: { category: true } }>
+  result: Prisma.ClassificationCategoryResultGetPayload<{ include: { category: true, classifierOutputs: { include: { classifier: true } } } }>
 }>()
 
 const hasDetails = computed(() => {
@@ -26,8 +26,21 @@ const hasDetails = computed(() => {
       <h3 v-if="result.timestamp" class="text-xs">{{ $d(result.timestamp, 'long') }}</h3>
     </div>
     <p>{{ result.description }}</p>
+    <div class="mt-4">
+      <!-- <h3 class="font-semibold text-cyan-800 dark:text-cyan-200 text-lg">Details</h3> -->
+      <ul>
+        <li class="my-1" v-for="output, key in result.classifierOutputs" :key="key">
+          <h4 class="font-semibold text-cyan-700 dark:text-cyan-300">{{ output.classifier.classifier }} <span
+              class="text-slate-800 dark:text-slate-100 font-normal">
+              {{
+              percentFormat(output.probability) }}
+            </span></h4>
+          <p v-if="output.additional_info">{{ output.additional_info }}</p>
+        </li>
+      </ul>
+    </div>
     <div class="mt-4" v-if="hasDetails">
-      <h3 class="font-semibold text-cyan-800 dark:text-cyan-200 text-lg">Details</h3>
+      <h3 class="font-semibold text-cyan-800 dark:text-cyan-200 text-lg">{{ $t("details") }}</h3>
       <ul>
         <li class="my-1" v-for="value, key in result.details" :key="key">
           <h4 class="font-semibold text-cyan-700 dark:text-cyan-300">{{ key }}</h4>

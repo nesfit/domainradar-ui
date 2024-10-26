@@ -35,6 +35,7 @@ ip_count: IP count
 at: at
 network: Network
 timeline: Timeline
+details: Details
 aggregate_probability: Badness
 first_seen: First seen
 last_update: Last updated

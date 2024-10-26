@@ -35,6 +35,7 @@ ip_count: Počet IP adres
 at: na
 network: Síť
 timeline: Časová osa
+details: Detaily
 aggregate_probability: Škodlivost
 first_seen: První záznam
 last_update: Poslední aktualizace

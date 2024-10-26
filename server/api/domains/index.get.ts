@@ -84,7 +84,11 @@ async function executeFindManyQuery(
       },
       classificationResults: {
         include: {
-          classifierOutputs: true,
+          classifierOutputs: {
+            include: {
+              classifier: true,
+            },
+          },
           category: true,
         },
       },
