@@ -28,6 +28,11 @@ export default defineEventHandler(
     return {
       data: await prisma.domainsInput.findMany({
         take: 1000,
+        where: {
+          filter_output: {
+            not: {}, // don't show unfiltred domains
+          },
+        },
       }),
       metadata: {
         totalCount: 0,

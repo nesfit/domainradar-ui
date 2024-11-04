@@ -38,20 +38,22 @@ const { data: colors } = await useFetch("/api/config/prefiltercolors")
 
 const domainsByFilterName = computed(() => {
   if (!data.value) return {}
-  const achjo: Record<string, Data> = data.value.data.reduce((acc: Record<string, Data>, domain) => {
-    const filter_output = domain.filter_output && typeof domain.filter_output === "object" ? domain.filter_output as Record<string, any> : { "No prefilter output": 0 }
-    const filters = Object.keys(filter_output)
-    for (const filter of filters) {
-      if (!acc[filter]) {
-        acc[filter] = []
+  const achjo: Record<string, Data> = data.value.data
+    .filter((domain) => domain.filter_output && typeof domain.filter_output === "object")
+    .reduce((acc: Record<string, Data>, domain) => {
+      const filter_output = domain.filter_output as Record<string, any>
+      const filters = Object.keys(filter_output)
+      for (const filter of filters) {
+        if (!acc[filter]) {
+          acc[filter] = []
+        }
+        acc[filter].push({
+          ...domain,
+          first_seen: new Date(domain.first_seen),
+          last_seen: new Date(domain.last_seen),
+        })
       }
-      acc[filter].push({
-        ...domain,
-        first_seen: new Date(domain.first_seen),
-        last_seen: new Date(domain.last_seen),
-      })
-    }
-    return acc
+      return acc
   }, {})
   // return achjo with "No prefilter output" last
   return Object.fromEntries(Object.entries(achjo).sort(([a], [b]) => {
