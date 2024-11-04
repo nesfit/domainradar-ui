@@ -14,9 +14,7 @@ WHERE
     AND r.probability > $4
     AND r.probability < $5
     AND d.domain_name ILIKE '%' || $6 || '%'
-GROUP BY
-    d.id
-ORDER BY MAX(r.probability) DESC
+ORDER BY r.probability DESC
 OFFSET
     $2
 LIMIT $3;
