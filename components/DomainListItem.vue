@@ -4,6 +4,7 @@ import Pie from "./Pie.vue"
 import MalignIcon from "./MalignIcon.vue"
 import { computed, ref } from "vue";
 import { percentFormat } from "@/assets/utils"
+import latestResults from "~/utils/latestResults";
 
 const props = defineProps<{
   domain: Domain
@@ -27,6 +28,8 @@ const dominantType = computed(() => {
     return "Okay"
   }
 })
+
+const latestClassificationResults = computed(() => latestResults(props.domain.classificationResults, "timestamp", "category.category"))
 
 const isHovered = ref(false)
 
@@ -54,7 +57,7 @@ const maxIPDots = 4
     <div class="overflow-x-hidden">
       <h2 class="whitespace-nowrap truncate text-ellipsis">{{ domain.domain_name }}</h2>
       <ul class="flex gap-2 text-sm">
-        <li v-for="result in domain.classificationResults" :key="result.category.category"
+        <li v-for="result in latestClassificationResults" :key="result.category.category"
           class="flex items-center gap-0.5">
           <MalignIcon :type="result.category.category" /> {{ percentFormat(result.probability) }}
         </li>

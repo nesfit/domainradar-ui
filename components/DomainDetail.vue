@@ -25,6 +25,18 @@ const sortedClassificationResults = computed(() => {
   })
 })
 
+const latestClassificationResults = computed(() => latestResults(sortedClassificationResults.value, "timestamp", "category.category"))
+
+const groupedResults = computed(() => {
+  return sortedClassificationResults.value.reduce((acc, cur) => {
+    if (!acc[cur.category.category]) {
+      acc[cur.category.category] = []
+    }
+    acc[cur.category.category].push(cur)
+    return acc
+  }, {} as Record<string, Domain["classificationResults"]>)
+})
+
 const explodedName = computed(() => {
   return props.domain.domain_name.split(".")
 })
@@ -62,7 +74,7 @@ function getFirstSeen(domain: Domain) {
             }}</span>
         </h1>
         <ul class="mt-2 flex gap-4 flex-wrap">
-          <li v-for="result in sortedClassificationResults" :key="result.category.category" :style="{
+          <li v-for="result in latestClassificationResults" :key="result.category.category" :style="{
             opacity: result.probability + 0.35,
           }" class="flex items-center gap-2">
             <Pie :percent="result.probability * 100" :size="36">
@@ -91,8 +103,7 @@ function getFirstSeen(domain: Domain) {
 
     <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">{{ $t('classification_results') }}</h2>
     <div class="flex flex-col gap-4">
-      <ClassifierDetail v-for="result in sortedClassificationResults" :key="result.category.category"
-        :result="result" />
+      <ClassifierDetail v-for="results, category in groupedResults" :key="category" :results="results" />
     </div>
 
     <template v-if="props.domain.ipAddresses.length > 0">
