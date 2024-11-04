@@ -15,7 +15,7 @@ import type { Prisma } from '@prisma/client';
 
 const props = withDefaults(defineProps<{
   collectionResults: Prisma.CollectionResultGetPayload<{ include: { source: true }, omit: { raw_data: true } }>[]
-  ip: boolean
+  ip?: boolean
 }>(), {
   ip: false
 })
