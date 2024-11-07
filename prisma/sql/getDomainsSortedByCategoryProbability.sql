@@ -11,8 +11,7 @@ FROM
     JOIN classification_category cat ON r.category_id = cat.id
 WHERE
     cat.category = $1
-    AND r.probability > $4
-    AND r.probability < $5
+AND d.aggregate_probability > $4 AND d.aggregate_probability < $5
     AND d.domain_name ILIKE '%' || $6 || '%'
 ORDER BY r.probability DESC
 OFFSET

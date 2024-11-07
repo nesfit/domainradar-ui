@@ -48,10 +48,12 @@ export function buildDomainFilter(
   params: ReturnType<typeof getDomainParamsFromEvent>,
 ) {
   const filters: Prisma.DomainWhereInput[] = []
+  // default
+  filters.push({ aggregate_probability: { not: null } })
   //
   if (params.search) filters.push({ domain_name: { contains: params.search } })
 
-  if (params.filterAggregateProbabilityLower)
+  if (params.filterAggregateProbabilityLower >= 0)
     filters.push({
       aggregate_probability: { gte: params.filterAggregateProbabilityLower },
     })
