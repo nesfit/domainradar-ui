@@ -36,6 +36,7 @@ at: na
 network: Síť
 timeline: Časová osa
 details: Detaily
+detail: Detail
 aggregate_probability: Škodlivost
 first_seen: První záznam
 last_update: Poslední aktualizace
@@ -44,6 +45,17 @@ offenses: Incidenty
 phishing_probability: Pravděpodobnost phishingu
 malware_probability: Pravděpodobnost malware
 dga_probability: Pravděpodobnost DGA
+
+id: ID
+source_id: ID zdroje
+description: Popis
+status: Stav
+magnitude: Magnituda
+event_count: Počet událostí
+flow_count: Počet toků
+device_count: Počet zařízení
+severity: Závažnost
+last_updated_time: Čas poslední aktualizace
 
 sign_in: Přihlásit se
 sign_out: Odhlásit se

@@ -36,16 +36,54 @@ const hasOffenses = computed(() => {
       }">
         <MdiIcon icon="mdiNumeric6Box" v-if="version == 6" />
         <MdiIcon icon="mdiNumeric4Box" v-else />
-        {{ props.ip.ip }}
+        {{ ip.ip }}
       </h2>
-      <div class="text-sm" v-if="props.ip.qradarOffenseSource[0]">
-        <strong>QRadar:</strong> mag. {{ props.ip.qradarOffenseSource[0].magnitude }}, <strong class="lowercase">{{
+      <div class="text-sm" v-if="ip.qradarOffenseSource[0]">
+        <strong>QRadar:</strong> mag. {{ ip.qradarOffenseSource[0].magnitude }}, <strong class="lowercase">{{
           $t('offenses') }}:
           {{
-          props.ip.qradarOffenseSource[0].offenses.length }}</strong>
+            ip.qradarOffenseSource[0].offenses.length }}</strong>
       </div>
     </div>
     <div class="flex gap-1">
+      <Modal show-close v-if="hasOffenses">
+        <!-- TODO: make less ugly and separate component -->
+        <template #trigger="{ state }">
+          <Button symmetrical color="accent" v-tooltip="$t('offenses')" @click="state.open = true">
+            <MdiIcon icon="mdiAlarmLight" />
+          </Button>
+        </template>
+        <h2 class="text-xl font-bold">{{ $t('offenses') }}</h2>
+        <div>{{ $t('source_id') }} {{ ip.qradarOffenseSource[0].id }}</div>
+        <div>IP {{ ip.qradarOffenseSource[0].ip_id }}</div>
+        <div>{{ $t('magnitude') }}: {{ ip.qradarOffenseSource[0].magnitude }}</div>
+        <ul>
+          <li v-for="offense in ip.qradarOffenseSource[0].offenses" :key="offense.id">
+            <Modal show-close>
+              <template #trigger="{ state }">
+                <div class="flex gap-1 items-center">
+                  <span>{{ offense.id }}</span>
+                  <Button @click="state.open = true">
+                    {{ $t('detail') }}
+                  </Button>
+                </div>
+              </template>
+              <div>
+                <h3 class="text-xl font-bold">{{ $t('id') }} {{ offense.id }}</h3>
+                <div><strong>{{ $t('source_id') }}</strong>: {{ offense.source_id }}</div>
+                <div><strong>{{ $t('description') }}</strong>: {{ offense.description }}</div>
+                <div><strong>{{ $t('status') }}</strong>: {{ offense.status }}</div>
+                <div><strong>{{ $t('magnitude') }}</strong>: {{ offense.magnitude }}</div>
+                <div><strong>{{ $t('event_count') }}</strong>: {{ offense.event_count }}</div>
+                <div><strong>{{ $t('flow_count') }}</strong>: {{ offense.flow_count }}</div>
+                <div><strong>{{ $t('device_count') }}</strong>: {{ offense.device_count }}</div>
+                <div><strong>{{ $t('severity') }}</strong>: {{ offense.severity }}</div>
+                <div><strong>{{ $t('last_updated_time') }}</strong>: {{ offense.last_updated_time }}</div>
+              </div>
+            </Modal>
+          </li>
+        </ul>
+      </Modal>
       <Modal show-close>
         <template #trigger="{ state }">
           <Button symmetrical color="accent" v-tooltip="$t('collection_results')" @click="state.open = true">
@@ -54,7 +92,6 @@ const hasOffenses = computed(() => {
         </template>
         <CollectionResults ip :collectionResults="ip.collectionResults" />
       </Modal>
-      <Button color="destructive" v-if="hasOffenses">{{ $t('offenses') }}</Button>
     </div>
   </div>
 </template>

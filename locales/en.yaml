@@ -36,6 +36,7 @@ at: at
 network: Network
 timeline: Timeline
 details: Details
+detail: Detail
 aggregate_probability: Badness
 first_seen: First seen
 last_update: Last updated
@@ -44,6 +45,17 @@ offenses: Offenses
 phishing_probability: Phishing probability
 malware_probability: Malware probability
 dga_probability: DGA probability
+
+id: ID
+source_id: Source ID
+description: Description
+status: Status
+magnitude: Magnitude
+event_count: Event count
+flow_count: Flow count
+device_count: Device count
+severity: Severity
+last_updated_time: Time of last update
 
 sign_in: Sign in
 sign_out: Sign out
