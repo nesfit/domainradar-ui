@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Vue3JsonEditor } from 'vue3-json-editor';
 import type { ComponentId, ConfigChangeRequest, Configs, Config } from '~/types/config';
 
 definePageMeta(
@@ -136,6 +135,8 @@ function regexFieldValidator(expression: string): Error | null {
     return Error(t('invalid_regex'))
   }
 }
+
+const testJson = ref({ x: 1 })
 </script>
 
 <template>
@@ -223,7 +224,8 @@ function regexFieldValidator(expression: string): Error | null {
           <h3 class="mx-2 text-lg font-bold capitalize">{{ component }}</h3>
           <HButton @click="tryUpdateConfig(component)" color="accent">{{ $t('save') }}</HButton>
         </div>
-        <vue3-json-editor v-model="editableConfigs[component]" mode="code" />
+        <json-editor v-model:json="editableConfigs[component]" mode="text"
+          @change="(e: any) => editableConfigs[component] = JSON.parse(e.text)" />
       </section>
 
     </section>

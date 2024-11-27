@@ -27,8 +27,17 @@ class ConfigManager {
     this.configTopic = configTopic
     this.requestTopic = requestTopic
     this.kafka = createKafka(clientId, runtimeConfig.kafkaBroker)
+    const groupId = runtimeConfig.kafkaGroupId ?? "webui"
+    console.log(
+      "Using Kafka broker",
+      runtimeConfig.kafkaBroker,
+      "with group ID",
+      groupId,
+      "as client",
+      clientId,
+    )
     this.primaryConsumer = this.kafka.consumer({
-      groupId: "webui",
+      groupId,
     })
   }
 
@@ -140,8 +149,9 @@ class ConfigManager {
 }
 
 async function createManager() {
+  const runtimeConfig = useRuntimeConfig()
   const configManager = new ConfigManager(
-    "webui",
+    runtimeConfig.kafkaGroupId ?? "webui",
     "configuration_states",
     "configuration_change_requests",
   )

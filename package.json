@@ -20,6 +20,7 @@
     "kafkajs": "^2.2.4",
     "normalize.css": "^8.0.1",
     "nuxt": "^3.11.1",
+    "nuxt-jsoneditor": "^1.8.4",
     "ol": "^9.1.0",
     "ol-contextmenu": "^5.4.0",
     "ol-ext": "^4.0.17",
@@ -28,7 +29,6 @@
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue3-circle-progress": "^1.0.7",
-    "vue3-json-editor": "^1.1.5",
     "vue3-openlayers": "^6.3.0"
   },
   "devDependencies": {

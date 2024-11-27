@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     "@hebilicious/authjs-nuxt",
     "@nuxtjs/i18n",
     "floating-vue/nuxt",
+    "nuxt-jsoneditor",
   ],
   css: [
     "normalize.css/normalize.css",
@@ -46,8 +47,20 @@ export default defineNuxtConfig({
       { code: "cs", iso: "cs-CZ", file: "cs.yaml" },
     ],
   },
+  jsoneditor: {
+    componentName: "JsonEditor",
+    includeCss: true,
+    options: {
+      /**
+       *
+       * SET GLOBAL OPTIONS
+       *
+       * */
+    },
+  },
   runtimeConfig: {
     kafkaBroker: process.env.NUXT_KAFKA_BROKER,
+    kafkaGroupId: process.env.NUXT_KAFKA_GROUP_ID,
     db: {
       connectionString: process.env.NUXT_DB_CONNECTION_STRING,
     },
