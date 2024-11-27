@@ -107,6 +107,7 @@ customCheck:
     title: Kontrola vlastních domén
     description: Zadejte domény, které chcete zkontrolovat. Každá doména na novém řádku.
     placeholder: Zadejte domény
+    fromFile: Vložit z textového souboru
     submit: Přidat do fronty DomainRadaru
     sending: Přidávání do fronty...
     sent: Domény přidány

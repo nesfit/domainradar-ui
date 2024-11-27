@@ -10,8 +10,10 @@
       <p>
         {{ $t('customCheck.description') }}
       </p>
-      <HTextArea v-model="domains" :rows="10" :placeholder="$t('customCheck.placeholder')" class="font-mono"
-        :disabled="sending" />
+      <HInputField type="file" accept="text/plain" :label="$t('customCheck.fromFile')" :disabled="sending"
+        @input="readFromFile" />
+      <HTextArea v-model="domains" :rows="10" :placeholder="$t('customCheck.placeholder')"
+        class="w-full font-mono whitespace-pre break-normal overflow-x-scroll" :disabled="sending" />
       <HButton type="submit" @click="addDomains" :disabled="sending || domains === ''">
         {{ sending ? $t('customCheck.sending') : $t('customCheck.submit') }}
       </HButton>
@@ -53,6 +55,16 @@ const sending = ref<boolean>(false)
 const sent = ref<boolean>(false)
 const errored = ref<boolean>(false)
 const error = ref<string>('')
+
+function readFromFile(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = () => {
+    domains.value = reader.result as string
+  }
+  reader.readAsText(file)
+}
 
 async function addDomains() {
   const domainsArray = domains.value.split('\n').map(domain => domain.trim()).filter(Boolean)
