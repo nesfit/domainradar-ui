@@ -14,11 +14,7 @@ export type CustomPrefilter = {
 export default defineEventHandler(async (event) => {
   // auth
   if (!(await getServerSession(event, authOptions))?.user)
-    return {
-      data: [],
-      metadata: { page: 0, limit: 0 },
-      error: "Unauthorized",
-    }
+    throw new Error("Unauthorized")
   //
   const options = await readBody<CustomPrefilter>(event)
   //

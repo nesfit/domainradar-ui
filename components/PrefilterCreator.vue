@@ -44,10 +44,11 @@ const config = reactive<CustomPrefilter>({
 });
 
 async function create() {
-  await $fetch("/api/prefilter", {
+  const newFilter = await $fetch("/api/prefilter", {
     method: "PUT",
     body: config
   })
+  useRouter().push(`/settings/prefilter/${newFilter.id}`)
 }
 </script>
 

@@ -30,6 +30,8 @@ save: Save
 name: Name
 description: Description
 enabled: Enabled
+add: Add
+domains: Domains
 
 classification_results: Classification results
 collection_results: Collection results
@@ -98,6 +100,8 @@ settings:
             pass: Pass
             drop: Drop
             store: Store
+        add_domain: Add a domain
+        domains_desc: Input domains to add or load from a file. Mark domains for deletion. Once you are done, save the changes.
     components:
         title: Component settings
         description: Adjust DomainRadar component configuration.

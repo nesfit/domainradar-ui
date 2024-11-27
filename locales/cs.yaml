@@ -30,6 +30,8 @@ save: Uložit
 name: Jméno
 description: Popis
 enabled: Zapnuto
+add: Přidat
+domains: Domény
 
 classification_results: Výsledky klasifikace
 collection_results: Výsledky sběru
@@ -98,6 +100,8 @@ settings:
             pass: Propouštět
             drop: Zahazovat
             store: Ukládat
+        add_domain: Přidat doménu
+        domains_desc: Přidejte domény zadáním nebo ze souboru. Označte domény ke smazání. Až bude seznam hotový, uložte změny.
     components:
         title: Nastavení komponent
         description: Upravte konfiguraci komponent DomainRadaru.

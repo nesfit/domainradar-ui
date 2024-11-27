@@ -6,14 +6,11 @@ import prisma from "~/lib/prisma"
 export default defineEventHandler(async (event) => {
   // auth
   if (!(await getServerSession(event, authOptions))?.user)
-    return {
-      data: [],
-      metadata: { page: 0, limit: 0 },
-      error: "Unauthorized",
-    }
+    throw new Error("Unauthorized")
   //
-  const query = getQuery<{ id: number }>(event)
-  const prefilterId = query.id
+  const id = getRouterParam(event, "id")
+  if (!id) throw new Error("id is required")
+  const prefilterId = parseInt(id)
   //
   return prisma.customPrefilter.findFirst({
     where: {
