@@ -13,51 +13,55 @@ datasource db {
 // "Enum" tables
 
 model Collector {
-  @@map("collector")
   id               Int                @id
   collector        String
   is_ip_collector  Boolean
   CollectionResult CollectionResult[]
+
+  @@map("collector")
 }
 
 model ClassificationCategory {
-  @@map("classification_category")
   id                           Int                            @id
   category                     String
   ClassifierType               ClassifierType[]
   ClassificationCategoryResult ClassificationCategoryResult[]
+
+  @@map("classification_category")
 }
 
 model ClassifierType {
-  @@map("classifier_type")
   id               Int                    @id
   category_id      Int
   classifier       String
   category         ClassificationCategory @relation(fields: [category_id], references: [id])
   ClassifierOutput ClassifierOutput[]
+
+  @@map("classifier_type")
 }
 
 model CollectorStatusType {
-  @@map("collector_status_type")
-  status_code Int   @id
-  name        String
-  description String?
+  status_code      Int                @id
+  name             String
+  description      String?
   CollectionResult CollectionResult[]
+
+  @@map("collector_status_type")
 }
 
 // Models
 
 model DomainsInput {
-  @@map("domains_input")
-  id          Int      @id @default(autoincrement())
-  domain      String
-  first_seen  DateTime
-  last_seen   DateTime
+  id            Int      @id @default(autoincrement())
+  domain        String
+  first_seen    DateTime
+  last_seen     DateTime
   filter_output Json?
+
+  @@map("domains_input")
 }
 
 model Domain {
-  @@map("domain")
   id                    Int                            @id @default(autoincrement())
   domain_name           String                         @unique
   aggregate_probability Float?
@@ -66,35 +70,37 @@ model Domain {
   collectionResults     CollectionResult[]
   ipAddresses           IP[]
   last_update           DateTime
+
+  @@map("domain")
 }
 
 model IP {
-  @@map("ip")
-  id                    Int                   @id @default(autoincrement())
-  ip                    String
-  geo_country_code      String?
-  geo_region            String?
-  geo_region_code       String?
-  geo_city              String?
-  geo_postal_code       String?
-  geo_latitude          Float?
-  geo_longitude         Float?
-  geo_timezone          String?
-  asn                   Int?
-  as_org                String?
-  network_address       String?
-  network_prefix_length Int?
-  nerd_reputation       Float?
+  id                       Int                   @id @default(autoincrement())
+  ip                       String
+  geo_country_code         String?
+  geo_region               String?
+  geo_region_code          String?
+  geo_city                 String?
+  geo_postal_code          String?
+  geo_latitude             Float?
+  geo_longitude            Float?
+  geo_timezone             String?
+  asn                      Int?
+  as_org                   String?
+  network_address          String?
+  network_prefix_length    Int?
+  nerd_reputation          Float?
   geo_asn_update_timestamp DateTime?
-  nerd_update_timestamp DateTime?
-  domain                Domain                @relation(fields: [domain_id], references: [id])
-  domain_id             Int
-  collectionResults     CollectionResult[]
-  qradarOffenseSource   QRadarOffenseSource[]
+  nerd_update_timestamp    DateTime?
+  domain                   Domain                @relation(fields: [domain_id], references: [id])
+  domain_id                Int
+  collectionResults        CollectionResult[]
+  qradarOffenseSource      QRadarOffenseSource[]
+
+  @@map("ip")
 }
 
 model ClassificationCategoryResult {
-  @@map("classification_category_result")
   id                Int                    @id @default(autoincrement())
   timestamp         DateTime
   category          ClassificationCategory @relation(fields: [category_id], references: [id])
@@ -105,47 +111,51 @@ model ClassificationCategoryResult {
   domain            Domain                 @relation(fields: [domain_id], references: [id])
   domain_id         Int
   classifierOutputs ClassifierOutput[]
+
+  @@map("classification_category_result")
 }
 
 model ClassifierOutput {
-  @@map("classifier_output")
+  classifier      ClassifierType               @relation(fields: [classifier_id], references: [id])
+  classifier_id   Int
+  probability     Float
+  additional_info String?
+  categoryResult  ClassificationCategoryResult @relation(fields: [result_id], references: [id])
+  result_id       Int
+
   @@id([classifier_id, result_id])
-  classifier         ClassifierType               @relation(fields: [classifier_id], references: [id])
-  classifier_id      Int
-  probability        Float
-  additional_info    String?
-  categoryResult     ClassificationCategoryResult @relation(fields: [result_id], references: [id])
-  result_id Int
+  @@map("classifier_output")
 }
 
 model CollectionResult {
-  @@map("collection_result")
-  id          Int       @id @default(autoincrement())
-  source      Collector @relation(fields: [source_id], references: [id])
+  id          Int                 @id @default(autoincrement())
+  source      Collector           @relation(fields: [source_id], references: [id])
   source_id   Int
   status_code Int
   status      CollectorStatusType @relation(fields: [status_code], references: [status_code])
   error       String?
   timestamp   DateTime
   raw_data    Json?
-  domain      Domain    @relation(fields: [domain_id], references: [id])
+  domain      Domain              @relation(fields: [domain_id], references: [id])
   domain_id   Int
-  ip          IP?        @relation(fields: [ip_id], references: [id])
+  ip          IP?                 @relation(fields: [ip_id], references: [id])
   ip_id       Int?
+
+  @@map("collection_result")
 }
 
 model QRadarOffenseSource {
-  @@map("qradar_offense_source")
   id               Int             @id @default(autoincrement())
   qradar_domain_id Int
   magnitude        Float
   ip               IP              @relation(fields: [ip_id], references: [id])
   ip_id            Int
   offenses         QRadarOffense[]
+
+  @@map("qradar_offense_source")
 }
 
 model QRadarOffense {
-  @@map("qradar_offense")
   id                Int                 @id @default(autoincrement())
   description       String?
   event_count       Int
@@ -157,4 +167,28 @@ model QRadarOffense {
   status            String?
   source            QRadarOffenseSource @relation(fields: [source_id], references: [id])
   source_id         Int
+
+  @@map("qradar_offense")
+}
+
+// Custom prefilter tables
+
+model CustomPrefilter {
+  id          Int                       @id @default(autoincrement())
+  name        String
+  description String?
+  enabled     Boolean                   @default(true)
+  action      Int                       @default(0)
+  domains     CustomPrefilteredDomain[]
+
+  @@map("custom_prefilter")
+}
+
+model CustomPrefilteredDomain {
+  customPrefilter     CustomPrefilter @relation(fields: [custom_prefilter_id], references: [id])
+  custom_prefilter_id Int
+  domain_name         String
+
+  @@id([custom_prefilter_id, domain_name])
+  @@map("custom_prefiltered_domain")
 }
