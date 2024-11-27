@@ -27,6 +27,9 @@ up_to_date: Aktuální
 open: Otevřít
 close: Zavřít
 save: Uložit
+name: Jméno
+description: Popis
+enabled: Zapnuto
 
 classification_results: Výsledky klasifikace
 collection_results: Výsledky sběru
@@ -48,7 +51,6 @@ dga_probability: Pravděpodobnost DGA
 
 id: ID
 source_id: ID zdroje
-description: Popis
 status: Stav
 magnitude: Magnituda
 event_count: Počet událostí
@@ -87,6 +89,15 @@ settings:
         prefilterColors:
             title: Barvy předfiltrovaných domén
             description: Zvolte barvy pro předfiltrované domény pomocí vzoru (regulární výraz).
+    prefilter:
+        title: Předfiltr domén
+        description: Přidejte vlastní pravidla pro filtrování domén před jejich zpracováním DomainRadarem.
+        add_filter: Přidat filtr
+        action: Akce pro shodující se domény
+        actions:
+            pass: Propouštět
+            drop: Zahazovat
+            store: Ukládat
     components:
         title: Nastavení komponent
         description: Upravte konfiguraci komponent DomainRadaru.

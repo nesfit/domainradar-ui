@@ -135,8 +135,6 @@ function regexFieldValidator(expression: string): Error | null {
     return Error(t('invalid_regex'))
   }
 }
-
-const testJson = ref({ x: 1 })
 </script>
 
 <template>
@@ -192,6 +190,14 @@ const testJson = ref({ x: 1 })
       <div class="flex my-2">
         <ObjectConfig class="w-full" get-endpoint="/api/config/prefiltercolors" default-key="pattern"
           default-value="#facade" value-input-type="color" :key-validator="regexFieldValidator" />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-extrabold">{{ $t('settings.prefilter.title') }}</h2>
+      <p>{{ $t('settings.prefilter.description') }}</p>
+      <div class="my-2">
+        <PrefilterCreator />
       </div>
     </section>
 

@@ -27,6 +27,9 @@ up_to_date: Up to date
 open: Open
 close: Close
 save: Save
+name: Name
+description: Description
+enabled: Enabled
 
 classification_results: Classification results
 collection_results: Collection results
@@ -48,7 +51,6 @@ dga_probability: DGA probability
 
 id: ID
 source_id: Source ID
-description: Description
 status: Status
 magnitude: Magnitude
 event_count: Event count
@@ -87,6 +89,15 @@ settings:
         prefilterColors:
             title: Prefiltered domain colors
             description: Assign colors to prefiltered domains using patterns (regex).
+    prefilter:
+        title: Domain prefiltering
+        description: Create custom rules for prefiltering domains before they are processed by DomainRadar.
+        add_filter: Add a filter
+        action: Action for matching domains
+        actions:
+            pass: Pass
+            drop: Drop
+            store: Store
     components:
         title: Component settings
         description: Adjust DomainRadar component configuration.
