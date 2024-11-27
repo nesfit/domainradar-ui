@@ -2,7 +2,7 @@
   <slot name="trigger" :state="state">
     <button @click="state.open = true">OPEN</button>
   </slot>
-  <Teleport to="#teleports">
+  <Teleport to="#holoteleports" v-if="mounted">
     <Transition name="modal-fade">
       <div v-if="state.open" class="modal">
         <div class="modal-closer" @click="state.open = false">
@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts" setup>
+const mounted = ref(false)
 const state = reactive({
   open: false
 })
@@ -29,6 +30,10 @@ const state = reactive({
 defineProps<{
   showClose?: boolean
 }>()
+
+onMounted(() => {
+  mounted.value = true
+})
 </script>
 
 <style>
