@@ -76,7 +76,7 @@ model Domain {
 
 model IP {
   id                       Int                   @id @default(autoincrement())
-  ip                       String
+  ip                       String @unique
   geo_country_code         String?
   geo_region               String?
   geo_region_code          String?
@@ -93,7 +93,7 @@ model IP {
   geo_asn_update_timestamp DateTime?
   nerd_update_timestamp    DateTime?
   domain                   Domain                @relation(fields: [domain_id], references: [id])
-  domain_id                Int
+  domain_id                Int @unique
   collectionResults        CollectionResult[]
   qradarOffenseSource      QRadarOffenseSource[]
 
@@ -144,31 +144,45 @@ model CollectionResult {
   @@map("collection_result")
 }
 
+// QRadar
+
 model QRadarOffenseSource {
-  id               Int             @id @default(autoincrement())
+  id               BigInt  @id @default(autoincrement())
+  ip               String? @db.Inet
   qradar_domain_id Int
   magnitude        Float
-  ip               IP              @relation(fields: [ip_id], references: [id])
-  ip_id            Int
-  offenses         QRadarOffense[]
+
+  offenses QRadarOffenseInSource[]
+  IP       IP?                     @relation(fields: [ip], references: [ip])
 
   @@map("qradar_offense_source")
 }
 
 model QRadarOffense {
-  id                Int                 @id @default(autoincrement())
+  id                BigInt   @id @default(autoincrement())
   description       String?
-  event_count       Int
-  flow_count        Int
-  device_count      Int
+  event_count       Int      @default(0)
+  flow_count        Int      @default(0)
+  device_count      Int      @default(0)
   severity          Float
   magnitude         Float
-  last_updated_time DateTime
+  last_updated_time DateTime @db.Timestamptz
   status            String?
-  source            QRadarOffenseSource @relation(fields: [source_id], references: [id])
-  source_id         Int
+
+  sources QRadarOffenseInSource[]
 
   @@map("qradar_offense")
+}
+
+model QRadarOffenseInSource {
+  offense_source_id BigInt
+  offense_id        BigInt
+
+  offense_source QRadarOffenseSource @relation(fields: [offense_source_id], references: [id], onDelete: Cascade)
+  offense        QRadarOffense       @relation(fields: [offense_id], references: [id], onDelete: Cascade)
+
+  @@id([offense_id, offense_source_id])
+  @@map("qradar_offense_in_source")
 }
 
 // Custom prefilter tables
