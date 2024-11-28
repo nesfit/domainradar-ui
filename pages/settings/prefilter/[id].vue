@@ -149,6 +149,8 @@ async function save() {
     body: domainsCommands
   })
   await refresh()
+  domainsCommands.add = []
+  domainsCommands.remove = []
 }
 
 async function deletePrefilter() {

@@ -204,7 +204,12 @@ const { data: prefilters, refresh: refreshPrefilters } = await useFetch("/api/pr
           <li v-for="prefilter in prefilters" :key="prefilter.id" class="flex justify-between items-center p-2">
             <NuxtLink :to="`/settings/prefilter/${prefilter.id}`" class="mx-2 text-lg font-bold">{{ prefilter.name }}
             </NuxtLink>
-            <PrefilterEditor :init="prefilter" @update="refreshPrefilters" />
+            <div>
+              <NuxtLink :to="`/settings/prefilter/${prefilter.id}`">
+                <HButton>{{ $t('domains') }}</HButton>
+              </NuxtLink>
+              <PrefilterEditor :init="prefilter" @update="refreshPrefilters" />
+            </div>
           </li>
         </ul>
       </div>

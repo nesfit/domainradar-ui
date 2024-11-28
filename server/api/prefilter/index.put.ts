@@ -17,17 +17,23 @@ export default defineEventHandler(async (event) => {
     throw new Error("Unauthorized")
   //
   const options = await readBody<CustomPrefilter>(event)
+  const isNew = !options.id
   //
-  return prisma.customPrefilter.upsert({
-    where: {
-      id: options.id,
-    },
-    update: options,
-    create: {
-      name: options.name || "",
-      description: options.description || "",
-      enabled: options.enabled,
-      action: options.action,
-    },
-  })
+  if (isNew) {
+    return prisma.customPrefilter.create({
+      data: {
+        name: options.name || "",
+        description: options.description || "",
+        enabled: options.enabled,
+        action: options.action,
+      },
+    })
+  } else {
+    return prisma.customPrefilter.update({
+      where: {
+        id: options.id,
+      },
+      data: options,
+    })
+  }
 })
