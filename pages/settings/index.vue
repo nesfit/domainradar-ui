@@ -136,14 +136,7 @@ function regexFieldValidator(expression: string): Error | null {
   }
 }
 
-const { data: prefilters } = await useFetch("/api/prefilter")
-
-async function deletePrefilter(id: string) {
-  await $fetch(`/api/prefilter`, {
-    method: 'DELETE',
-    query: { id }
-  })
-}
+const { data: prefilters, refresh: refreshPrefilters } = await useFetch("/api/prefilter")
 </script>
 
 <template>
@@ -206,12 +199,12 @@ async function deletePrefilter(id: string) {
       <h2 class="text-xl font-extrabold">{{ $t('settings.prefilter.title') }}</h2>
       <p>{{ $t('settings.prefilter.description') }}</p>
       <div class="my-2">
-        <PrefilterCreator />
+        <PrefilterEditor />
         <ul>
           <li v-for="prefilter in prefilters" :key="prefilter.id" class="flex justify-between items-center p-2">
             <NuxtLink :to="`/settings/prefilter/${prefilter.id}`" class="mx-2 text-lg font-bold">{{ prefilter.name }}
             </NuxtLink>
-            <HButton @click="deletePrefilter(prefilter.id)" color="destructive">{{ $t('delete') }}</HButton>
+            <PrefilterEditor :init="prefilter" @update="refreshPrefilters" />
           </li>
         </ul>
       </div>

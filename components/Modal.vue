@@ -14,7 +14,7 @@
               <MdiIcon icon="mdiClose" />
             </HButton>
           </div>
-          <slot></slot>
+          <slot :state="state"></slot>
         </div>
       </div>
     </Transition>

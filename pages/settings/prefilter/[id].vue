@@ -13,10 +13,25 @@
       </div>
       <div class="font-bold">{{ $t('settings.prefilter.action') }}: {{
         $t(`settings.prefilter.actions.${getAction(data.action)}`)
-      }}</div>
+}}</div>
       <p v-if="data.description">
         {{ data.description }}
       </p>
+      <div class="flex">
+        <PrefilterEditor :init="dataWithoutDomains" @update="refresh" />
+        <Modal>
+          <template #trigger="{ state }">
+            <HButton color="destructive" @click="state.open = true">{{ $t('delete') }}</HButton>
+          </template>
+          <template #default="{ state }">
+            <p>{{ $t('delete') }} {{ data.name }}. {{ $t('confirmation') }}</p>
+            <div class="flex justify-between gap-4">
+              <HButton color="destructive" @click="deletePrefilter">{{ $t('delete') }}</HButton>
+              <HButton @click="state.open = false">{{ $t('cancel') }}</HButton>
+            </div>
+          </template>
+        </Modal>
+      </div>
 
       <h3 class="text-lg font-bold mt-4">{{ $t('domains') }}</h3>
       <p>{{ $t('settings.prefilter.domains_desc') }}</p>
@@ -65,6 +80,17 @@ const prefilterId = parseInt(params.id as string)
 
 const { data, error, refresh } = await useFetch(`/api/prefilter/${prefilterId}`)
 
+const dataWithoutDomains = computed(() => {
+  if (!data.value) return undefined
+  return {
+    id: data.value.id,
+    name: data.value.name,
+    action: data.value.action,
+    description: data.value.description,
+    enabled: data.value.enabled
+  }
+})
+
 function getAction(action: number) {
   switch (action) {
     case 0:
@@ -99,7 +125,7 @@ function setRemovalStatus(domainName: string) {
 }
 
 function addDomains(domainNames: string[]) {
-  domainsCommands.add = [...domainsCommands.add, ...domainNames.filter((domain) => !domainsCommands.add.includes(domain))]
+  domainsCommands.add = [...domainsCommands.add, ...domainNames.filter((domain) => domain.length > 0).filter((domain) => !domainsCommands.add.includes(domain))]
 }
 function cancelAddDomain(domainName: string) {
   domainsCommands.add = domainsCommands.add.filter((domain) => domain !== domainName)
@@ -123,5 +149,12 @@ async function save() {
     body: domainsCommands
   })
   await refresh()
+}
+
+async function deletePrefilter() {
+  await $fetch(`/api/prefilter/${prefilterId}`, {
+    method: "DELETE"
+  })
+  await useRouter().push("/settings")
 }
 </script>

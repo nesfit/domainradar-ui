@@ -27,6 +27,9 @@ up_to_date: Up to date
 open: Open
 close: Close
 save: Save
+delete: Delete
+cancel: Cancel
+confirmation: Are you sure?
 name: Name
 description: Description
 enabled: Enabled
@@ -95,6 +98,7 @@ settings:
         title: Domain prefiltering
         description: Create custom rules for prefiltering domains before they are processed by DomainRadar.
         add_filter: Add a filter
+        edit_filter: Edit filter configuration
         action: Action for matching domains
         actions:
             pass: Pass

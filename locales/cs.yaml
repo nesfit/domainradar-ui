@@ -27,6 +27,9 @@ up_to_date: Aktuální
 open: Otevřít
 close: Zavřít
 save: Uložit
+delete: Smazat
+cancel: Zrušit
+confirmation: Jste si jisti?
 name: Jméno
 description: Popis
 enabled: Zapnuto
@@ -95,6 +98,7 @@ settings:
         title: Předfiltr domén
         description: Přidejte vlastní pravidla pro filtrování domén před jejich zpracováním DomainRadarem.
         add_filter: Přidat filtr
+        edit_filter: Upravit konfiguraci filtru
         action: Akce pro shodující se domény
         actions:
             pass: Propouštět

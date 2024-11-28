@@ -8,16 +8,18 @@ export default defineEventHandler(async (event) => {
   if (!(await getServerSession(event, authOptions))?.user)
     throw new Error("Unauthorized")
   //
-  const id = getQuery<{ id: number }>(event).id
+  const id = getRouterParam(event, "id")
+  if (!id) throw new Error("id is required")
+  const prefilterId = parseInt(id)
   //
   const domainsDelete = prisma.customPrefilteredDomain.deleteMany({
     where: {
-      custom_prefilter_id: id,
+      custom_prefilter_id: prefilterId,
     },
   })
   const prefilterDelete = prisma.customPrefilter.delete({
     where: {
-      id,
+      id: prefilterId,
     },
   })
   return prisma.$transaction([domainsDelete, prefilterDelete])

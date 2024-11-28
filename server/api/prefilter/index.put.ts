@@ -6,7 +6,7 @@ import prisma from "~/lib/prisma"
 export type CustomPrefilter = {
   id?: number
   name?: string
-  description?: string
+  description?: string | null
   enabled?: boolean
   action?: number
 }
