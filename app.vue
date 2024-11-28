@@ -46,7 +46,7 @@ const { locale, setLocale } = useI18n()
       </header>
     </HoloWrapper>
     <NuxtPage />
-    <div id="holoteleports"></div>
+    <div id="holoteleports" class="fixed z-[9999]"></div>
   </HRoot>
 </template>
 
