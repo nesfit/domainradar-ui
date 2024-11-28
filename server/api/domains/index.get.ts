@@ -77,7 +77,11 @@ async function executeFindManyQuery(
           },
           qradarOffenseSource: {
             include: {
-              offenses: true,
+              offenses: {
+                include: {
+                  offense: true,
+                },
+              },
             },
           },
         },

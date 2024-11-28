@@ -146,8 +146,13 @@ model CollectionResult {
 
 // QRadar
 
+// NOTE: BigInt has been replaced by Int because
+// I can't be arsed to convert them when JSON does
+// not support them. If this stops working in the
+// future, have fun.
+
 model QRadarOffenseSource {
-  id               BigInt  @id @default(autoincrement())
+  id               Int  @id @default(autoincrement())
   ip               String? @db.Inet
   qradar_domain_id Int
   magnitude        Float
@@ -159,7 +164,7 @@ model QRadarOffenseSource {
 }
 
 model QRadarOffense {
-  id                BigInt   @id @default(autoincrement())
+  id                Int   @id @default(autoincrement())
   description       String?
   event_count       Int      @default(0)
   flow_count        Int      @default(0)
@@ -175,8 +180,8 @@ model QRadarOffense {
 }
 
 model QRadarOffenseInSource {
-  offense_source_id BigInt
-  offense_id        BigInt
+  offense_source_id Int
+  offense_id        Int
 
   offense_source QRadarOffenseSource @relation(fields: [offense_source_id], references: [id], onDelete: Cascade)
   offense        QRadarOffense       @relation(fields: [offense_id], references: [id], onDelete: Cascade)

@@ -42,7 +42,7 @@ const hasOffenses = computed(() => {
         <strong>QRadar:</strong> mag. {{ ip.qradarOffenseSource[0].magnitude }}, <strong class="lowercase">{{
           $t('offenses') }}:
           {{
-            ip.qradarOffenseSource[0].offenses.length }}</strong>
+  ip.qradarOffenseSource[0].offenses.length }}</strong>
       </div>
     </div>
     <div class="flex gap-1">
@@ -55,10 +55,10 @@ const hasOffenses = computed(() => {
         </template>
         <h2 class="text-xl font-bold">{{ $t('offenses') }}</h2>
         <div>{{ $t('source_id') }} {{ ip.qradarOffenseSource[0].id }}</div>
-        <div>IP {{ ip.qradarOffenseSource[0].ip_id }}</div>
+        <div>IP {{ ip.qradarOffenseSource[0].ip }}</div>
         <div>{{ $t('magnitude') }}: {{ ip.qradarOffenseSource[0].magnitude }}</div>
         <ul>
-          <li v-for="offense in ip.qradarOffenseSource[0].offenses" :key="offense.id">
+          <li v-for="{ offense } in ip.qradarOffenseSource[0].offenses" :key="Number(offense.id)">
             <Modal show-close>
               <template #trigger="{ state }">
                 <div class="flex gap-1 items-center">
@@ -70,7 +70,6 @@ const hasOffenses = computed(() => {
               </template>
               <div>
                 <h3 class="text-xl font-bold">{{ $t('id') }} {{ offense.id }}</h3>
-                <div><strong>{{ $t('source_id') }}</strong>: {{ offense.source_id }}</div>
                 <div><strong>{{ $t('description') }}</strong>: {{ offense.description }}</div>
                 <div><strong>{{ $t('status') }}</strong>: {{ offense.status }}</div>
                 <div><strong>{{ $t('magnitude') }}</strong>: {{ offense.magnitude }}</div>
