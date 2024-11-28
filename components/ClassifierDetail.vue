@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Prisma } from '@prisma/client';
 import { percentFormat } from '@/assets/utils'
+import format from '@/utils/format'
 import MalignIcon from './MalignIcon.vue';
 import { computed } from 'vue';
 
@@ -70,7 +71,7 @@ const hasDetails = computed(() => {
         </button>
       </div>
     </div>
-    <p class="font-bold">{{ result.description }}</p>
+    <p class="font-bold" v-html="format(result.description || '')"></p>
     <div class="mt-4">
       <!-- <h3 class="font-semibold text-cyan-800 dark:text-cyan-200 text-lg">Details</h3> -->
       <ul>

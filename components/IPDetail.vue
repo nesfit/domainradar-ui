@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { percentFormat } from '@/assets/utils'
+import format from '@/utils/format'
 import { computed } from 'vue';
 
 import type { DomainData } from '~/server/api/domains/index.get';
@@ -8,9 +9,6 @@ type IP = DomainData['ipAddresses'][0]
 const props = defineProps<{
   ip: IP
 }>()
-
-const conf = useRuntimeConfig()
-const qradar = ref(conf.public.qradarBaseUrl)
 
 const version = computed(() => {
   if (props.ip.ip.includes(":")) {
@@ -59,7 +57,7 @@ const hasOffenses = computed(() => {
         <h2 class="text-xl font-bold">{{ $t('offenses') }}</h2>
         <!-- <qradar url>/console/qradar/jsp/QRadar.jsp?appName=Sem&pageId=AttackerOffenseList&summaryId=<SOURCE ADDR ID> -->
         <a class="flex gap-1"
-          :href="`${qradar}/console/do/struts2/core/summarylist?appName=Sem&pageId=AttackerOffenseList&summaryId=${ip.qradarOffenseSource[0].id}`"
+          :href="`${$config.public.qradarBaseUrl}/console/do/struts2/core/summarylist?appName=Sem&pageId=AttackerOffenseList&summaryId=${ip.qradarOffenseSource[0].id}`"
           target="_blank">{{
             $t('source_id') }} {{ ip.qradarOffenseSource[0].id }}
           <MdiIcon icon="mdiOpenInNew" />
@@ -79,13 +77,14 @@ const hasOffenses = computed(() => {
               </template>
               <div class="max-w-lg">
                 <!-- <qradar url>/console/qradar/jsp/QRadar.jsp?appName=Sem&pageId=OffenseSummary&summaryId=<OFFENSE ID> -->
-                <a :href="`${qradar}/console/do/sem/offensesummary?appName=Sem&pageId=OffenseSummary&summaryId=${offense.id}`"
+                <a :href="`${$config.public.qradarBaseUrl}/console/do/sem/offensesummary?appName=Sem&pageId=OffenseSummary&summaryId=${offense.id}`"
                   target="_blank">
                   <h3 class="text-xl font-bold flex gap-1">{{ $t('id') }} {{ offense.id }}
                     <MdiIcon icon="mdiOpenInNew" />
                   </h3>
                 </a>
-                <div><strong>{{ $t('description') }}</strong>: {{ offense.description }}</div>
+                <div><strong>{{ $t('description') }}</strong>: <span v-html="format(offense.description || '')"></span>
+                </div>
                 <div><strong>{{ $t('status') }}</strong>: {{ offense.status }}</div>
                 <div><strong>{{ $t('magnitude') }}</strong>: {{ offense.magnitude }}</div>
                 <div><strong>{{ $t('event_count') }}</strong>: {{ offense.event_count }}</div>
