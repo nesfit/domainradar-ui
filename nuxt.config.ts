@@ -68,6 +68,7 @@ export default defineNuxtConfig({
       secret: "",
     },
     public: {
+      qradarBaseUrl: process.env.NUXT_QRADAR_BASE_URL,
       authJs: {
         verifyClientOnEveryRequest: true,
       },
