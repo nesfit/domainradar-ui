@@ -27,7 +27,12 @@ const { page, limit, total } = storeToRefs(pageStore)
 const filterSortStore = useFilterSortStore()
 const { sortAsc, sortKey, sortName, filterAggregateProbability } = storeToRefs(filterSortStore)
 
+const searchInputTerm = ref("") // does not trigger refresh
 const search = ref("")
+function setNewSearchTerm() {
+  search.value = searchInputTerm.value
+}
+
 const filterAggregateProbabilityLower = computed(() => filterAggregateProbability.value[0])
 const filterAggregateProbabilityUpper = computed(() => filterAggregateProbability.value[1])
 
@@ -91,6 +96,7 @@ const { data, error, refresh, pending: domainsLoading } = await useFetch("/api/d
     filterAggregateProbabilityUpper,
   },
   lazy: true,
+  watch: [page, sortAsc, sortKey, filterAggregateProbabilityLower, filterAggregateProbabilityUpper],
 })
 const domains = computed(() => data.value?.data ?? [])
 filterSortStore.$subscribe(refreshTotalOnParamChange)
@@ -143,8 +149,14 @@ const { data: domainLinks } = await useFetch('/api/config/links')
       <div class="pane-container top-16">
         <header class="text-cyan-900 dark:text-cyan-100 bg-slate-200 dark:bg-slate-700 p-6 flex-shrink">
           <div class="flex gap-x-4 items-end">
-            <HInputField color="accent" class="grow" :label="$t('search')" v-model="search" autofocus />
-            <HButton class="h-8" color="accent" @click="filtersOpen = !filtersOpen">
+            <div class="flex items-end">
+              <HInputField type="search" color="accent" class="grow -mr-0.5" :label="$t('search')"
+                v-model="searchInputTerm" autofocus @keypress.enter="setNewSearchTerm" />
+              <HButton class="h-[1.875rem]" color="accent" symmetrical @click="setNewSearchTerm">
+                <MdiIcon icon="mdiMagnify" />
+              </HButton>
+            </div>
+            <HButton class="h-[1.875rem]" color="accent" @click="filtersOpen = !filtersOpen">
               <MdiIcon icon="mdiFilter" /> {{ $t('filter.title') }}
             </HButton>
           </div>
