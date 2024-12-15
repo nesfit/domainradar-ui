@@ -76,7 +76,7 @@ model Domain {
 
 model IP {
   id                       Int                   @id @default(autoincrement())
-  ip                       String @unique
+  ip                       String                @unique
   geo_country_code         String?
   geo_region               String?
   geo_region_code          String?
@@ -93,7 +93,7 @@ model IP {
   geo_asn_update_timestamp DateTime?
   nerd_update_timestamp    DateTime?
   domain                   Domain                @relation(fields: [domain_id], references: [id])
-  domain_id                Int @unique
+  domain_id                Int                   @unique
   collectionResults        CollectionResult[]
   qradarOffenseSource      QRadarOffenseSource[]
 
@@ -152,7 +152,7 @@ model CollectionResult {
 // future, have fun.
 
 model QRadarOffenseSource {
-  id               Int  @id @default(autoincrement())
+  id               Int     @id @default(autoincrement())
   ip               String? @db.Inet
   qradar_domain_id Int
   magnitude        Float
@@ -164,7 +164,7 @@ model QRadarOffenseSource {
 }
 
 model QRadarOffense {
-  id                Int   @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   description       String?
   event_count       Int      @default(0)
   flow_count        Int      @default(0)
@@ -193,12 +193,13 @@ model QRadarOffenseInSource {
 // Custom prefilter tables
 
 model CustomPrefilter {
-  id          Int                       @id @default(autoincrement())
-  name        String
-  description String?
-  enabled     Boolean                   @default(true)
-  action      Int                       @default(0)
-  domains     CustomPrefilteredDomain[]
+  id                     Int                       @id @default(autoincrement())
+  name                   String
+  description            String?
+  enabled                Boolean                   @default(true)
+  action                 Int                       @default(0)
+  last_updated_timestamp DateTime                  @default(now()) @db.Timestamptz
+  domains                CustomPrefilteredDomain[]
 
   @@map("custom_prefilter")
 }

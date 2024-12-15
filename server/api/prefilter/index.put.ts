@@ -33,7 +33,10 @@ export default defineEventHandler(async (event) => {
       where: {
         id: options.id,
       },
-      data: options,
+      data: {
+        ...options,
+        last_updated_timestamp: new Date(),
+      },
     })
   }
 })

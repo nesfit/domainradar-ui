@@ -28,5 +28,13 @@ export default defineEventHandler(async (event) => {
       custom_prefilter_id: commands.id,
     },
   })
-  return prisma.$transaction([add, remove])
+  const stamp = prisma.customPrefilter.update({
+    where: {
+      id: commands.id,
+    },
+    data: {
+      last_updated_timestamp: new Date(),
+    },
+  })
+  return prisma.$transaction([add, remove, stamp])
 })
