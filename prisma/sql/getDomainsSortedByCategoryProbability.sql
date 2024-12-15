@@ -10,7 +10,7 @@ FROM
 JOIN classification_category_result r ON d.id = r.domain_id
 WHERE
 r.category_id = $1
-AND d.aggregate_probability > $4 AND d.aggregate_probability < $5
+AND d.aggregate_probability >= $4 AND d.aggregate_probability <= $5
     AND d.domain_name ILIKE '%' || $6 || '%'
 ORDER BY r.probability DESC
 OFFSET
