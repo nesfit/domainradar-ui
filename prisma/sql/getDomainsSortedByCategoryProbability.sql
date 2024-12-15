@@ -1,4 +1,4 @@
--- @param {String} $1:category
+-- @param {Int} $1:category
 -- @param {Int} $2:offset
 -- @param {Int} $3:limit
 -- @param {Float} $4:minProbability
@@ -7,10 +7,9 @@
 SELECT d.id
 FROM
     domain d
-    JOIN classification_category_result r ON d.id = r.domain_id
-    JOIN classification_category cat ON r.category_id = cat.id
+JOIN classification_category_result r ON d.id = r.domain_id
 WHERE
-    cat.category = $1
+r.category_id = $1
 AND d.aggregate_probability > $4 AND d.aggregate_probability < $5
     AND d.domain_name ILIKE '%' || $6 || '%'
 ORDER BY r.probability DESC

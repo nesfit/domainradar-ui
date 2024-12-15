@@ -12,16 +12,16 @@ import prisma from "~/lib/prisma"
 import { getDomainsSortedByCategoryProbability } from "@prisma/client/sql"
 
 function neededWorkaroundFn(params: DomainParams): workaroundFn | null {
-  // sort by category probability
+  // sort by category probability (as numbers for one less join to lighten the db load)
   if (params.sortKey === "phishing_probability")
     return (...args: Parameters<workaroundFn>) =>
-      getDomainsSortedByCategoryProbability("Phishing", ...args)
+      getDomainsSortedByCategoryProbability(1, ...args) // 1 = Phishing
   if (params.sortKey === "malware_probability")
     return (...args: Parameters<workaroundFn>) =>
-      getDomainsSortedByCategoryProbability("Malware", ...args)
+      getDomainsSortedByCategoryProbability(2, ...args) // 2 = Malware
   if (params.sortKey === "dga_probability")
     return (...args: Parameters<workaroundFn>) =>
-      getDomainsSortedByCategoryProbability("DGA", ...args)
+      getDomainsSortedByCategoryProbability(3, ...args) // 3 = DGA
   // none needed
   return null
 }
