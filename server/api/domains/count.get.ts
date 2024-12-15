@@ -1,10 +1,9 @@
 import { authOptions } from "../auth/[...]"
 import { getServerSession } from "#auth"
 
-import getDomainParamsFromEvent, {
-  buildDomainFilter,
-} from "~/server/utils/domain.params"
+import getDomainParamsFromEvent from "~/server/utils/domain.params"
 import prisma from "~/lib/prisma"
+import { countResults } from "@prisma/client/sql"
 
 interface DomainCountResponse {
   data: {
@@ -24,9 +23,19 @@ export default defineEventHandler(
     //
     //
     try {
-      const totalCount = await prisma.domain.count({
-        where: buildDomainFilter(getDomainParamsFromEvent(event)),
-      })
+      const {
+        filterAggregateProbabilityLower,
+        filterAggregateProbabilityUpper,
+        search,
+      } = getDomainParamsFromEvent(event)
+      const countResult = await prisma.$queryRawTyped(
+        countResults(
+          filterAggregateProbabilityLower,
+          filterAggregateProbabilityUpper,
+          search,
+        ),
+      )
+      const totalCount = Number(countResult[0].estimate) || 0
 
       return {
         data: { totalCount },
