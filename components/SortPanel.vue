@@ -22,7 +22,7 @@ const sortingOptions = {
   "dga_probability": "dga_probability",
   "last_update": "last_update",
   // "offense_count": "",
-  "ip_count": "ipAddresses._count",
+  // "ip_count": "ipAddresses._count",
 }
 
 const workaroundQueries = [
