@@ -145,7 +145,7 @@ const { data: prefilters, refresh: refreshPrefilters } = await useFetch("/api/pr
 
 <template>
   <div class="px-16 py-8 flex flex-col gap-12 max-w-screen-xl">
-    <div class="flex items-center gap-2 text-2xl font-black text-cyan-900 dark:text-cyan-100 -ml-8">
+    <div class="flex items-center gap-2 text-2xl font-black  -ml-8">
       <button @click="go(-1)">
         <MdiIcon icon="mdiArrowLeft" />
       </button>
@@ -172,11 +172,13 @@ const { data: prefilters, refresh: refreshPrefilters } = await useFetch("/api/pr
       <h3 class="mt-4 text-lg font-bold">{{ $t('settings.app.theme.title') }}</h3>
       <p>{{ $t('settings.app.theme.description') }}</p>
       <div class="flex my-2">
-        <HButton :color="preferences.theme === 'system' ? 'accent' : 'foreground'" @click="preferences.setTheme('system')">
+        <HButton :color="preferences.theme === 'system' ? 'accent' : 'foreground'"
+          @click="preferences.setTheme('system')">
           <MdiIcon icon="mdiCheck" v-show="preferences.theme === 'system'" class="mr-2" />
           {{ $t('settings.app.theme.system') }}
         </HButton>
-        <HButton :color="preferences.theme === 'light' ? 'accent' : 'foreground'" @click="preferences.setTheme('light')">
+        <HButton :color="preferences.theme === 'light' ? 'accent' : 'foreground'"
+          @click="preferences.setTheme('light')">
           <MdiIcon icon="mdiCheck" v-show="preferences.theme === 'light'" class="mr-2" />
           {{ $t('settings.app.theme.light') }}
         </HButton>

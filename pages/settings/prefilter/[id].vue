@@ -1,6 +1,6 @@
 <template>
   <div class="px-16 py-8 flex flex-col gap-12 max-w-screen-xl">
-    <div class="flex items-center gap-2 text-2xl font-black text-cyan-900 dark:text-cyan-100 -ml-8">
+    <div class="flex items-center gap-2 text-2xl font-black  -ml-8">
       <NuxtLink to="/settings">
         <MdiIcon icon="mdiArrowLeft" />
       </NuxtLink>
@@ -13,7 +13,7 @@
       </div>
       <div class="font-bold">{{ $t('settings.prefilter.action') }}: {{
         $t(`settings.prefilter.actions.${getAction(data.action)}`)
-}}</div>
+        }}</div>
       <p v-if="data.description">
         {{ data.description }}
       </p>

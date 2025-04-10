@@ -1,6 +1,6 @@
 <template>
   <div class="px-16 py-8 flex flex-col gap-12 max-w-screen-xl">
-    <div class="flex items-center gap-2 text-2xl font-black text-cyan-900 dark:text-cyan-100 -ml-8">
+    <div class="flex items-center gap-2 text-2xl font-black  -ml-8">
       <button @click="go(-1)">
         <MdiIcon icon="mdiArrowLeft" />
       </button>
@@ -8,7 +8,7 @@
     </div>
     <ul>
       <li v-for="(domains, filterName) in domainsByFilterName" :key="filterName">
-        <h2 class="text-xl font-bold text-cyan-900 dark:text-cyan-100">{{ filterName }}</h2>
+        <h2 class="text-xl font-bold ">{{ filterName }}</h2>
         <ul class="mb-8">
           <li v-for="domain in domains" :key="domain.domain">
             <div class="flex items-center gap-2">

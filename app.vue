@@ -9,11 +9,8 @@ onMounted(() => {
 })
 </script>
 <template>
-  <HRoot :uses-system-appearance="preferences.theme === 'system'"
-        :dark-appearance="preferences.theme === 'dark'"
-        :no-holograms="!preferences.allowHolo"
-        theme-dark="radar-dark"
-        theme-light="radar-light">
+  <HRoot :uses-system-appearance="preferences.theme === 'system'" :dark-appearance="preferences.theme === 'dark'"
+    :no-holograms="!preferences.allowHolo" theme-dark="radar-dark" theme-light="radar-light">
     <HoloWrapper class="main-header" block color="accent" :options="{
     rows: 1,
     duration: {
@@ -28,7 +25,7 @@ onMounted(() => {
         <HoloRainEffect :renderer="renderer" :options="{ propagate: false, interval: 1 }" />
       </template>
       <header class="px-6 py-3 w-full h-16 flex justify-between items-center">
-        <NuxtLink to="/app" class="flex items-center gap-2 text-cyan-900 dark:text-cyan-100 cursor-pointer">
+        <NuxtLink to="/app" class="flex items-center gap-2  cursor-pointer">
           <DomainRadarLogo class="w-8" />
           <strong class="text-lg">DomainRadar</strong>
         </NuxtLink>
@@ -37,24 +34,20 @@ onMounted(() => {
             {{ $t('up_to_date') }}
             <div class="dot"></div>
           </span> -->
-          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/prefiltered"
-            v-tooltip="$t('prefiltered.title')">
+          <NuxtLink class=" text-2xl" to="/prefiltered" v-tooltip="$t('prefiltered.title')">
             <MdiIcon icon="mdiFilterCheckOutline" />
           </NuxtLink>
-          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/custom-check"
-            v-tooltip="$t('customCheck.title')">
+          <NuxtLink class=" text-2xl" to="/custom-check" v-tooltip="$t('customCheck.title')">
             <MdiIcon icon="mdiWebPlus" />
           </NuxtLink>
           <span>&middot;</span>
-          <button @click="setLocale(locale === 'en' ? 'cs' : 'en')"
-            class="uppercase h-7 font-semibold text-cyan-900 dark:text-cyan-100"
+          <button @click="setLocale(locale === 'en' ? 'cs' : 'en')" class="uppercase h-7 font-semibold "
             v-tooltip="$t('settings.app.language.title')">{{ locale }}
           </button>
-          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/settings" v-tooltip="$t('settings.title')">
+          <NuxtLink class=" text-2xl" to="/settings" v-tooltip="$t('settings.title')">
             <MdiIcon icon="mdiTune" />
           </NuxtLink>
-          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/" v-tooltip="$t('exit')"
-            v-if="$route.path !== '/'">
+          <NuxtLink class=" text-2xl" to="/" v-tooltip="$t('exit')" v-if="$route.path !== '/'">
             <MdiIcon icon="mdiExitRun" />
           </NuxtLink>
         </div>

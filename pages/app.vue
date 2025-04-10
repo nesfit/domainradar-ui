@@ -147,7 +147,7 @@ const { data: domainLinks } = await useFetch('/api/config/links')
     <!-- Controls -->
     <Transition name="page">
       <div class="pane-container top-16">
-        <header class="text-cyan-900 dark:text-cyan-100 bg-slate-200 dark:bg-slate-700 p-6 flex-shrink">
+        <header class=" bg-slate-200 dark:bg-slate-700 p-6 flex-shrink">
           <div class="flex gap-x-4 items-end">
             <div class="flex items-end">
               <HInputField type="search" color="accent" class="grow -mr-0.5" :label="$t('search')"
