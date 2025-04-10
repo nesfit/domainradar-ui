@@ -147,7 +147,7 @@ const { data: domainLinks } = await useFetch('/api/config/links')
     <!-- Controls -->
     <Transition name="page">
       <div class="pane-container top-16">
-        <header class=" bg-slate-200 dark:bg-slate-700 p-6 flex-shrink">
+        <header class=" bg-holo-bg p-6 flex-shrink">
           <div class="flex gap-x-4 items-end">
             <div class="flex items-end">
               <HInputField type="search" color="accent" class="grow -mr-0.5" :label="$t('search')"
@@ -180,7 +180,7 @@ const { data: domainLinks } = await useFetch('/api/config/links')
           <SortPanel class="mt-4" v-if="sortingOpen" />
         </header>
         <main
-          class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-3 overflow-auto h-full flex flex-col">
+          class="bg-holo-bg text-holo-fg p-3 overflow-auto h-full flex flex-col">
           <ul class="grow transition-all duration-300" :class="{ 'filter blur-sm': domainsLoading }">
             <DomainListItem v-for="domain in domains" :key="domain.domain_name" :domain="domain"
               :active="domain.domain_name === activeDomain?.domain_name" @click="setActiveDomain"

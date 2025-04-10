@@ -10,7 +10,7 @@
             <MdiIcon icon="mdiWindowClose" class="text-lg" />
           </HButton>
         </div>
-        <div class="text-sm text-red-700 dark:text-red-400 px-2">
+        <div class="text-sm text-destructive px-2">
           <span :color="validColor(validations[index][0])">{{ validations[index][0]?.message }}</span>
           <span :color="validColor(validations[index][1])">{{ validations[index][1]?.message }}</span>
         </div>

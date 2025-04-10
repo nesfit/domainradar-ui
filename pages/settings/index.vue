@@ -247,14 +247,14 @@ const { data: prefilters, refresh: refreshPrefilters } = await useFetch("/api/pr
         </div>
       </div>
 
-      <section v-for="(config, component) in editableConfigs" class="mt-4">
-        <div class="flex justify-between items-center p-2 bg-slate-300 dark:bg-slate-600">
+      <div v-for="(config, component) in editableConfigs" class="mt-4">
+        <div class="flex justify-between items-center p-2 bg-holo-bg text-holo-fg">
           <h3 class="mx-2 text-lg font-bold capitalize">{{ component }}</h3>
           <HButton @click="tryUpdateConfig(component)" color="accent">{{ $t('save') }}</HButton>
         </div>
         <json-editor v-model:json="editableConfigs[component]" mode="text"
           @change="(e: any) => editableConfigs[component] = JSON.parse(e.text)" />
-      </section>
+      </div>
 
     </section>
 

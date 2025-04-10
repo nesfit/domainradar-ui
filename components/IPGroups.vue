@@ -51,10 +51,10 @@ function getFormattedCoords(ips: IP[]) {
 </script>
 
 <template>
-  <div class="py-4 px-6 bg-slate-200 dark:bg-slate-700 dark:text-slate-50">
+  <div class="py-4 px-6 bg-holo-bg text-holo-fg">
     <div v-for="coordGroup, i in groupedByCoords" :key="i" class="mb-4">
       <h2 class="flex flex-wrap items-baseline gap-x-2">
-        <div class="font-bold text-xl text-cyan-800 dark:text-cyan-200">
+        <div class="font-bold text-xl text-accent">
           {{ getBestGeoDescriptor(coordGroup) }}
         </div>
         <div class="text-sm">
@@ -65,9 +65,10 @@ function getFormattedCoords(ips: IP[]) {
           coordGroup[0].asn }})</span></div>
       <div v-for="net, i in groupBy(coordGroup, 'network_address')" :key="i" class="my-3">
         <h3 class="mb-2 text-lg">
-          {{ $t('network') }} <strong class="font-mono text-cyan-700 dark:text-cyan-300">{{
-  net[0].network_address?.replace('/', '')
-          }}</strong> /
+          {{ $t('network') }} 
+          <div class="mb-2 font-mono text-accent">{{
+            net[0].network_address?.replace('/', '')
+          }}</div>
           {{ net[0].network_prefix_length }}
         </h3>
         <IPDetail v-for="ip in net" :key="ip.ip" :ip="ip" class="mb-2" />

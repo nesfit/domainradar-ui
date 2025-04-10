@@ -89,14 +89,14 @@ watchDebounced(uniqueDots, animateViewToDots, { debounce: 100 })
 <template>
   <ClientOnly>
     <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" :controls="[]"
-      class="w-full h-full [background-color:_#aad3df] dark-map">
+      class="w-full h-full [background-color:_hsl(var(--background))] map-theme">
       <ol-view ref="view" :center="center" :zoom="zoom" :projection="projection" />
       <ol-tile-layer :preload="Infinity">
         <ol-source-osm />
       </ol-tile-layer>
       <ol-attribution-control />
       <ol-overlay v-for="dot in uniqueDots" :key="`${dot[0]},${dot[1]}`" :position="dot" :positioning="'center-center'">
-        <div class="w-6 h-6 rounded-full bg-pink-400 dark:bg-pink-600 border-4 border-white loc-shadow pop-in">
+        <div class="w-6 h-6 rounded-full bg-accent border-4 border-white loc-shadow pop-in">
         </div>
       </ol-overlay>
     </ol-map>
@@ -105,19 +105,23 @@ watchDebounced(uniqueDots, animateViewToDots, { debounce: 100 })
 
 <style scoped>
 .loc-shadow {
-  @apply text-pink-400 dark:text-pink-600;
+  @apply text-accent;
   box-shadow: 0 0 1rem 0.5rem currentColor;
   animation: pulsing 2s infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  .dark-map {
-    filter: invert(1) hue-rotate(210deg);
-  }
-}
 @keyframes pulsing {
   50% {
     box-shadow: 0 0 4rem 1rem currentColor;
   }
+}
+
+.map-theme {
+  filter: invert(var(--map-invert, 0)) hue-rotate(var(--map-hue-rotate, 0deg));
+}
+
+.holo-root[data-holo-theme="radar-dark"] .map-theme {
+  --map-invert: 1;
+  --map-hue-rotate: 210deg;
 }
 </style>

@@ -60,7 +60,7 @@ function getFirstSeen(domain: Domain) {
 
 <template>
   <div
-    class="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 p-6 border-2 border-slate-400 dark:border-slate-600">
+    class="bg-holo-bg text-holo-fg p-6 border-2 border-primary">
 
     <div class="flex gap-x-8 gap-y-4 items-center ms-4 flex-wrap">
       <Pie v-if="typeof domain.aggregate_probability == 'number'" :percent="domain.aggregate_probability * 100">
@@ -69,8 +69,8 @@ function getFirstSeen(domain: Domain) {
       <div>
         <h1 class="text-3xl font-semibold flex flex-wrap items-baseline">
           <span v-for="part in explodedName.slice(0, -1)" :key="part">
-            {{ part }}<span class="mx-0.5 text-cyan-600 dark:text-cyan-400 font-extrabold text-4xl">.</span>
-          </span><span class="text-cyan-800 dark:text-cyan-200 font-normal">{{ explodedName[explodedName.length - 1]
+            {{ part }}<span class="mx-0.5 text-accent font-extrabold text-4xl">.</span>
+          </span><span class="text-accent font-normal">{{ explodedName[explodedName.length - 1]
             }}</span>
         </h1>
         <ul class="mt-2 flex gap-4 flex-wrap">
@@ -109,7 +109,7 @@ function getFirstSeen(domain: Domain) {
     <template v-if="props.domain.ipAddresses.length > 0">
       <h2 class="font-bold text-2xl mt-8 mb-4 ms-4">
         {{ $t('ip_addresses') }}
-        <span class="text-cyan-800 dark:text-cyan-300 font-normal">
+        <span class="text-accent">
           ({{ props.domain.ipAddresses.length }})
         </span>
       </h2>

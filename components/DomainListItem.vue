@@ -47,9 +47,9 @@ const maxIPDots = 4
 </script>
 
 <template>
-  <li class="flex items-center gap-2 cursor-pointer px-3 py-1 hover:bg-slate-300 dark:hover:bg-slate-600" :class="{
-  'bg-slate-200 dark:bg-slate-700': active,
-}" @click="$emit('click', domain)" @mouseenter="onMouseEntered" @mouseleave="onMouseLeft">
+  <li class="flex items-center gap-2 cursor-pointer px-3 py-1 hover:bg-primary/10" :class="{
+    'bg-primary/5': active,
+  }" @click="$emit('click', domain)" @mouseenter="onMouseEntered" @mouseleave="onMouseLeft">
     <Pie v-if="typeof domain.aggregate_probability == 'number'" :size="36"
       :percent="domain.aggregate_probability * 100">
       <MalignIcon :type="dominantType" />
@@ -62,9 +62,8 @@ const maxIPDots = 4
           <MalignIcon :type="result.category.category" /> {{ percentFormat(result.probability) }}
         </li>
         <li class="opacity-50 transition-colors duration-150 flex" :class="{
-  'opacity-100 text-pink-600': isHovered,
-}
-  ">
+  'opacity-100 text-accent': isHovered,
+}">
           <template v-if="domain.ipAddresses.length < maxIPDots">
             <MdiIcon icon="mdiCircleMedium" v-for="{ ip } in domain.ipAddresses" :key="ip" />
           </template>

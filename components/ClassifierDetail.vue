@@ -53,9 +53,9 @@ const hasDetails = computed(() => {
 </script>
 
 <template>
-  <div class="py-4 px-6 bg-slate-200 dark:bg-slate-700 dark:text-slate-50">
+  <div class="py-4 px-6 bg-holo-bg text-holo-fg">
     <div class="flex justify-between items-center flex-wrap">
-      <h2 class="font-bold text-cyan-800 dark:text-cyan-200 text-xl inline-flex gap-2 items-center mb-2">
+      <h2 class="font-bold text-accent text-xl inline-flex gap-2 items-center mb-2">
         <Pie :percent="result.probability * 100" :size="36">
           <MalignIcon :type="result.category.category" />
         </Pie>
@@ -76,20 +76,19 @@ const hasDetails = computed(() => {
       <!-- <h3 class="font-semibold text-cyan-800 dark:text-cyan-200 text-lg">Details</h3> -->
       <ul>
         <li class="my-1" v-for="output, key in result.classifierOutputs" :key="key">
-          <h4 class="font-semibold text-cyan-700 dark:text-cyan-300">{{ output.classifier.classifier }} <span
-              class="text-slate-800 dark:text-slate-100 font-normal">
-              {{
-              percentFormat(output.probability) }}
+          <h4 class="font-semibold text-accent">{{ output.classifier.classifier }} <span
+              class="text-holo-fg font-normal">
+              {{ percentFormat(output.probability) }}
             </span></h4>
           <p v-if="output.additional_info">{{ output.additional_info }}</p>
         </li>
       </ul>
     </div>
     <div class="mt-4" v-if="hasDetails">
-      <h3 class="font-semibold text-cyan-800 dark:text-cyan-200 text-lg">{{ $t("details") }}</h3>
+      <h3 class="font-semibold text-accent text-lg">{{ $t("details") }}</h3>
       <ul>
         <li class="my-1" v-for="value, key in result.details" :key="key">
-          <h4 class="font-semibold text-cyan-700 dark:text-cyan-300">{{ key }}</h4>
+          <h4 class="font-semibold text-accent">{{ key }}</h4>
           <p>{{ value }}</p>
         </li>
       </ul>

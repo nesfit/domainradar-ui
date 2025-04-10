@@ -13,7 +13,7 @@
           <li v-for="domain in domains" :key="domain.domain">
             <div class="flex items-center gap-2">
               <span :style="getTextStyle(domain.domain)">{{ domain.domain }}</span>
-              <span class="text-sm text-gray-500 dark:text-gray-400">{{ $d(domain.last_seen, 'long') }}</span>
+              <span class="text-sm text-holo-fg/50">{{ $d(domain.last_seen, 'long') }}</span>
             </div>
             <!-- <div class="text-sm text-gray-500 dark:text-gray-400">{{ domain.filterResult }}</div> -->
           </li>

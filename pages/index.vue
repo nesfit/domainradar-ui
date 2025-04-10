@@ -7,8 +7,8 @@ const email = computed(() => session.value?.user?.email)
 </script>
 
 <template>
-  <div class="absolute -z-10 w-dvw h-dvh top-0 pt-16 flex justify-center items-center bg-slate-200 dark:bg-slate-700">
-    <div class="relative max-w-max p-6 bg-slate-300 dark:bg-slate-600">
+  <div class="absolute -z-10 w-dvw h-dvh top-0 pt-16 flex justify-center items-center bg-holo-bg">
+    <div class="relative max-w-max p-6 bg-primary/10">
       <h1 class="text-2xl">
         {{ $t(signedIn ? 'auth_msg.authenticated' : 'auth_msg.guest', { name }) }}
       </h1>

@@ -29,11 +29,11 @@ const hasOffenses = computed(() => {
 
 <template>
   <div
-    class="py-4 px-6 bg-slate-300 dark:bg-slate-600 dark:text-slate-50 flex flex-wrap justify-between items-center gap-2">
+    class="py-4 px-6 bg-holo-bg text-holo-fg flex flex-wrap justify-between items-center gap-2">
     <div>
       <h2 class="font-bold text-xl font-mono flex items-center gap-1" :class="{
-        'text-pink-800 dark:text-pink-300': version == 6,
-        'text-green-800 dark:text-green-300': version == 4,
+        'text-accent': version == 6,
+        'text-okay': version == 4,
       }">
         <MdiIcon icon="mdiNumeric6Box" v-if="version == 6" />
         <MdiIcon icon="mdiNumeric4Box" v-else />
