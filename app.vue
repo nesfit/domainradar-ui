@@ -18,7 +18,7 @@ const { locale, setLocale } = useI18n()
         <HoloRainEffect :renderer="renderer" :options="{ propagate: false, interval: 1 }" />
       </template>
       <header class="px-6 py-3 w-full h-16 flex justify-between items-center">
-        <NuxtLink to="/" class="flex items-center gap-2 text-cyan-900 dark:text-cyan-100 cursor-pointer">
+        <NuxtLink to="/app" class="flex items-center gap-2 text-cyan-900 dark:text-cyan-100 cursor-pointer">
           <DomainRadarLogo class="w-8" />
           <strong class="text-lg">DomainRadar</strong>
         </NuxtLink>
@@ -35,12 +35,17 @@ const { locale, setLocale } = useI18n()
             v-tooltip="$t('customCheck.title')">
             <MdiIcon icon="mdiWebPlus" />
           </NuxtLink>
+          <span>&middot;</span>
           <button @click="setLocale(locale === 'en' ? 'cs' : 'en')"
             class="uppercase h-7 font-semibold text-cyan-900 dark:text-cyan-100"
             v-tooltip="$t('settings.app.language.title')">{{ locale }}
           </button>
           <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/settings" v-tooltip="$t('settings.title')">
             <MdiIcon icon="mdiTune" />
+          </NuxtLink>
+          <NuxtLink class="text-cyan-900 dark:text-cyan-100 text-2xl" to="/" v-tooltip="$t('exit')"
+            v-if="$route.path !== '/'">
+            <MdiIcon icon="mdiExitRun" />
           </NuxtLink>
         </div>
       </header>

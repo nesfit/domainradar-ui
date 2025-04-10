@@ -29,6 +29,7 @@ close: Close
 save: Save
 delete: Delete
 cancel: Cancel
+exit: Exit
 confirmation: Are you sure?
 name: Name
 description: Description
