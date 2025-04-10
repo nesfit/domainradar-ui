@@ -5,11 +5,27 @@ interface Preferences {
   allowHolo: boolean
 }
 
+const defaultPreferences: Preferences = {
+  theme: 'system',
+  allowHolo: true
+}
+
+// Validate a single preference value
+function isValidPreference(key: keyof Preferences, value: any): boolean {
+  if (value === undefined || value === null) return false
+  
+  switch (key) {
+    case 'theme':
+      return ['system', 'light', 'dark'].includes(value)
+    case 'allowHolo':
+      return typeof value === 'boolean'
+    default:
+      return false
+  }
+}
+
 export const usePreferencesStore = defineStore('preferences', {
-  state: (): Preferences => ({
-    theme: 'system',
-    allowHolo: true
-  }),
+  state: (): Preferences => ({ ...defaultPreferences }),
   
   actions: {
     setTheme(theme: 'system' | 'light' | 'dark') {
@@ -19,11 +35,20 @@ export const usePreferencesStore = defineStore('preferences', {
       this.allowHolo = allow
     },
     loadFromStorage() {
-      const stored = localStorage.getItem('preferences')
-      if (stored) {
+      try {
+        const stored = localStorage.getItem('preferences')
+        if (!stored) return
+
         const prefs = JSON.parse(stored)
-        this.theme = prefs.theme
-        this.allowHolo = prefs.allowHolo
+        
+        if (isValidPreference('theme', prefs.theme)) {
+          this.theme = prefs.theme
+        }
+        if (isValidPreference('allowHolo', prefs.allowHolo)) {
+          this.allowHolo = prefs.allowHolo
+        }
+      } catch (e) {
+        console.error('Failed to load preferences:', e)
       }
     }
   }
@@ -32,9 +57,23 @@ export const usePreferencesStore = defineStore('preferences', {
 // Plugin to save preferences to localStorage whenever they change
 export function preferencesPlugin({ store }: { store: any }) {
   store.$subscribe((mutation: any, state: any) => {
-    localStorage.setItem('preferences', JSON.stringify({
-      theme: state.theme,
-      allowHolo: state.allowHolo
-    }))
+    try {
+      // Only persist values that pass validation
+      const prefsToSave: Partial<Preferences> = {}
+      
+      if (isValidPreference('theme', state.theme)) {
+        prefsToSave.theme = state.theme
+      }
+      if (isValidPreference('allowHolo', state.allowHolo)) {
+        prefsToSave.allowHolo = state.allowHolo
+      }
+
+      // Only save if we have valid values
+      if (Object.keys(prefsToSave).length > 0) {
+        localStorage.setItem('preferences', JSON.stringify(prefsToSave))
+      }
+    } catch (e) {
+      console.error('Failed to save preferences:', e)
+    }
   })
 }
