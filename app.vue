@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import { HoloWrapper, HoloRainEffect } from 'holo-vue';
 const { locale, setLocale } = useI18n()
+const preferences = usePreferencesStore()
+
+// Load preferences from localStorage on app start
+onMounted(() => {
+  preferences.loadFromStorage()
+})
 </script>
 <template>
-  <HRoot :uses-system-appearance="true" theme-dark="radar-dark" theme-light="radar-light">
+  <HRoot :uses-system-appearance="preferences.theme === 'system'"
+        :dark-appearance="preferences.theme === 'dark'"
+        :no-holograms="!preferences.allowHolo"
+        theme-dark="radar-dark"
+        theme-light="radar-light">
     <HoloWrapper class="main-header" block color="accent" :options="{
     rows: 1,
     duration: {

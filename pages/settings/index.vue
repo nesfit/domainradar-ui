@@ -14,7 +14,11 @@ const route = useRoute()
 const { go } = useRouter()
 const { locale, setLocale } = useI18n()
 
-const allowHolo = ref(true)
+const preferences = usePreferencesStore()
+const allowHolo = computed({
+  get: () => preferences.allowHolo,
+  set: (value) => preferences.setAllowHolo(value)
+})
 
 const configFetchTries = ref(0)
 const { data: currentConfig, error: errorFetchingConfigs, refresh: refreshConfigs, pending: loadingConfigs } = await useFetch("/api/kafka/config", {
@@ -168,18 +172,20 @@ const { data: prefilters, refresh: refreshPrefilters } = await useFetch("/api/pr
       <h3 class="mt-4 text-lg font-bold">{{ $t('settings.app.theme.title') }}</h3>
       <p>{{ $t('settings.app.theme.description') }}</p>
       <div class="flex my-2">
-        <HButton color="accent">
-          <MdiIcon icon="mdiCheck" v-show="true" class="mr-2" />
+        <HButton :color="preferences.theme === 'system' ? 'accent' : 'foreground'" @click="preferences.setTheme('system')">
+          <MdiIcon icon="mdiCheck" v-show="preferences.theme === 'system'" class="mr-2" />
           {{ $t('settings.app.theme.system') }}
         </HButton>
-        <HButton color="foreground" disabled>
+        <HButton :color="preferences.theme === 'light' ? 'accent' : 'foreground'" @click="preferences.setTheme('light')">
+          <MdiIcon icon="mdiCheck" v-show="preferences.theme === 'light'" class="mr-2" />
           {{ $t('settings.app.theme.light') }}
         </HButton>
-        <HButton color="foreground" disabled>
+        <HButton :color="preferences.theme === 'dark' ? 'accent' : 'foreground'" @click="preferences.setTheme('dark')">
+          <MdiIcon icon="mdiCheck" v-show="preferences.theme === 'dark'" class="mr-2" />
           {{ $t('settings.app.theme.dark') }}
         </HButton>
       </div>
-      <HCheckbox class="mx-1.5" v-model="allowHolo" disabled>{{ $t('settings.app.theme.allow_holo') }}</HCheckbox>
+      <HCheckbox class="mx-1.5" v-model="allowHolo">{{ $t('settings.app.theme.allow_holo') }}</HCheckbox>
 
       <h3 class="mt-4 text-lg font-bold">{{ $t('settings.app.links.title') }}</h3>
       <p>{{ $t('settings.app.links.description') }}</p>
