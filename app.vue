@@ -3,9 +3,19 @@ import { HoloWrapper, HoloRainEffect } from 'holo-vue';
 const { locale, setLocale } = useI18n()
 const preferences = usePreferencesStore()
 
+function setBodyBg() {
+  const dark = preferences.theme === "system" ? window.matchMedia("(prefers-color-scheme: dark)").matches : preferences.theme === "dark"
+  document.body.style.backgroundColor = dark ? "#213552" : "#abd3df"
+}
+
 // Load preferences from localStorage on app start
 onMounted(() => {
   preferences.loadFromStorage()
+  setBodyBg()
+})
+// When theme changes, change body bg color
+watch(preferences, (newTheme) => {
+  setBodyBg()
 })
 </script>
 <template>
@@ -59,14 +69,6 @@ onMounted(() => {
 </template>
 
 <style>
-body {
-  background-color: #abd3df;
-}
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #213552;
-  }
-}
 
 .main-header {
   background-color: hsl(var(--background) / 80%);
