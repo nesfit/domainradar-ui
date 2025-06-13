@@ -27,7 +27,7 @@ class ConfigManager {
     this.configTopic = configTopic
     this.requestTopic = requestTopic
     this.kafka = createKafka(clientId, runtimeConfig.kafkaBroker)
-    const groupId = runtimeConfig.kafkaGroupId ?? "webui"
+    const groupId = `${runtimeConfig.kafkaGroupId ?? "webui"}_${Date.now()}`
     console.log(
       "Using Kafka broker",
       runtimeConfig.kafkaBroker,
@@ -64,7 +64,7 @@ class ConfigManager {
   async initialize() {
     console.log("Initializing ConfigManager...")
     await this.primaryConsumer.connect()
-    await this.primaryConsumer.subscribe({ topics: [this.configTopic] })
+    await this.primaryConsumer.subscribe({ topics: [this.configTopic], fromBeginning: true })
     await this.primaryConsumer.run({
       eachMessage: async ({ message }) => {
         this.lastMessage = message
