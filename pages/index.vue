@@ -1,22 +1,25 @@
 <script setup lang="ts">
-const route = useRoute()
-const { signIn, signOut, session, status, cookies, getProviders } = useAuth()
-const signedIn = computed(() => status.value === 'authenticated')
-const name = computed(() => session.value?.user?.name)
-const email = computed(() => session.value?.user?.email)
+const { user, loggedIn, fetch: fetchSession } = useUserSession()
+
+async function signOut() {
+  await $fetch('/api/auth/logout', { method: 'POST' })
+
+  // Refresh session to get updated state
+  await fetchSession()
+}
 </script>
 
 <template>
   <div class="absolute -z-10 w-dvw h-dvh top-0 pt-16 flex justify-center items-center bg-holo-bg">
     <div class="relative max-w-max p-6 bg-primary/10">
       <h1 class="text-2xl">
-        {{ $t(signedIn ? 'auth_msg.authenticated' : 'auth_msg.guest', { name }) }}
+        {{ $t(loggedIn ? 'auth_msg.authenticated' : 'auth_msg.guest', { name: user?.name }) }}
       </h1>
-      <h2 v-if="signedIn" class="mb-6">{{ email }}</h2>
-      <HButton @click="signedIn ? $router.push('/app') : signIn()" color="accent">
-        {{ $t(signedIn ? 'open_app' : 'sign_in') }}
+      <h2 v-if="loggedIn" class="mb-6">{{ user?.email }}</h2>
+      <HButton @click="loggedIn ? $router.push('/app') : $router.push('/login')" color="accent">
+        {{ $t(loggedIn ? 'open_app' : 'sign_in') }}
       </HButton>
-      <HButton v-if="signedIn" @click="signOut()" hollow>{{ $t('sign_out') }}</HButton>
+      <HButton v-if="loggedIn" @click="signOut()" hollow>{{ $t('sign_out') }}</HButton>
     </div>
   </div>
 </template>

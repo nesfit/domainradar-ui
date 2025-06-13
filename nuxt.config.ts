@@ -13,10 +13,10 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
     "nuxt-mdi-unfucked",
-    "@hebilicious/authjs-nuxt",
     "@nuxtjs/i18n",
     "floating-vue/nuxt",
     "nuxt-jsoneditor",
+    "nuxt-auth-utils",
   ],
   css: [
     "normalize.css/normalize.css",
@@ -33,9 +33,6 @@ export default defineNuxtConfig({
     runMigration: false,
     generateClient: false,
     autoSetupPrisma: true,
-  },
-  authJs: {
-    authenticatedRedirectTo: "/app",
   },
   i18n: {
     defaultLocale: "en",
@@ -59,19 +56,14 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    sessionPassword: process.env.NUXT_SESSION_PASSWORD || '',
     kafkaBroker: process.env.NUXT_KAFKA_BROKER,
     kafkaGroupId: process.env.NUXT_KAFKA_GROUP_ID,
     db: {
       connectionString: process.env.NUXT_DB_CONNECTION_STRING,
     },
-    authJs: {
-      secret: "",
-    },
     public: {
       qradarBaseUrl: "http://qradar.base.not.set",
-      authJs: {
-        verifyClientOnEveryRequest: true,
-      },
     },
   },
   vite: {

@@ -68,6 +68,8 @@ last_updated_time: Time of last update
 sign_in: Sign in
 sign_out: Sign out
 open_app: Open app
+username: Username
+password: Password
 auth_msg:
     guest: Please sign in to access the application.
     unauthorized: You are not authorized to access this.

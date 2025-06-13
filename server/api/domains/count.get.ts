@@ -1,6 +1,3 @@
-import { authOptions } from "../auth/[...]"
-import { getServerSession } from "#auth"
-
 import getDomainParamsFromEvent, {
   buildDomainFilter,
 } from "~/server/utils/domain.params"
@@ -16,11 +13,7 @@ interface DomainCountResponse {
 export default defineEventHandler(
   async (event): Promise<DomainCountResponse> => {
     // auth
-    if (!(await getServerSession(event, authOptions))?.user)
-      return {
-        data: { totalCount: 0 },
-        error: "Unauthorized",
-      }
+    const session = await requireUserSession(event)
     //
     //
     try {

@@ -1,5 +1,3 @@
-import { authOptions } from "../auth/[...]"
-import { getServerSession } from "#auth"
 import prisma from "~/lib/prisma"
 import type { Prisma } from "@prisma/client"
 
@@ -18,12 +16,7 @@ interface PrefilteredDomainResponse {
 export default defineEventHandler(
   async (event): Promise<PrefilteredDomainResponse> => {
     // auth
-    if (!(await getServerSession(event, authOptions))?.user)
-      return {
-        data: [],
-        metadata: { totalCount: 0, page: 0, limit: 0 },
-        error: "Unauthorized",
-      }
+    const session = await requireUserSession(event)
     //
     return {
       data: await prisma.domainsInput.findMany({

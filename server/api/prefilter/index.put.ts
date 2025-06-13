@@ -1,6 +1,3 @@
-import { authOptions } from "../auth/[...]"
-import { getServerSession } from "#auth"
-
 import prisma from "~/lib/prisma"
 
 export type CustomPrefilter = {
@@ -13,8 +10,7 @@ export type CustomPrefilter = {
 
 export default defineEventHandler(async (event) => {
   // auth
-  if (!(await getServerSession(event, authOptions))?.user)
-    throw new Error("Unauthorized")
+  const session = await requireUserSession(event)
   //
   const options = await readBody<CustomPrefilter>(event)
   const isNew = !options.id

@@ -1,6 +1,4 @@
 import type { TypedSql } from "@prisma/client/runtime/library"
-import { authOptions } from "../auth/[...]"
-import { getServerSession } from "#auth"
 
 import getDomainParamsFromEvent, {
   buildDomainFilter,
@@ -149,12 +147,7 @@ interface DomainResponse {
 
 export default defineEventHandler(async (event): Promise<DomainResponse> => {
   // auth
-  if (!(await getServerSession(event, authOptions))?.user)
-    return {
-      data: [],
-      metadata: { page: 0, limit: 0 },
-      error: "Unauthorized",
-    }
+  const session = await requireUserSession(event)
   //
   const params = getDomainParamsFromEvent(event)
   const { page, limit } = params

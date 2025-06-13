@@ -68,6 +68,8 @@ last_updated_time: Čas poslední aktualizace
 sign_in: Přihlásit se
 sign_out: Odhlásit se
 open_app: Otevřít aplikaci
+username: Uživatelské jméno
+password: Heslo
 auth_msg:
     guest: Pro přístup k aplikaci se prosím přihlaste.
     unauthorized: K přístupu nemáte oprávnění.

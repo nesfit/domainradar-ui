@@ -20,6 +20,7 @@
     "kafkajs": "^2.2.4",
     "normalize.css": "^8.0.1",
     "nuxt": "^3.11.1",
+    "nuxt-auth-utils": "0.5.20",
     "nuxt-jsoneditor": "^1.8.4",
     "ol": "^9.1.0",
     "ol-contextmenu": "^5.4.0",
@@ -36,7 +37,7 @@
     "@nuxtjs/i18n": "^8.2.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@pinia/nuxt": "^0.5.1",
-    "@prisma/client": "^5.21.1",
+    "@prisma/client": "^6.9.0",
     "@types/pg": "^8.11.10",
     "@vueuse/nuxt": "^10.9.0",
     "nuxt-mdi-unfucked": "^69.0.1"
