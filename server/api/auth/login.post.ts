@@ -1,25 +1,34 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
+  const config = useRuntimeConfig()
   
   // Validate credentials
   const { username, password } = body
   
-  // Check against environment variables (same logic as your current setup)
-  if (
-    (username === process.env.ADMIN_USERNAME &&
-    password === process.env.ADMIN_PASSWORD)
-  ) {
-    // Set user session
-    await setUserSession(event, {
-      user: {
-        id: "admin",
-        name: "Admin", 
-        email: "feta@cheese.gr"
-      },
-      loggedInAt: Date.now()
-    })
+  // Parse users from runtime config
+  const usersString = config.authUsers || ''
+  const userPairs = usersString.split(';').filter((pair: string) => pair.includes(':'))
+  
+  for (const pair of userPairs) {
+    const [envUsername, hashedPassword] = pair.split(':')
     
-    return { success: true }
+    if (username === envUsername) {
+      // Verify password using nuxt-auth-utils
+      const isValid = await verifyPassword(hashedPassword, password)
+      
+      if (isValid) {
+        // Set user session
+        await setUserSession(event, {
+          user: {
+            id: username,
+            name: username,
+          },
+          loggedInAt: Date.now()
+        })
+        
+        return { success: true }
+      }
+    }
   }
   
   throw createError({

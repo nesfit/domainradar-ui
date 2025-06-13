@@ -57,6 +57,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     sessionPassword: process.env.NUXT_SESSION_PASSWORD || '',
+    authUsers: process.env.NUXT_AUTH_USERS || '',
     kafkaBroker: process.env.NUXT_KAFKA_BROKER,
     kafkaGroupId: process.env.NUXT_KAFKA_GROUP_ID,
     db: {
