@@ -33,11 +33,10 @@
     "vue3-openlayers": "^6.3.0"
   },
   "devDependencies": {
-    "@hebilicious/authjs-nuxt": "^0.3.5",
     "@nuxtjs/i18n": "^8.2.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@pinia/nuxt": "^0.5.1",
-    "@prisma/client": "^6.9.0",
+    "@prisma/client": "^5.21.1",
     "@types/pg": "^8.11.10",
     "@vueuse/nuxt": "^10.9.0",
     "nuxt-mdi-unfucked": "^69.0.1"
