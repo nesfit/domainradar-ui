@@ -65,11 +65,10 @@ function getFormattedCoords(ips: IP[]) {
           coordGroup[0].asn }})</span></div>
       <div v-for="net, i in groupBy(coordGroup, 'network_address')" :key="i" class="my-3">
         <h3 class="mb-2 text-lg">
-          {{ $t('network') }} 
+          {{ $t('network') }}
           <div class="mb-2 font-mono text-accent">{{
             net[0].network_address?.replace('/', '')
-          }}</div>
-          {{ net[0].network_prefix_length }}
+            }} /{{ net[0].network_prefix_length }}</div>
         </h3>
         <IPDetail v-for="ip in net" :key="ip.ip" :ip="ip" class="mb-2" />
       </div>

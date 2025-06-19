@@ -28,12 +28,11 @@ const hasOffenses = computed(() => {
 </script>
 
 <template>
-  <div
-    class="py-4 px-6 bg-holo-bg text-holo-fg flex flex-wrap justify-between items-center gap-2">
+  <div class="py-4 px-6 bg-accent/10 text-holo-fg flex flex-wrap justify-between items-center gap-2">
     <div>
       <h2 class="font-bold text-xl font-mono flex items-center gap-1" :class="{
-        'text-accent': version == 6,
-        'text-okay': version == 4,
+        'text-destructive': version == 6,
+        'text-accent': version == 4,
       }">
         <MdiIcon icon="mdiNumeric6Box" v-if="version == 6" />
         <MdiIcon icon="mdiNumeric4Box" v-else />
@@ -43,7 +42,7 @@ const hasOffenses = computed(() => {
         <strong>QRadar:</strong> mag. {{ ip.qradarOffenseSource[0].magnitude }}, <strong class="lowercase">{{
           $t('offenses') }}:
           {{
-  ip.qradarOffenseSource[0].offenses.length }}</strong>
+            ip.qradarOffenseSource[0].offenses.length }}</strong>
       </div>
     </div>
     <div class="flex gap-1">
