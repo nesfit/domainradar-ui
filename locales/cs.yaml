@@ -36,6 +36,7 @@ description: Popis
 enabled: Zapnuto
 add: Přidat
 domains: Domény
+since: od
 
 classification_results: Výsledky klasifikace
 collection_results: Výsledky sběru
@@ -124,6 +125,10 @@ settings:
 
 prefiltered:
     title: Předfiltrované domény
+    all_filters: Všechny filtry
+    passed: Propouštěno
+    dropped: Zahazováno
+    stored: Ukládáno
 
 customCheck:
     title: Kontrola vlastních domén

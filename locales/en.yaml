@@ -36,6 +36,7 @@ description: Description
 enabled: Enabled
 add: Add
 domains: Domains
+since: since
 
 classification_results: Classification results
 collection_results: Collection results
@@ -124,6 +125,10 @@ settings:
 
 prefiltered:
     title: Prefiltered Domains
+    all_filters: All filters
+    passed: Passed
+    dropped: Dropped
+    stored: Stored
 
 customCheck:
     title: Custom Domain Check
