@@ -22,7 +22,9 @@ import { storeToRefs } from "pinia"
 import type { DomainData as Domain } from "~/server/api/domains/index.get"
 
 const pageStore = usePageStore()
-const { page, limit, total } = storeToRefs(pageStore)
+const page = pageStore.page() // default paginator
+const limit = pageStore.limit()
+const total = pageStore.total()
 
 const filterSortStore = useFilterSortStore()
 const { sortAsc, sortKey, sortName, filterAggregateProbability } = storeToRefs(filterSortStore)
@@ -179,8 +181,7 @@ const { data: domainLinks } = await useFetch('/api/config/links')
           <FilterPanel class="mt-4" v-if="filtersOpen" />
           <SortPanel class="mt-4" v-if="sortingOpen" />
         </header>
-        <main
-          class="bg-holo-bg text-holo-fg p-3 overflow-auto h-full flex flex-col">
+        <main class="bg-holo-bg text-holo-fg p-3 overflow-auto h-full flex flex-col">
           <ul class="grow transition-all duration-300" :class="{ 'filter blur-sm': domainsLoading }">
             <DomainListItem v-for="domain in domains" :key="domain.domain_name" :domain="domain"
               :active="domain.domain_name === activeDomain?.domain_name" @click="setActiveDomain"
@@ -190,7 +191,7 @@ const { data: domainLinks } = await useFetch('/api/config/links')
             <img src="/cheese.webp" alt="Loading" class="w-1/2" />
           </div>
           <div class="mt-6 flex justify-center">
-            <PageNavigator :refreshing="totalCountRequestInFlight" />
+            <PageNavigator :refreshing="totalCountRequestInFlight" paginator="default" />
           </div>
         </main>
       </div>

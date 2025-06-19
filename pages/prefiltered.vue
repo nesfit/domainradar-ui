@@ -6,105 +6,72 @@
       </button>
       <h1>{{ $t('prefiltered.title') }}</h1>
     </div>
-    <!-- Search and Filter Controls -->
+    <!-- Search Controls -->
     <div class="flex gap-4 items-center">
-      <HInputField v-model="search" type="text" :placeholder="$t('search')" />
-      <select v-model="selectedFilter" class="border rounded px-2 py-1">
-        <option value="">{{ $t('prefiltered.all_filters') }}</option>
-        <option v-for="filter in filterNames" :key="filter" :value="filter">
-          {{ filter }}
-        </option>
-      </select>
+      <HInputField v-model="searchInputTerm" type="text" :placeholder="$t('search')" @keyup.enter="setNewSearchTerm" />
+      <HButton @click="setNewSearchTerm">{{ $t('search') }}</HButton>
+    </div>
+    <div>
+      <PageNavigator :refreshing="pending" paginator="prefiltered" />
     </div>
     <ul>
-      <li v-for="(domains, filterName) in filteredDomainsByFilterName" :key="filterName">
-        <h2 class="text-xl font-bold ">{{ filterName }}</h2>
-        <ul class="mb-8">
-          <li v-for="domain in domains" :key="domain.domain">
-            <div class="flex items-center gap-2">
-              <span :style="getTextStyle(domain.domain)">{{ domain.domain }}</span>
-              <span class="text-sm text-gray-500 dark:text-gray-400">{{ getActionName(domain, filterName) }}</span>
-              <span class="text-sm text-holo-fg/50">{{ $t('since') }} {{ $d(domain.first_seen, 'long') }}</span>
-            </div>
-            <!-- <div class="text-sm text-gray-500 dark:text-gray-400">{{ domain.filterResult }}</div> -->
-          </li>
-        </ul>
+      <li v-for="domain in domains" :key="domain.domain" class="mb-4">
+        <div>
+          <span :style="getTextStyle(domain.domain)">{{ domain.domain }}</span>
+          <div class="flex items-center gap-2 flex-wrap mt-1">
+            <template v-for="(result, filterName) in getFilterActions(domain)" :key="filterName">
+              <span class="px-2 py-0.5 rounded bg-accent text-holo-bg text-xs">
+                {{ getActionName(result) }}: {{ filterName }}
+              </span>
+            </template>
+          </div>
+        </div>
       </li>
     </ul>
+    <div>
+      <PageNavigator :refreshing="pending" paginator="prefiltered" />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { Data } from "~/server/api/domains/prefiltered.get"
-definePageMeta(
-  {
-    middleware: "auth",
-    auth: { guestRedirectTo: "/" }
-  }
-)
-
+import { ref, computed, watch } from 'vue'
+import { usePageStore } from '@/stores/pagination'
+import { storeToRefs } from 'pinia'
 const { t } = useI18n()
-
 const { go } = useRouter()
-const { data, error, refresh } = await useFetch("/api/domains/prefiltered")
 const { data: colors } = await useFetch("/api/config/prefiltercolors")
 
-const domainsByFilterName = computed(() => {
-  if (!data.value) return {}
-  const achjo: Record<string, Data> = data.value.data
-    .filter((domain) => domain.filter_output && typeof domain.filter_output === "object")
-    .reduce((acc: Record<string, Data>, domain) => {
-      const filter_output = domain.filter_output as Record<string, any>
-      const filters = Object.entries(filter_output)
-      for (const [filter, result] of filters) {
-        if (result == 0) continue // skip if result is 0 (pass)
-        if (!acc[filter]) {
-          acc[filter] = []
-        }
-        acc[filter].push({
-          ...domain,
-          first_seen: new Date(domain.first_seen),
-          last_seen: new Date(domain.last_seen),
-        })
-      }
-      return acc
-  }, {})
-  // return achjo with "No prefilter output" last
-  return Object.fromEntries(Object.entries(achjo).sort(([a], [b]) => {
-    if (a === "No prefilter output") return 1
-    if (b === "No prefilter output") return -1
-    return a.localeCompare(b)
-  }))
-})
+const PAGINATOR = "prefiltered"
+const pageStore = usePageStore()
+const page = pageStore.page(PAGINATOR)
+const limit = pageStore.limit(PAGINATOR)
+const total = pageStore.total(PAGINATOR)
 
+const searchInputTerm = ref("")
 const search = ref("")
-const selectedFilter = ref("")
-const filterNames = computed(() => Object.keys(domainsByFilterName.value))
+function setNewSearchTerm() {
+  search.value = searchInputTerm.value
+  pageStore.setPage(1, PAGINATOR)
+}
 
-const filteredDomainsByFilterName = computed(() => {
-  let filtered = domainsByFilterName.value
-  // Filter by selected filter
-  if (selectedFilter.value) {
-    filtered = { [selectedFilter.value]: filtered[selectedFilter.value] || [] }
-  }
-  // Filter domains by search
-  const searchTerm = search.value.trim().toLowerCase()
-  if (!searchTerm) return filtered
-  const result: Record<string, Data> = {}
-  for (const [filterName, domains] of Object.entries(filtered)) {
-    const filteredDomains = domains.filter(domain =>
-      domain.domain.toLowerCase().includes(searchTerm)
-    )
-    if (filteredDomains.length > 0) {
-      result[filterName] = filteredDomains
-    }
-  }
-  return result
+const { data, error, refresh, pending } = await useFetch("/api/domains/prefiltered", {
+  query: { page, limit, search },
+  watch: [page, limit, search],
+  lazy: true,
 })
+
+const domains = computed(() => data.value?.data ?? [])
+const metadata = computed(() => data.value?.metadata ?? { totalCount: 0, page: 1, limit: 20 })
+
+watch(metadata, (meta) => {
+  if (meta && typeof meta.totalCount === 'number') {
+    pageStore.setTotal(meta.totalCount, PAGINATOR)
+  }
+}, { immediate: true })
 
 function getTextStyle(domainName: string) {
   if (!colors.value) return {}
-  //
   for (const [pattern, color] of Object.entries(colors.value)) {
     try {
       const domainNamePattern = new RegExp(pattern)
@@ -112,19 +79,27 @@ function getTextStyle(domainName: string) {
         return { color }
       }
     } catch (e) {
-      console.error(`Invalid pattern: ${pattern}`)
+      // ignore invalid regex
     }
   }
-  //
   return {}
 }
 
-function getActionName(domain: Data[0], filterName: string) {
-  // @ts-ignore
-  const result = domain.filter_output[filterName] as number | undefined
-  if (result === undefined) return "?"
-  if (result === 0) return t('prefiltered.passed')
+function getFilterActions(domain: any) {
+  const out: Record<string, number> = {}
+  if (domain.filter_output && typeof domain.filter_output === 'object') {
+    for (const [filter, result] of Object.entries(domain.filter_output)) {
+      if (typeof result === 'number' && result > 0) {
+        out[filter] = result
+      }
+    }
+  }
+  return out
+}
+
+function getActionName(result: number) {
   if (result === 1) return t('prefiltered.dropped')
   if (result === 2) return t('prefiltered.stored')
+  return t('prefiltered.passed')
 }
 </script>
