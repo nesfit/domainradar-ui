@@ -59,11 +59,14 @@ function getFirstSeen(domain: Domain) {
 </script>
 
 <template>
-  <div
-    class="bg-holo-bg text-holo-fg p-6 border-2 border-primary">
+  <div class="bg-holo-bg text-holo-fg p-6 border-2 border-primary">
 
     <div class="flex gap-x-8 gap-y-4 items-center ms-4 flex-wrap">
-      <Pie v-if="typeof domain.aggregate_probability == 'number'" :percent="domain.aggregate_probability * 100">
+      <Pie v-if="typeof domain.aggregate_probability == 'number'" :percent="domain.aggregate_probability * 100"
+        v-tooltip="{
+  content: $t('aggregate_probability_tooltip'),
+          popperClass: 'max-w-80'
+        }">
         <div class="text-2xl">{{ percentFormat(domain.aggregate_probability, 0) }}</div>
       </Pie>
       <div>

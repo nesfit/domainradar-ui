@@ -22,6 +22,7 @@ pagination:
     to: to
     from: from
 results: no results | {n} result | {n} results
+aggregate_probability_tooltip: The total badness probability is calculated using a decision-making neural network combined with a set of heuristics.
 
 up_to_date: Up to date
 open: Open

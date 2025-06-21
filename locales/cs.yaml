@@ -22,6 +22,7 @@ pagination:
     to: do
     from: od
 results: bez výsledků | {n} výsledek | {n} výsledky | {n} výsledků
+aggregate_probability_tooltip: Celkový potenciál škodlivosti je vypočítán pomocí rozhodovací neuronové sítě v kombinaci s heuristikami.
 
 up_to_date: Aktuální
 open: Otevřít
