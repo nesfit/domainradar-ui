@@ -71,10 +71,12 @@ function getFirstSeen(domain: Domain) {
       </Pie>
       <div>
         <h1 class="text-3xl font-semibold flex flex-wrap items-baseline">
-          <span v-for="part in explodedName.slice(0, -1)" :key="part">
-            {{ part }}<span class="mx-0.5 text-accent font-extrabold text-4xl">.</span>
-          </span><span class="text-accent font-normal">{{ explodedName[explodedName.length - 1]
+          <span>
+            <span v-for="part in explodedName.slice(0, -1)" :key="part">
+              {{ part }}<span class="mx-0.5 text-accent font-extrabold text-4xl">.</span>
+            </span><span class="text-accent font-normal">{{ explodedName[explodedName.length - 1]
             }}</span>
+          </span>
         </h1>
         <ul class="mt-2 flex gap-4 flex-wrap">
           <li v-for="result in latestClassificationResults" :key="result.category.category" :style="{
