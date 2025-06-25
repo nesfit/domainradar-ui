@@ -27,6 +27,7 @@ aggregate_probability_tooltip: The total badness probability is calculated using
 up_to_date: Up to date
 open: Open
 close: Close
+copy_domain_name: Copy domain name
 save: Save
 delete: Delete
 cancel: Cancel

@@ -41,6 +41,14 @@ const explodedName = computed(() => {
   return props.domain.domain_name.split(".")
 })
 
+const copyDomainName = async () => {
+  try {
+    await navigator.clipboard.writeText(props.domain.domain_name)
+  } catch (err) {
+    console.error('Failed to copy domain name:', err)
+  }
+}
+
 function hasFirstSeen(domain: Domain) {
   return domain.collectionResults.length > 0
 }
@@ -70,13 +78,17 @@ function getFirstSeen(domain: Domain) {
         <div class="text-2xl">{{ percentFormat(domain.aggregate_probability, 0) }}</div>
       </Pie>
       <div>
-        <h1 class="text-3xl font-semibold flex flex-wrap items-baseline">
+        <h1 class="text-3xl font-semibold flex flex-wrap items-baseline gap-2">
           <span>
             <span v-for="part in explodedName.slice(0, -1)" :key="part">
               {{ part }}<span class="mx-0.5 text-accent font-extrabold text-4xl">.</span>
             </span><span class="text-accent font-normal">{{ explodedName[explodedName.length - 1]
-            }}</span>
+              }}</span>
           </span>
+          <Button @click="copyDomainName" color="accent" hollow borderless symmetrical
+            v-tooltip="$t('copy_domain_name')" class="text-sm">
+            <MdiIcon icon="mdiContentCopy" />
+          </Button>
         </h1>
         <ul class="mt-2 flex gap-4 flex-wrap">
           <li v-for="result in latestClassificationResults" :key="result.category.category" :style="{

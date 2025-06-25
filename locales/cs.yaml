@@ -27,6 +27,7 @@ aggregate_probability_tooltip: Celkový potenciál škodlivosti je vypočítán 
 up_to_date: Aktuální
 open: Otevřít
 close: Zavřít
+copy_domain_name: Kopírovat doménové jméno
 save: Uložit
 delete: Smazat
 cancel: Zrušit
