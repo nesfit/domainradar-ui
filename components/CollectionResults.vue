@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 min-w-60 dark:text-slate-100 text-slate-800">
+  <div class="flex flex-col gap-4 min-w-60 text-holo-fg">
     <div v-for="res in props.collectionResults.filter(r => r.source.is_ip_collector === ip)" :key="res.source.id">
       <h2 class="text-lg font-bold">{{ res.source.collector }}</h2>
       <p class="text-sm">{{ $d(res.timestamp, "long") }}</p>
